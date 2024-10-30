@@ -1,4 +1,4 @@
-export class ValidationError {
+export class JsonschemaValidationError {
    constructor(
       public message: string,
    ) { }
