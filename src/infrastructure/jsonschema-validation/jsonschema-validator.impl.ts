@@ -1,5 +1,5 @@
-import { JsonschemaValidationError } from "@/core/validation/jsonschema-validation-error";
-import { IJsonschemaValidator } from "@/core/validation/jsonschema-validator.interface";
+import { JsonschemaValidationError } from "@/core/jsonschema-validation/jsonschema-validation-error";
+import { IJsonschemaValidator } from "@/core/jsonschema-validation/jsonschema-validator.interface";
 import { Validator as Validator_jsonschema } from "jsonschema";
 export class JsonSchemaValidator implements IJsonschemaValidator {
    validateBySchema(instance: object, schema: object): JsonschemaValidationError[] {
