@@ -20,7 +20,7 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
          case 'GET': {
             const id = url.searchParams.get('id') ?? undefined;
             const username = url.searchParams.get('username') ?? undefined;
-            getUser_UseCase(username, id);
+            await getUser_UseCase(username, id);
          }
          case 'POST': {
             const body = await receiveBody<CreateUserDto>(request);
@@ -28,7 +28,7 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
             if (aggregateValidationError.length) throw aggregateValidationError;
 
             return void response.end(JSON.stringify(
-               createUser_UseCase(body as CreateUserDto)
+               await createUser_UseCase(body as CreateUserDto)
             ));
          }
          case 'PATCH': {
@@ -46,7 +46,7 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
             if (aggregateValidationError.length) throw aggregateValidationError;
 
             return void response.end(JSON.stringify(
-               updateUser_UseCase(creds, id, body as UpdateUserDto)
+               await updateUser_UseCase(creds, id, body as UpdateUserDto)
             ));
 
          }
@@ -62,7 +62,7 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
             }
 
             return void response.end(JSON.stringify(
-               deleteUser_UseCase(creds, id)
+               await deleteUser_UseCase(creds, id)
             ));
          }
          default: {
