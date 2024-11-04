@@ -1,7 +1,7 @@
-import { before, describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
 import assert from "node:assert";
 
-import { SqlDatabase } from "@/infrastructure/database/SqlDatabase";
+import { SqlDatabase } from "@/adapters/database/SqlDatabase";
 import { Pool } from "pg";
 
 class UserConProps {
@@ -34,6 +34,9 @@ describe("SqlDatabase", () => {
 
    before(async () => {
       database.query(sqlUserDefinition);
+   })
+   after(async () => {
+      database.query("DROP TABLE users");
    })
    describe("query", () => {
       it("should create user", async () => {
