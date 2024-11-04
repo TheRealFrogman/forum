@@ -1,14 +1,36 @@
-import { Validator } from "jsonschema";
-import { User } from "./core/domain/user/entities/user.entity";
-const userSchema = require("./core/domain/user/entities/user.schema.json");
-var v = new Validator();
+import http from 'http';
+import { HttpError } from './core/exceptions/HttpError';
+import { userRoutes } from './routes/user/user.routes';
 
-const instance = new User({
-   hashed_password: "hashedPa:ssword1",
-   username: "user1",
-   id: 1
-})
+import { userServiceInstance } from './dependencies';
+userServiceInstance.create({ password: "admin123", username: "admin" })
+   .catch(() => { });
+userServiceInstance.create({ password: "john_doe", username: "john" })
+   .catch(() => { });
+userServiceInstance.create({ password: "jane_doe", username: "jane" })
+   .catch(() => { });
 
-const result = v.validate(instance, userSchema,);
+const server = http.createServer(async (request, response) => {
+   const url = new URL(request.url!, `http://${request.headers.host}`);
 
-console.log(result)
+   try {
+      switch (url.pathname) {
+         case '/users': {
+            const result = await userRoutes(request, response);
+            
+            break;
+         }
+      }
+   } catch (error) {
+      if (error instanceof HttpError)
+         return void response
+            .writeHead(error.httpCode, { 'Content-Type': 'application/json' })
+            .end(JSON.stringify(error));
+
+      throw error;
+   }
+});
+
+server.listen(3000, () => {
+   console.log('Server running on port 3000');
+});
