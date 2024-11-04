@@ -1,10 +1,9 @@
 
 export class UpdateUserDto {
-   username?: string;
-   password?: string;
-   constructor(data: UpdateUserDto) {
-      Object.assign(this, data);
-   }
+   constructor(
+      public username?: string,
+      public password?: string
+   ) { }
 
    static schema = {
       "title": "UpdateUserDto",

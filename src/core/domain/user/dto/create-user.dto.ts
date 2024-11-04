@@ -1,11 +1,9 @@
 
 export class CreateUserDto {
-   username!: string
-   password!: string
-
-   constructor(data: CreateUserDto) {
-      Object.assign(this, data);
-   }
+   constructor(
+      public username: string,
+      public password: string
+   ) { }
 
    static schema = {
       "title": "CreateUserDto",

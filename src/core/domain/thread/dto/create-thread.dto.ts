@@ -1,8 +1,7 @@
-export class CreateThreadDto  {
-   description!: string
-   title!: string
-
-   constructor(data: CreateThreadDto) {
-      Object.assign(this, data);
-   }
- }
+export class CreateThreadDto {
+   constructor(
+      public author_id: string,
+      public description: string,
+      public title: string,
+   ) { }
+}
