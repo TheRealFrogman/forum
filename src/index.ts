@@ -8,7 +8,7 @@ userServiceInstance.create({ password: "admin123", username: "admin" })
 userServiceInstance.create({ password: "john_doe", username: "john" })
    .catch(() => { });
 userServiceInstance.create({ password: "jane_doe", username: "jane" })
-   .catch(() => { });
+   .catch(() => { }); 
 
 const server = http.createServer(async (request, response) => {
    const url = new URL(request.url!, `http://${request.headers.host}`);
