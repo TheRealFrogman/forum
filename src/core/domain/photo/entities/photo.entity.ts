@@ -1,6 +1,6 @@
 
 interface PhotoProps {
-   id: number;
+   id: string;
    link: string;
    target_type: 'thread' | 'comment';
    target_id: number;
@@ -9,7 +9,7 @@ interface PhotoProps {
 interface PhotoInitializer extends PhotoProps { }
 
 export class Photo implements PhotoProps {
-   id!: number;
+   id!: string;
    link!: string;
    target_type!: 'thread' | 'comment';
    target_id!: number;

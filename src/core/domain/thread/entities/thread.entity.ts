@@ -1,7 +1,7 @@
 
 interface ThreadProps {
-   id: number;
-   author_id: number;
+   id: string;
+   author_id: string;
    description: string;
    title: string;
 }
@@ -9,8 +9,8 @@ interface ThreadProps {
 interface ThreadInitializer extends ThreadProps { }
 
 export class Thread implements ThreadProps {
-   id!: number;
-   author_id!: number;
+   id!: string;
+   author_id!: string;
    description!: string;
    title!: string;
    constructor(data: ThreadInitializer) {

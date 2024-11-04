@@ -1,18 +1,18 @@
 interface CommentProps {
-   id: number;
+   id: string;
    content: string;
-   thread_id: number;
-   author_id: number;
+   thread_id: string;
+   author_id: string;
    rating: number;
 }
 
 interface CommentInitializer extends CommentProps { }
 
 export class Comment implements CommentProps {
-   id!: number;
+   id!: string;
    content!: string;
-   thread_id!: number;
-   author_id!: number;
+   thread_id!: string;
+   author_id!: string;
    rating!: number;
 
    constructor(data: CommentInitializer) {
