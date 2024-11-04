@@ -1,4 +1,6 @@
 
 export class UpdateCommentDto {
-   content!: string;
+   constructor(
+      public content: string
+   ) { }
 }

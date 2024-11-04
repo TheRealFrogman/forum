@@ -1,5 +1,7 @@
 export class CreatePhotoDto {
-   link!: string;
-   target_type!: 'thread' | 'comment';
-   target_id!: number;
+   constructor(
+      public link: string,
+      public target_type: 'thread' | 'comment',
+      public target_id: number,
+   ) { }
 }

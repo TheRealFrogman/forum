@@ -1,6 +1,8 @@
 export class CreateCommentDto {
-   id!: number;
-   content!: string;
-   thread_id!: number;
-   author_id!: number;
+   constructor(
+      public id: number,
+      public content: string,
+      public thread_id: number,
+      public author_id: number,
+   ) { }
 }
