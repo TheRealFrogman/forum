@@ -1,4 +1,4 @@
-import { ISqlDatabase } from "@/core/database/sql-database.interface";
+import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
 import { Pool } from "pg"
 export class SqlDatabase implements ISqlDatabase {
    constructor(
@@ -21,6 +21,9 @@ export class SqlDatabase implements ISqlDatabase {
                if (!cls) return resolve(null);
 
                if (result.rowCount === 1) {
+                  const json = JSON.parse(JSON.stringify(result.rows[0]));
+                  console.log(json);
+
                   const instance = new cls();
                   for (const key in instance) {
                      if (Object.prototype.hasOwnProperty.call(instance, key)) {
