@@ -8,14 +8,16 @@ interface UserProps {
    id: string;
    username: string;
    hashed_password: string;
-   role: Role
+   role: Role;
+   created_at: Date;
 }
 
 interface UserInitializer {
    id: string;
    username: string;
    hashed_password: string;
-   role: Role
+   role: Role;
+   created_at: Date;
 }
 
 export class User implements UserProps {
@@ -23,6 +25,7 @@ export class User implements UserProps {
    username!: string;
    hashed_password!: string;
    role!: Role
+   created_at!: Date;
    constructor(data: UserInitializer) {
       Object.assign(this, data);
    }
@@ -44,7 +47,8 @@ export class User implements UserProps {
       return {
          id: this.id,
          username: this.username,
-         role: this.role
+         role: this.role,
+         created_at: this.created_at
       }
    }
 
@@ -60,7 +64,8 @@ export class User implements UserProps {
          "username": {
             "type": "string",
             "minLength": 3,
-            "maxLength": 30
+            "maxLength": 30,
+            "pattern": "[a-zA-Z0-9]+"
          },
          "hashed_password": {
             "description": "hashed password, salt + hash",
