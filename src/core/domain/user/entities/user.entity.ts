@@ -54,8 +54,8 @@ export class User implements UserProps {
       "type": "object",
       "properties": {
          "id": {
-            "type": "number",
-            "minimum": 0
+            "type": "string",
+            "minLength": 0
          },
          "username": {
             "type": "string",
