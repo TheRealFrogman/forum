@@ -1,6 +1,6 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
-import type { CreatePhotoDto } from "../dto/create-photo.dto.js";
-import { Photo } from "../entities/photo.entity.js";
+import type { CreatePhotoDto } from "@/core/domain/photo/dto/create-photo.dto.js";
+import { Photo } from "@/core/domain/photo/entities/photo.entity.js";
 
 export class PhotoService {
    constructor(

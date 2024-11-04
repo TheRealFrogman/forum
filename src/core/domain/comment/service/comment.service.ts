@@ -1,10 +1,10 @@
-import type { CreateCommentDto } from "../dto/create-comment.dto.ts";
-import type { UpdateCommentDto } from "../dto/update-comment.dto.ts";
-import { ICommentRepository } from "../repository/ICommentRepository.interface.js";
+import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
+import type { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto.ts";
+import type { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto.ts";
 
 export class CommentService {
    constructor(
-      private comments: ICommentRepository,
+      private comments: ISqlDatabase,
    ) { }
    create(createCommentDto: CreateCommentDto) {
       return 'This action adds a new comment';

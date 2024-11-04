@@ -1,8 +1,8 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
-import type { IEncryptHash } from "../../../ports/encrypt/IEncryptHash.js";
-import type { CreateUserDto } from "../dto/create-user.dto.js";
-import type { UpdateUserDto } from "../dto/update-user.dto.js";
-import { User } from "../entities/user.entity.js";
+import type { IEncryptHash } from "@/core/ports/encrypt/IEncryptHash.js";
+import type { CreateUserDto } from "@/core/domain/user/dto/create-user.dto.js";
+import type { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto.js";
+import { User } from "@/core/domain/user/entities/user.entity.js";
 import { HttpError } from "@/core/exceptions/HttpError.js";
 
 export class UserService {

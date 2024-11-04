@@ -1,8 +1,8 @@
-import { User } from "../../user/entities/user.entity.js";
-import type { CreateThreadDto } from "../dto/create-thread.dto.js";
-import type { UpdateThreadDto } from "../dto/update-thread.dto.js";
+import { User } from "@/core/domain/user/entities/user.entity.js";
+import type { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto.js";
+import type { UpdateThreadDto } from "@/core/domain/thread/dto/update-thread.dto.js";
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
-import { Thread } from "../entities/thread.entity.js";
+import { Thread } from "@/core/domain/thread/entities/thread.entity.js";
 
 export class ThreadService {
    constructor(
