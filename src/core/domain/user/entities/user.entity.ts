@@ -1,28 +1,50 @@
+
+enum Role {
+   REGULAR = 'regular',
+   ADMIN = 'admin',
+}
+
 interface UserProps {
-   id: number;
+   id: string;
    username: string;
    hashed_password: string;
+   role: Role
 }
 
 interface UserInitializer {
-   id: number;
+   id: string;
    username: string;
    hashed_password: string;
+   role: Role
 }
 
 export class User implements UserProps {
-   id!: number;
+   id!: string;
    username!: string;
    hashed_password!: string;
+   role!: Role
    constructor(data: UserInitializer) {
       Object.assign(this, data);
    }
 
-   // strip the password
+   canUpdate(user: User) {
+      if (this.role === Role.ADMIN) { return true; }
+      if (this.id === user.id) { return true; }
+      return false;
+   }
+
+   canDelete(user: User) {
+      if (this.role === Role.ADMIN) { return true; }
+      if (this.id === user.id) { return true; }
+      return false;
+   }
+
+   // strip the password 
    toJSON() {
       return {
          id: this.id,
          username: this.username,
+         role: this.role
       }
    }
 
