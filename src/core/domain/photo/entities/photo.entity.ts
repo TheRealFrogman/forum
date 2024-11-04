@@ -3,7 +3,7 @@ interface PhotoProps {
    id: string;
    link: string;
    target_type: 'thread' | 'comment';
-   target_id: number;
+   target_id: string;
 }
 
 interface PhotoInitializer extends PhotoProps { }
@@ -12,9 +12,35 @@ export class Photo implements PhotoProps {
    id!: string;
    link!: string;
    target_type!: 'thread' | 'comment';
-   target_id!: number;
+   target_id!: string;
 
    constructor(data: PhotoInitializer) {
       Object.assign(this, data);
+   }
+
+   static schema = {
+      title: "Photo",
+      type: "object",
+      properties: {
+         id: {
+            type: "string",
+            minLength: 0,
+         },
+         link: {
+            type: "string",
+            minLength: 4,
+            maxLength: 255,
+         },
+         target_type: {
+            type: "string",
+            enum: ['thread', 'comment'],
+         },
+         target_id: {
+            type: "string",
+            minimum: 0,
+         }
+      },
+      required: ["link", "target_type", "target_id"],
+      additionalProperties: false
    }
 }
