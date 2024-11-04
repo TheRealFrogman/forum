@@ -1,6 +1,6 @@
 import { HttpError } from "@/core/exceptions/HttpError";
 import { localAuthenticatorInstance, userServiceInstance } from "@/dependencies";
-import { User } from "../user/entities/user.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
 
 export async function deleteUser_UseCase({ password, username }: { username: string, password: string }, deleteId: User['id']) {
    const authUser = await localAuthenticatorInstance.authenticate(username, password);

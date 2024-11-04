@@ -1,5 +1,5 @@
-import { UpdateUserDto } from "../user/dto/update-user.dto";
-import { User } from "../user/entities/user.entity";
+import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
+import { User } from "@/core/domain/user/entities/user.entity";
 import { HttpError } from "@/core/exceptions/HttpError";
 
 import { localAuthenticatorInstance, userServiceInstance } from "@/dependencies";

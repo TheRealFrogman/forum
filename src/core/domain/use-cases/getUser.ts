@@ -1,5 +1,5 @@
 import { userServiceInstance } from "@/dependencies";
-import { User } from "../user/entities/user.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
 import { HttpError } from "@/core/exceptions/HttpError";
 
 export async function getUser_UseCase(username?: string, id?: User['id']) {
