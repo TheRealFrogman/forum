@@ -35,12 +35,16 @@ export class UserService {
    }
 
    async update(id: User['id'], updateUserDto: UpdateUserDto): Promise<User | null> {
-
+      console.log(updateUserDto)
       const input = {
          hashed_password: updateUserDto.password ? await this.passwordHasher.hash(updateUserDto.password) : undefined,
          username: updateUserDto.username
       }
-      // это странный код снизу
+      for (const key in input) {
+         //@ts-ignore
+         if(input[key] === undefined) delete input[key];
+      }
+
       const result = await this.database.query(`UPDATE users SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], User,);
       if (!result) throw new HttpError(404, 'User not found');
       if (Array.isArray(result)) throw new Error("Error finding user by username");
