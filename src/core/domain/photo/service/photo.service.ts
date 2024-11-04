@@ -1,17 +1,25 @@
+import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
 import type { CreatePhotoDto } from "../dto/create-photo.dto.js";
-
-import { IPhotoRepository } from "../repository/IPhotoRepository.interface.js";
+import { Photo } from "../entities/photo.entity.js";
 
 export class PhotoService {
    constructor(
-      private photos: IPhotoRepository,
+      private readonly database: ISqlDatabase
    ) { }
 
-   create(createPhotoDto: CreatePhotoDto) {
-      return this.photos.create(createPhotoDto);
+   async create(createPhotoDto: CreatePhotoDto) {
+      return this.database.query(
+         `INSERT INTO photos (link, target_type, target_id) VALUES ($1, $2, $3) RETURNING *`,
+         [createPhotoDto.link, createPhotoDto.target_type, createPhotoDto.target_id],
+         Photo,
+      );
    }
 
-   findOne(id: number) {
-      return this.photos.findOne(id);
+   async findOne(id: number) {
+      return this.database.query(
+         `SELECT * FROM photos WHERE id = $1`,
+         [id],
+         Photo,
+      );
    }
 }

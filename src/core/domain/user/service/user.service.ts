@@ -1,21 +1,15 @@
-import { ISqlDatabase } from "@/core/database/sql-database.interface.js";
-import type { IEncryptHash } from "../../../encrypt/IEncryptHash.js";
+import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
+import type { IEncryptHash } from "../../../ports/encrypt/IEncryptHash.js";
 import type { CreateUserDto } from "../dto/create-user.dto.js";
 import type { UpdateUserDto } from "../dto/update-user.dto.js";
 import { User } from "../entities/user.entity.js";
+import { HttpError } from "@/core/exceptions/HttpError.js";
 
 export class UserService {
    constructor(
       private readonly passwordHasher: IEncryptHash,
       private readonly database: ISqlDatabase
-   ) {
-      this.create({ password: "admin123", username: "admin" })
-         .catch(() => { });
-      this.create({ password: "john_doe", username: "john" })
-         .catch(() => { });
-      this.create({ password: "jane_doe", username: "jane" })
-         .catch(() => { });
-   }
+   ) { }
 
    async findUserByUsername(username: string): Promise<User | null> {
       const result = await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User,);
@@ -23,20 +17,21 @@ export class UserService {
       return result;
    }
 
-   async create({ password, username }: CreateUserDto) {
-      const user = await this.findUserByUsername(username);
-      if (user) throw new Error('User with this username already exists');
-      const hashed_password = await this.passwordHasher.hash(password);
-
-      const newUser = await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User,);
-
-      return newUser;
-   }
-
-   async findOne(id: User['id']): Promise<User | null> {
+   async findOneById(id: User['id']): Promise<User | null> {
       const result = await this.database.query(`SELECT * FROM users WHERE id = $1`, [id], User,);
       if (Array.isArray(result)) throw new Error("Error finding user by username");
       return result;
+   }
+
+   async create({ password, username }: CreateUserDto): Promise<User | null> {
+      const user = await this.findUserByUsername(username);
+      if (user) throw new HttpError(409, 'User with this username already exists');
+      const hashed_password = await this.passwordHasher.hash(password);
+
+      const newUser = await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User,);
+      if (Array.isArray(newUser)) throw new Error("Error finding user by username");
+
+      return newUser;
    }
 
    async update(id: User['id'], updateUserDto: UpdateUserDto): Promise<User | null> {
@@ -47,14 +42,15 @@ export class UserService {
       }
       // это странный код снизу
       const result = await this.database.query(`UPDATE users SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], User,);
-      if (!result) throw new Error('User not found');
+      if (!result) throw new HttpError(404, 'User not found');
       if (Array.isArray(result)) throw new Error("Error finding user by username");
       return result;
    }
 
-   async remove(id: User['id']): Promise<User | null> {
-      const result = await this.database.query(`DELETE FROM users WHERE id = $1`, [id], User,);
+   async remove(user: User): Promise<User | null> {
+      const result = await this.database.query(`DELETE FROM users WHERE id = $1 RETURNING *`, [user.id], User,);
       if (Array.isArray(result)) throw new Error("Error finding user by username");
+      if (result === null) throw new Error("Unexpected null result deleting existing user");
       return result;
    }
 }
