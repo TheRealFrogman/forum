@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(30) CHECK(LENGTH(username) > 3 AND LENGTH(username) < 30) NOT NULL,
+    username VARCHAR(30) CHECK(LENGTH(username) > 3 AND LENGTH(username) < 30 AND username ~ $$[A-Za-z0-9]$$) NOT NULL,
     hashed_password VARCHAR(255) CHECK(hashed_password ~ $$^.+:.+$$ AND LENGTH(hashed_password) > 8) NOT NULL,
     role TEXT CHECK(role IN ('regular', 'admin')) NOT NULL DEFAULT 'regular',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
