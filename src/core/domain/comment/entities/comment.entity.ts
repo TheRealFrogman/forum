@@ -18,4 +18,31 @@ export class Comment implements CommentProps {
    constructor(data: CommentInitializer) {
       Object.assign(this, data);
    }
+
+   static schema = {
+      title: "Comment",
+      type: "object",
+      properties: {
+         id: {
+            type: "string",
+            minLength: 0
+         },
+         content: {
+            type: "string",
+         },
+         thread_id: {
+            type: "string",
+            minLength: 0
+         },
+         author_id: {
+            type: "string",
+            minLength: 0
+         },
+         rating: {
+            type: "number",
+         }
+      },
+      required: ["id", "content", "thread_id", "author_id", "rating"],
+      additionalProperties: false
+   }
 }
