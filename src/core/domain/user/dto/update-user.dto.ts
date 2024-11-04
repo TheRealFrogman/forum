@@ -13,7 +13,8 @@ export class UpdateUserDto {
          "username": {
             "type": "string",
             "minLength": 3,
-            "maxLength": 30
+            "maxLength": 30,
+            "pattern": "[a-zA-Z0-9]+"
          },
          "password": {
             "description": "input password",
