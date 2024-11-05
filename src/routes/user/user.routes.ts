@@ -41,12 +41,15 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
                return void response.writeHead(400).end();
             }
 
+            const authUser = await localAuthenticatorInstance.authenticate(creds.username, creds.password);
+            if (!authUser) throw new HttpError(401);
+
             const body = await receiveBody<UpdateUserDto>(request);
             const aggregateValidationError = jsonschemaValidatorInstance.validateBySchema(body, UpdateUserDto.schema);
             if (aggregateValidationError.length) throw aggregateValidationError;
 
             return void response.end(JSON.stringify(
-               await updateUser_UseCase(creds, id, body as UpdateUserDto)
+               await updateUser_UseCase(authUser, id, body as UpdateUserDto)
             ));
 
          }
@@ -55,14 +58,16 @@ export async function userRoutes(request: http.IncomingMessage, response: http.S
             if (!creds) {
                return void response.writeHead(401).end();
             }
-
             const id = url.searchParams.get('id')!;
             if (!id) {
                return void response.writeHead(400).end();
             }
 
+            const authUser = await localAuthenticatorInstance.authenticate(creds.username, creds.password);
+            if (!authUser) throw new HttpError(401);
+
             return void response.end(JSON.stringify(
-               await deleteUser_UseCase(creds, id)
+               await deleteUser_UseCase(authUser, id)
             ));
          }
          default: {
