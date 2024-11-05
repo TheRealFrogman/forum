@@ -6,10 +6,10 @@ import http from 'http';
 import { jsonschemaValidatorInstance, localAuthenticatorInstance, userServiceInstance } from '@/dependencies';
 import { getBasicCredentials } from '@/core/lib/getBasicCredentials';
 import { HttpError } from '@/core/exceptions/HttpError';
-import { deleteUser_UseCase } from '@/core/domain/use-cases/deleteUser';
-import { updateUser_UseCase } from '@/core/domain/use-cases/updateUser';
-import { createUser_UseCase } from '@/core/domain/use-cases/createUser';
-import { getUser_UseCase } from '@/core/domain/use-cases/getUser';
+import { deleteUser_UseCase } from '@/core/use-cases/user/deleteUser';
+import { updateUser_UseCase } from '@/core/use-cases/user/updateUser';
+import { createUser_UseCase } from '@/core/use-cases/user/createUser';
+import { getUser_UseCase } from '@/core/use-cases/user/getUser';
 
 export async function userRoutes(request: http.IncomingMessage, response: http.ServerResponse) {
    const url = new URL(request.url!, `http://${request.headers.host}`);
