@@ -1,5 +1,5 @@
 import { HttpError } from "@/core/exceptions/HttpError";
-import { localAuthenticatorInstance, userServiceInstance } from "@/dependencies";
+import { userServiceInstance } from "@/dependencies";
 import { User } from "@/core/domain/user/entities/user.entity";
 
 export async function deleteUser_UseCase(user: User, deleteId: User['id']) {
