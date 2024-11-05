@@ -3,7 +3,8 @@ import { User } from "@/core/domain/user/entities/user.entity";
 import { HttpError } from "@/core/exceptions/HttpError";
 
 import { localAuthenticatorInstance, userServiceInstance } from "@/dependencies";
-type Creds = { username: string, password: string }
+import { Creds } from "./types/Creds";
+
 export async function updateUser_UseCase({ password, username }: Creds, updateId: User['id'], payload: UpdateUserDto) {
    const updateCandidate = await userServiceInstance.findOneById(updateId);
    if (!updateCandidate) throw new HttpError(400);

@@ -1,6 +1,6 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
 import { Pool } from "pg"
-export class SqlDatabase implements ISqlDatabase {
+export class SqlPoolDatabase implements ISqlDatabase {
    constructor(
       private pool = new Pool({
          user: process.env['DB_USER'],
@@ -23,14 +23,18 @@ export class SqlDatabase implements ISqlDatabase {
          }
       }
 
-      if(Object.keys(instance).length !== Object.keys(data).length) 
+      if (Object.keys(instance).length !== Object.keys(data).length)
          throw new Error("Amount of instance fields is not equal to amount of data fields");
 
 
       return instance;
    }
 
-   query<T extends object>(query: string, params?: unknown[], cls?: new (...args: any[]) => T,): Promise<T | T[] | null> {
+   // перегрузки для того чтобы видеть контракты прямо тут
+   query<T extends object>(query: string, params?: unknown[]): Promise<null>;
+   query<T extends object>(query: string, params: unknown[], cls: new (...args: any[]) => T, opts: { isArray: false }): Promise<T | null>;
+   query<T extends object>(query: string, params: unknown[], cls: new (...args: any[]) => T, opts: { isArray: true }): Promise<T[]>;
+   query<T extends object>(query: string, params?: unknown[], cls?: new (...args: any[]) => T, opts?: { isArray: boolean }): Promise<T | T[] | null> {
       return new Promise((resolve, reject) => {
          this.pool.query(query, params).then((result) => {
             if (result.rowCount === 0) {
@@ -38,10 +42,17 @@ export class SqlDatabase implements ISqlDatabase {
             }
             else {
                if (!cls) return resolve(null);
+
                const instances = result.rows.map((row) => this.mapDataToInstance(cls, row)!);
                if (instances.length === 1) {
+                  if (opts?.isArray === true) {
+                     throw new Error("Single object expected, check your query");
+                  }
                   resolve(instances[0]!);
                } else {
+                  if (opts?.isArray === false) {
+                     throw new Error("Array expected, check your query");
+                  }
                   resolve(instances);
                }
             }

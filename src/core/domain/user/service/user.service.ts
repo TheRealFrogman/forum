@@ -12,15 +12,11 @@ export class UserService {
    ) { }
 
    async findUserByUsername(username: string): Promise<User | null> {
-      const result = await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User,);
-      if (Array.isArray(result)) throw new Error("Error finding user by username");
-      return result;
+      return await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User, { isArray: false });
    }
 
    async findOneById(id: User['id']): Promise<User | null> {
-      const result = await this.database.query(`SELECT * FROM users WHERE id = $1`, [id], User,);
-      if (Array.isArray(result)) throw new Error("Error finding user by username");
-      return result;
+      return await this.database.query(`SELECT * FROM users WHERE id = $1`, [id], User, { isArray: false });
    }
 
    async create({ password, username }: CreateUserDto): Promise<User | null> {
@@ -28,10 +24,7 @@ export class UserService {
       if (user) throw new HttpError(409, 'User with this username already exists');
       const hashed_password = await this.passwordHasher.hash(password);
 
-      const newUser = await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User,);
-      if (Array.isArray(newUser)) throw new Error("Error finding user by username");
-
-      return newUser;
+      return await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User, { isArray: false });
    }
 
    async update(id: User['id'], updateUserDto: UpdateUserDto): Promise<User | null> {
@@ -42,19 +35,17 @@ export class UserService {
       }
       for (const key in input) {
          //@ts-ignore
-         if(input[key] === undefined) delete input[key];
+         if (input[key] === undefined) delete input[key];
       }
 
-      const result = await this.database.query(`UPDATE users SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], User,);
+      const result = await this.database.query(`UPDATE users SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], User, { isArray: false });
       if (!result) throw new HttpError(404, 'User not found');
-      if (Array.isArray(result)) throw new Error("Error finding user by username");
       return result;
    }
 
-   async remove(user: User): Promise<User | null> {
-      const result = await this.database.query(`DELETE FROM users WHERE id = $1 RETURNING *`, [user.id], User,);
-      if (Array.isArray(result)) throw new Error("Error finding user by username");
-      if (result === null) throw new Error("Unexpected null result deleting existing user");
+   async delete(user: User): Promise<User | null> {
+      const result = await this.database.query(`DELETE FROM users WHERE id = $1 RETURNING *`, [user.id], User, { isArray: false });
+      if (result === null) throw new HttpError(404, "Not found");
       return result;
    }
 }

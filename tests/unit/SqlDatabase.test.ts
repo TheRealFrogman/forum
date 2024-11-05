@@ -1,7 +1,7 @@
 import { after, before, describe, it } from "node:test";
 import assert from "node:assert";
 
-import { SqlDatabase } from "@/adapters/database/SqlDatabase";
+import { SqlPoolDatabase } from "@/adapters/database/SqlDatabase";
 import { Pool } from "pg";
 
 class UserConProps {
@@ -24,7 +24,7 @@ create table if not exists users (
 )`
 describe("SqlDatabase", () => {
 
-   const database = new SqlDatabase(new Pool({
+   const database = new SqlPoolDatabase(new Pool({
       user: "postgres",
       host: "localhost",
       database: "test",
