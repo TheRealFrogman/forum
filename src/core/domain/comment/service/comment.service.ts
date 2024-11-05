@@ -6,23 +6,51 @@ export class CommentService {
    constructor(
       private comments: ISqlDatabase,
    ) { }
-   create(createCommentDto: CreateCommentDto) {
-      return 'This action adds a new comment';
+   async create(createCommentDto: CreateCommentDto): Promise<Comment> {
+      return (await this.comments.query(
+         `INSERT INTO comments (id, content, thread_id, author_id) VALUES ($1, $2, $3, $4) RETURNING *`,
+         [createCommentDto.id, createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
+         Comment,
+         { isArray: false }
+      ))!;
    }
 
-   findAllByThread() {
-      return `This action returns all comment`;
+   async findAllByThread(threadId: string): Promise<Comment[]> {
+      return await this.comments.query(
+         `SELECT * FROM comments WHERE thread_id = $1`,
+         [threadId],
+         Comment,
+         { isArray: true }
+      );
    }
 
-   findOne(id: number) {
-      return `This action returns a #${id} comment`;
+   async findOne(id: string): Promise<Comment | null> {
+      return await this.comments.query(
+         `SELECT * FROM comments WHERE id = $1`,
+         [id],
+         Comment,
+         { isArray: false }
+      );
    }
 
-   update(id: number, updateCommentDto: UpdateCommentDto) {
-      return `This action updates a #${id} comment`;
+   async update(id: string, updateCommentDto: UpdateCommentDto): Promise<Comment | null> {
+      const input = {
+         content: updateCommentDto.content
+      };
+      return await this.comments.query(
+         `UPDATE comments SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`,
+         [id, ...Object.values(input)],
+         Comment,
+         { isArray: false }
+      );
    }
 
-   remove(id: number) {
-      return `This action removes a #${id} comment`;
+   async remove(id: string): Promise<Comment | null> {
+      return await this.comments.query(
+         `DELETE FROM comments WHERE id = $1 RETURNING *`,
+         [id],
+         Comment,
+         { isArray: false }
+      );
    }
 }
