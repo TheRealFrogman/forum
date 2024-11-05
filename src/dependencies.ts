@@ -31,6 +31,8 @@ export {
    sqlPoolDatabaseInstance as sqlDatabaseInstance,
    userServiceInstance,
    threadServiceInstance,
+   commentServiceInstance,
+   photoServiceInstance,
 
    jsonschemaValidatorInstance,
    localAuthenticatorInstance,
