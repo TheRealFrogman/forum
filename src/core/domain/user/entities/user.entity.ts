@@ -1,3 +1,4 @@
+import { Thread } from "../../thread/entities/thread.entity";
 
 enum Role {
    REGULAR = 'regular',
@@ -40,6 +41,12 @@ export class User implements UserProps {
       if (this.role === Role.ADMIN) { return true; }
       if (this.id === user.id) { return true; }
       return false;
+   }
+   canCreateThread() {
+      return true;
+   }
+   canCommentOnThread(thread: Thread) {
+      return true;
    }
 
    // strip the password 
