@@ -10,7 +10,11 @@ export class ThreadService {
    ) { }
 
    async create(createThreadDto: CreateThreadDto) {
-      const result = this.database.query(`INSERT INTO threads (title, description, author_id) VALUES ($1, $2, $3) RETURNING *`, [createThreadDto.title, createThreadDto.description, createThreadDto.author_id], Thread, { isArray: false });
+      return (await this.database.query(
+         `INSERT INTO threads (title, description, author_id) VALUES ($1, $2, $3) RETURNING *`,
+         [createThreadDto.title, createThreadDto.description, createThreadDto.author_id],
+         Thread, { isArray: false }
+      ))!;
    }
 
    async findAll() {
