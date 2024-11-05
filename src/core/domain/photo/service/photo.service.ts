@@ -12,6 +12,7 @@ export class PhotoService {
          `INSERT INTO photos (link, target_type, target_id) VALUES ($1, $2, $3) RETURNING *`,
          [createPhotoDto.link, createPhotoDto.target_type, createPhotoDto.target_id],
          Photo,
+         { isArray: false }
       );
    }
 
@@ -20,6 +21,7 @@ export class PhotoService {
          `SELECT * FROM photos WHERE id = $1`,
          [id],
          Photo,
+         { isArray: false },
       );
    }
 }
