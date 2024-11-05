@@ -24,11 +24,11 @@ export class ThreadService {
       return this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
    }
 
-   async findOne(id: number) {
+   async findOne(id: Thread['id']) {
       return this.database.query(`SELECT * FROM threads WHERE id = $1`, [id], Thread, { isArray: false });
    }
 
-   async update(id: number, updateThreadDto: UpdateThreadDto) {
+   async update(id: Thread['id'], updateThreadDto: UpdateThreadDto) {
       const input = {
          title: updateThreadDto.title,
          description: updateThreadDto.description,
