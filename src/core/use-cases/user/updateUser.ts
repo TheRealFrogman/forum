@@ -8,7 +8,7 @@ export async function updateUser_UseCase(user: User, updateId: User['id'], paylo
    const updateCandidate = await userServiceInstance.findOneById(updateId);
    if (!updateCandidate) throw new HttpError(400);
 
-   if (user.canUpdate(updateCandidate)) {
+   if (user.canUpdateUser(updateCandidate)) {
       return await userServiceInstance.update(updateId, payload);
    }
    throw new HttpError(401);
