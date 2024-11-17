@@ -1,11 +1,9 @@
 import { getUser_UseCase } from "@/core/domain/user/use-case/getUser";
-import { receiveBody } from "@/core/lib/receiveBody";
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
 import { updateUser_UseCase } from "@/core/domain/user/use-case/updateUser";
 import { deleteUser_UseCase } from "@/core/domain/user/use-case/deleteUser";
 import { Routes } from "@/routes/routes";
 
-import { jsonschemaValidatorInstance } from "@/dependencies";
 import { getSessionUser } from "./reused-code/helpers/getSessionUser.helper";
 import { parseAndValidateBody } from "./reused-code/helpers/parseAndValidateBody.helper";
 export const userRoutes: Routes<'/users'> = {

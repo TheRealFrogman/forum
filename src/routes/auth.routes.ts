@@ -1,9 +1,6 @@
-import { jsonschemaValidatorInstance, localAuthenticatorInstance, sessionServiceInstance, userServiceInstance } from "@/dependencies";
+import { localAuthenticatorInstance, sessionServiceInstance } from "@/dependencies";
 import { Routes } from "./routes";
-import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateUserDto } from "@/core/domain/user/dto/create-user.dto";
-import { parseCookies } from "@/core/lib/parseCookies";
-import { UUID } from "crypto";
 import { LoginDto } from "@/core/auth/local/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
@@ -19,21 +16,24 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
    },
    ["/auth/logout"]: {
       POST: async (request) => {
+         let session: Session | null = null;
+
          const sessionId = Session.getIdFromCookie(request);
-         const session = await sessionServiceInstance.getSessionBySessionId(sessionId)
-         if (!session)
+
+         if (sessionId && (session = await sessionServiceInstance.getSession(sessionId))) {
+            await sessionServiceInstance.destroySession(session);
+            return {
+               statusCode: 200,
+               statusMessage: "Session destroyed",
+               headers: { ...unsetSessionCookieHeaders },
+            };
+         } else
             return {
                statusCode: 401,
                statusMessage: "Invalid session",
                headers: { ...unsetSessionCookieHeaders },
             }
 
-         await sessionServiceInstance.destroySession(session);
-
-         return {
-            statusCode: 200,
-            headers: { ...unsetSessionCookieHeaders },
-         };
       }
    },
    ["/auth/login"]: {
@@ -44,7 +44,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
 
          const user = await localAuthenticatorInstance.authenticate(body.username, body.password);
          if (!user)
-            return { statusCode: 401 };
+            return { statusCode: 401, statusMessage: "Invalid credentials" };
 
          const session = await sessionServiceInstance.createSessionForUser(user);
          return {
@@ -61,11 +61,11 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const newUser = await localAuthenticatorInstance.register(body.username, body.password);
-         if (!newUser)
+         const user = await localAuthenticatorInstance.register(body.username, body.password);
+         if (user === 'exists')
             return { statusCode: 409 };
 
-         return { statusCode: 201, responseModel: newUser }
+         return { statusCode: 201, responseModel: user }
       }
    },
 } 

@@ -1,7 +1,6 @@
 import { IEncryptHash } from "@/core/ports/encrypt/IEncryptHash";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { UserService } from "@/core/domain/user/service/user.service";
-import { HttpError } from "@/core/exceptions/HttpError";
 
 export class LocalAuthenticator {
    constructor(
@@ -34,12 +33,12 @@ export class LocalAuthenticator {
     * Returns `User` if the registration is successful.
     * Throws an error if the username is already taken.
     */
-   async register(username: string, password: string): Promise<User | null> {
+   async register(username: string, password: string): Promise<User | 'exists'> {
       try {
          const newUser = await this.userService.create({ username, password });
          return newUser;
       } catch (error) {
-         throw new HttpError(409, 'User with this username already exists');
+         return "exists";
       }
    }
 }

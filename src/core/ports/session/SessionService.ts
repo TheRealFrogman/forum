@@ -21,7 +21,7 @@ export class SessionService {
       return this.sessions.deleteSession(session.sessionId)
    }
 
-   async getSessionBySessionId(session_id: Session['sessionId']): Promise<Session | null> {
+   async getSession(session_id: Session['sessionId']): Promise<Session | null> {
       return this.sessions.getSessionBySessionId(session_id)
    }
    async getAllSessionsForUser(user_id: User['id']): Promise<Session[]> {

@@ -5,8 +5,9 @@ import { IncomingMessage } from "http";
 
 export async function getSessionUser(request: IncomingMessage) {
    const sessionId = Session.getIdFromCookie(request);
-   const session = await sessionServiceInstance.getSessionBySessionId(sessionId)
-
+   if (!sessionId)
+      throw new HttpError(401, "Invalid session")
+   const session = await sessionServiceInstance.getSession(sessionId)
    if (!session)
       throw new HttpError(401, "Invalid session")
 

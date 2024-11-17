@@ -19,12 +19,14 @@ export class UserService {
       return await this.database.query(`SELECT * FROM users WHERE id = $1`, [id], User, { isArray: false });
    }
 
-   async create({ password, username }: CreateUserDto): Promise<User | null> {
+   async create({ password, username }: CreateUserDto): Promise<User> {
       const user = await this.findUserByUsername(username);
       if (user) throw new HttpError(409, 'User with this username already exists');
       const hashed_password = await this.passwordHasher.hash(password);
 
-      return await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User, { isArray: false });
+      const dbresult = await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User, { isArray: false });
+
+      return dbresult!;
    }
 
    async update(id: User['id'], updateUserDto: UpdateUserDto): Promise<User | null> {

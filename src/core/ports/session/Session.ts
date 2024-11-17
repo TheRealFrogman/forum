@@ -1,5 +1,4 @@
 import { User } from "@/core/domain/user/entities/user.entity";
-import { HttpError } from "@/core/exceptions/HttpError";
 import { parseCookies } from "@/core/lib/parseCookies";
 import { UUID } from "node:crypto";
 import { IncomingMessage } from "node:http";
@@ -11,10 +10,10 @@ export class Session {
    ) {
       Object.freeze(this);
    }
-   static getIdFromCookie(request: IncomingMessage): UUID {
+   static getIdFromCookie(request: IncomingMessage): UUID | null {
       const { session: sessionId } = parseCookies(request);
       if (!sessionId) {
-         throw new HttpError(401, "Session cookie is missing");
+         return null;
       }
 
       return sessionId as UUID;
