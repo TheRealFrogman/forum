@@ -1,8 +1,11 @@
 import http from "http"
 
-import { userRoutes } from "./routes/user-routes"
 import { HttpError } from "./core/exceptions/HttpError"
-import { authRoutes } from "./routes/auth.routes"
+import { userRoutes } from "./routing/routes/user.routes";
+import { authRoutes } from "./routing/routes/auth.routes";
+import { threadRoutes } from "./routing/routes/thread.routes";
+import { commentRoutes } from "./routing/routes/comment.routes";
+import { photoRoutes } from "./routing/routes/photo.routes";
 
 
 export const server = http.createServer({}, async (request, response) => {
@@ -19,6 +22,9 @@ export const server = http.createServer({}, async (request, response) => {
       const allRoutes = {
          ...userRoutes,
          ...authRoutes,
+         ...threadRoutes,
+         ...commentRoutes,
+         ...photoRoutes,
       }
       if (!(url.pathname in allRoutes))
          return void response.writeHead(404, "Route not found").end()

@@ -1,13 +1,13 @@
 import { userServiceInstance } from "@/dependencies";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { HttpError } from "@/core/exceptions/HttpError";
+import { EndpointResult } from "@/routing/routes";
 
-export async function getUser_UseCase(username?: string, id?: User['id']) {
-   if (id && !username) {
-      return await userServiceInstance.findOneById(id);
-   }
-   if (username && !id) {
-      return await userServiceInstance.findUserByUsername(username);
-   }
-   throw new HttpError(400, 'No id or username provided');
+export async function getUser_UseCase(username?: string, id?: User['id']): Promise<EndpointResult> {
+   if (id && !username)
+      return { statusCode: 200, responseModel: await userServiceInstance.findOneById(id) }
+
+   if (username && !id)
+      return { statusCode: 200, responseModel: await userServiceInstance.findUserByUsername(username) }
+
+   return { statusCode: 400, statusMessage: "No id or username provided" };
 }

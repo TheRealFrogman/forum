@@ -27,7 +27,7 @@ const commentServiceInstance = new CommentService(sqlPoolDatabaseInstance);
 const photoServiceInstance = new PhotoService(sqlPoolDatabaseInstance);
 
 const jsonschemaValidatorInstance: IJsonschemaValidator = new JsonSchemaValidator();
-const localAuthenticatorInstance = new LocalAuthenticator(userServiceInstance, hasher);
+const localAuthenticatorInstance = new LocalAuthenticator(sqlPoolDatabaseInstance, hasher);
 
 const sessionRepositoryInstance = new SessionMAPRepository();
 const sessionServiceInstance = new SessionService(sessionRepositoryInstance);

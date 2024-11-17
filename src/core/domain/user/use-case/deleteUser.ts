@@ -1,18 +1,18 @@
-import { HttpError } from "@/core/exceptions/HttpError";
 import { userServiceInstance } from "@/dependencies";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
+import { EndpointResult } from "@/routing/routes";
 
-export async function deleteUser_UseCase(user: User, deleteId: User['id']) {
+export async function deleteUser_UseCase(user: User, deleteId: User['id']): Promise<EndpointResult> {
    const deleteCandidate = await userServiceInstance.findOneById(deleteId);
    if (!deleteCandidate)
-      throw new HttpError(400, 'Delete candidate not found');
+      return { statusCode: 400, statusMessage: "Delete candidate not found" };
 
    if (canDeleteUser(user, deleteCandidate)) {
       const user = await userServiceInstance.delete(deleteCandidate);
-      return user!;
+      return { statusCode: 204, statusMessage: "User deleted", responseModel: user };
    }
 
-   throw new HttpError(401, 'You are not allowed to delete this user');
+   return { statusCode: 401, statusMessage: "You are not allowed to delete this user" };
 }
 
 function canDeleteUser(actor: User, target: User): boolean {

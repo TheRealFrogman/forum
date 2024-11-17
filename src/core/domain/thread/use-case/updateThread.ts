@@ -1,17 +1,18 @@
 import { UpdateThreadDto } from "@/core/domain/thread/dto/update-thread.dto";
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
-import { HttpError } from "@/core/exceptions/HttpError";
 import { threadServiceInstance } from "@/dependencies";
+import { EndpointResult } from "@/routing/routes";
 
-export async function updateThread_UseCase(user: User, id: Thread['id'], body: UpdateThreadDto) {
+export async function updateThread_UseCase(user: User, id: Thread['id'], body: UpdateThreadDto): Promise<EndpointResult> {
    const thread = await threadServiceInstance.findOne(id);
-   if (!thread) throw new HttpError(404, "Thread not found");
+   if (!thread)
+      return { statusCode: 404, statusMessage: "Thread not found" };
 
    if (canUpdateThread(user, thread))
-      return await threadServiceInstance.update(id, body);
+      return { statusCode: 200, responseModel: await threadServiceInstance.update(id, body) };
    else
-      throw new HttpError(401, "You are not allowed to update this thread");
+      return { statusCode: 401, statusMessage: "You are not allowed to update this thread" };
 }
 
 function canUpdateThread(user: User, thread: Thread) {

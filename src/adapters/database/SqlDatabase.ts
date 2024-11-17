@@ -12,7 +12,7 @@ export class SqlPoolDatabase implements ISqlDatabase {
    ) { }
 
    private mapDataToInstance<T extends object>(cls: new (...args: any[]) => T, data: object) {
-      const json = JSON.parse(JSON.stringify(data));
+      JSON.parse(JSON.stringify(data));
 
       const instance = new cls();
       for (const key in instance) {

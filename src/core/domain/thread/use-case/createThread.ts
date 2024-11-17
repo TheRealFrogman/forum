@@ -1,13 +1,13 @@
 import { threadServiceInstance } from "@/dependencies";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
-import { HttpError } from "@/core/exceptions/HttpError";
 import { User } from "@/core/domain/user/entities/user.entity";
+import { EndpointResult } from "@/routing/routes";
 
-export async function createThread_UseCase(user: User, body: CreateThreadDto) {
+export async function createThread_UseCase(user: User, body: CreateThreadDto): Promise<EndpointResult> {
    if (canCreateThread(user))
-      return await threadServiceInstance.create(body);
+      return { statusCode: 201, responseModel: await threadServiceInstance.create(body) };
    else
-      throw new HttpError(401, "You are not allowed to create a thread");
+      return { statusCode: 401, statusMessage: "You are not allowed to create a thread" }
 }
 
 function canCreateThread(user: User) {
