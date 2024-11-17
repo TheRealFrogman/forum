@@ -13,7 +13,6 @@ export class SqlPoolDatabase implements ISqlDatabase {
 
    private mapDataToInstance<T extends object>(cls: new (...args: any[]) => T, data: object) {
       const json = JSON.parse(JSON.stringify(data));
-      console.log(json);
 
       const instance = new cls();
       for (const key in instance) {
@@ -25,7 +24,6 @@ export class SqlPoolDatabase implements ISqlDatabase {
 
       if (Object.keys(instance).length !== Object.keys(data).length)
          throw new Error("Amount of instance fields is not equal to amount of data fields");
-
 
       return instance;
    }

@@ -1,5 +1,3 @@
-import { AggregateJsonschemaValidationError } from "./jsonschema-validation-error";
-
 export interface IJsonschemaValidator {
-   validateBySchema(instance: object, schema: object): AggregateJsonschemaValidationError
+   assertBySchemaOrThrow<T extends object>(instance: object, schema: object): asserts instance is T
 }

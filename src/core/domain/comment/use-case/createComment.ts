@@ -2,13 +2,17 @@ import { commentServiceInstance, threadServiceInstance } from "@/dependencies";
 import { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { HttpError } from "@/core/exceptions/HttpError";
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
 
 export async function createComment_UseCase(user: User, body: CreateCommentDto) {
    const thread = await threadServiceInstance.findOne(body.thread_id);
    if (!thread) throw new HttpError(404, "Thread not found");
 
-   if (user.canCommentOnThread(thread))
+   if (canCommentOnThread(user, thread))
       return await commentServiceInstance.create(body);
-   else 
-      throw new HttpError(401);
+   else
+      throw new HttpError(401, "You are not allowed to comment on this thread");
+}
+function canCommentOnThread(user: User, thread: Thread) {
+   return true;
 }

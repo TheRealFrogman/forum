@@ -9,5 +9,5 @@ export async function getUser_UseCase(username?: string, id?: User['id']) {
    if (username && !id) {
       return await userServiceInstance.findUserByUsername(username);
    }
-   throw new HttpError(400);
+   throw new HttpError(400, 'No id or username provided');
 }

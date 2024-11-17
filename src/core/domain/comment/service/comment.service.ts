@@ -1,6 +1,7 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
 import type { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto.ts";
 import type { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto.ts";
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
 
 export class CommentService {
    constructor(
@@ -8,8 +9,8 @@ export class CommentService {
    ) { }
    async create(createCommentDto: CreateCommentDto): Promise<Comment> {
       return (await this.comments.query(
-         `INSERT INTO comments (id, content, thread_id, author_id) VALUES ($1, $2, $3, $4) RETURNING *`,
-         [createCommentDto.id, createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
+         `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3, $4) RETURNING *`,
+         [createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
          Comment,
          { isArray: false }
       ))!;
@@ -24,7 +25,7 @@ export class CommentService {
       );
    }
 
-   async findOne(id: string): Promise<Comment | null> {
+   async findOne(id: Comment['id']): Promise<Comment | null> {
       return await this.comments.query(
          `SELECT * FROM comments WHERE id = $1`,
          [id],
@@ -33,7 +34,7 @@ export class CommentService {
       );
    }
 
-   async update(id: string, updateCommentDto: UpdateCommentDto): Promise<Comment | null> {
+   async update(id: Comment['id'], updateCommentDto: UpdateCommentDto): Promise<Comment | null> {
       const input = {
          content: updateCommentDto.content
       };
@@ -45,7 +46,7 @@ export class CommentService {
       );
    }
 
-   async remove(id: string): Promise<Comment | null> {
+   async delete(id: Comment['id']): Promise<Comment | null> {
       return await this.comments.query(
          `DELETE FROM comments WHERE id = $1 RETURNING *`,
          [id],
@@ -53,4 +54,5 @@ export class CommentService {
          { isArray: false }
       );
    }
+   
 }

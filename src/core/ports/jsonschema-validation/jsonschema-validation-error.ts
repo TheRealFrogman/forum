@@ -3,7 +3,7 @@ import { HttpError } from "@/core/exceptions/HttpError";
 export class JsonschemaPropertyValidationError extends HttpError {
    constructor(
       message: string,
-      public what: string
+      public validationTarget: string
    ) {
       super(400, message);
       this.name = "JsonschemaValidationError";
@@ -12,7 +12,7 @@ export class JsonschemaPropertyValidationError extends HttpError {
       const superJson = super.toJSON()
       const result = {
          ...super.toJSON(),
-         what: this.what
+         validationTarget: this.validationTarget
       }
       // @ts-ignore
       delete result.httpCode;

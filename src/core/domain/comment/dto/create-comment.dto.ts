@@ -1,6 +1,5 @@
 export class CreateCommentDto {
    constructor(
-      public id: string,
       public content: string,
       public thread_id: string,
       public author_id: string,
@@ -10,10 +9,6 @@ export class CreateCommentDto {
       title: "CreateCommentDto",
       type: "object",
       properties: {
-         id: {
-            type: "string",
-            minimum: 0
-         },
          content: {
             type: "string",
          },

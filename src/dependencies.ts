@@ -4,10 +4,12 @@ import { UserService } from "@/core/domain/user/service/user.service";
 import { HashEncrypt } from "@/adapters/hash-encrypt/hash-encrypt.provider";
 import { JsonSchemaValidator } from "@/adapters/jsonschema-validation/jsonschema-validator.impl";
 import { LocalAuthenticator } from "@/core/auth/local/local-auth";
-import { JwtImpl } from "./adapters/jwt/jwt.impl";
 import { ThreadService } from "./core/domain/thread/service/thread.service";
 import { CommentService } from "./core/domain/comment/service/comment.service";
 import { PhotoService } from "./core/domain/photo/service/photo.service";
+import { SessionMAPRepository } from "./adapters/session/SessionRepository";
+import { IJsonschemaValidator } from "./core/ports/jsonschema-validation/jsonschema-validator.interface";
+import { SessionService } from "./core/ports/session/SessionService";
 
 const sqlPoolDatabaseInstance = new SqlPoolDatabase(
    new Pool({
@@ -24,8 +26,11 @@ const threadServiceInstance = new ThreadService(sqlPoolDatabaseInstance);
 const commentServiceInstance = new CommentService(sqlPoolDatabaseInstance);
 const photoServiceInstance = new PhotoService(sqlPoolDatabaseInstance);
 
-const jsonschemaValidatorInstance = new JsonSchemaValidator;
+const jsonschemaValidatorInstance: IJsonschemaValidator = new JsonSchemaValidator();
 const localAuthenticatorInstance = new LocalAuthenticator(userServiceInstance, hasher);
+
+const sessionRepositoryInstance = new SessionMAPRepository();
+const sessionServiceInstance = new SessionService(sessionRepositoryInstance);
 
 export {
    sqlPoolDatabaseInstance as sqlDatabaseInstance,
@@ -33,6 +38,8 @@ export {
    threadServiceInstance,
    commentServiceInstance,
    photoServiceInstance,
+
+   sessionServiceInstance,
 
    jsonschemaValidatorInstance,
    localAuthenticatorInstance,

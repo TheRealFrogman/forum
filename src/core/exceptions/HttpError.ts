@@ -4,9 +4,9 @@ export class HttpError extends Error {
     * @param httpCode - http code of error
     * @param msg - error message
     */
-   constructor(httpCode: number, msg?: string) {
+   constructor(httpCode: number, msg?: string, name: string = "HttpError") {
       super(msg);
-      this.name = "HttpError";
+      this.name = name;
       this.httpCode = httpCode;
    }
    toJSON() {

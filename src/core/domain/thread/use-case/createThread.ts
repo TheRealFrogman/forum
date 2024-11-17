@@ -4,8 +4,12 @@ import { HttpError } from "@/core/exceptions/HttpError";
 import { User } from "@/core/domain/user/entities/user.entity";
 
 export async function createThread_UseCase(user: User, body: CreateThreadDto) {
-   if (user.canCreateThread())
+   if (canCreateThread(user))
       return await threadServiceInstance.create(body);
    else
-      throw new HttpError(401);
+      throw new HttpError(401, "You are not allowed to create a thread");
+}
+
+function canCreateThread(user: User) {
+   return true;
 }

@@ -1,6 +1,7 @@
-import { Thread } from "../../thread/entities/thread.entity";
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
 
-enum Role {
+export enum Role {
    REGULAR = 'regular',
    ADMIN = 'admin',
 }
@@ -28,28 +29,15 @@ export class User implements UserProps {
    role!: Role
    created_at!: Date;
    constructor(data: UserInitializer) {
-      Object.assign(this, data);
+      if (data) {
+         this.id = data.id;
+         this.username = data.username;
+         this.hashed_password = data.hashed_password;
+         this.role = data.role;
+         this.created_at = data.created_at;
+      }
    }
 
-   canUpdate(user: User) {
-      if (this.role === Role.ADMIN) { return true; }
-      if (this.id === user.id) { return true; }
-      return false;
-   }
-
-   canDelete(user: User) {
-      if (this.role === Role.ADMIN) { return true; }
-      if (this.id === user.id) { return true; }
-      return false;
-   }
-   canCreateThread() {
-      return true;
-   }
-   canCommentOnThread(thread: Thread) {
-      return true;
-   }
-
-   // strip the password 
    toJSON() {
       return {
          id: this.id,
@@ -79,7 +67,11 @@ export class User implements UserProps {
             "type": "string",
             "pattern": ".+:.+",
             "minLength": 64,
-         }
+         },
+         "role": {
+            "type": "string",
+            "enum": ["regular", "admin"]
+         },
       },
       "required": ["id", "username", "hashed_password"],
       "additionalProperties": false

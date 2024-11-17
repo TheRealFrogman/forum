@@ -4,16 +4,15 @@ import assert from "assert";
 import { Validator as Validator_jsonschema } from "jsonschema";
 
 export class JsonSchemaValidator implements IJsonschemaValidator {
-   validateBySchema(instance: object, schema: object): AggregateJsonschemaValidationError {
+   assertBySchemaOrThrow<T extends object>(instance: object, schema: object): asserts instance is T {
 
       const v = new Validator_jsonschema();
       const result = v.validate(instance, schema);
 
-      if (result.errors) {
+      if (result.errors.length) {
          var validationErrors = result.errors.map(err => new JsonschemaPropertyValidationError(err.property + " " + err.message, err.property));
+         assert(result.schema.title);
+         throw new AggregateJsonschemaValidationError("Validation failed", result.schema.title, schema, validationErrors ?? []);
       }
-
-      assert(result.schema.title);
-      return new AggregateJsonschemaValidationError("Validation failed", result.schema.title, schema, validationErrors! ?? []);
    }
 }
