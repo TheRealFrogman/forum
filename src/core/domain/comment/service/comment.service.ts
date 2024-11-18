@@ -9,7 +9,7 @@ export class CommentService {
    ) { }
    async create(createCommentDto: CreateCommentDto): Promise<Comment> {
       return (await this.comments.query(
-         `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3, $4) RETURNING *`,
+         `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3) RETURNING *`,
          [createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
          Comment,
          { isArray: false }
