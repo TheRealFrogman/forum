@@ -41,10 +41,6 @@ export const server = http.createServer({}, async (request, response) => {
          .end(result.responseModel ? JSON.stringify(result.responseModel) : undefined);
 
    } catch (error) {
-      if (error instanceof HttpError)
-         return void response
-            .writeHead(error.httpCode, error.message, { 'Content-Type': 'application/json' })
-            .end(JSON.stringify(error));
 
       console.error(error);
       return void response
