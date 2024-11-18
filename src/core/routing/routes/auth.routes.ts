@@ -1,4 +1,4 @@
-import { CreateUserDto } from "@/core/domain/user/dto/create-user.dto";
+import { RegisterDto } from "@/core/ports/local-auth/create-user.dto";
 import { LoginDto } from "@/core/ports/local-auth/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
@@ -59,7 +59,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         const user = await localAuthenticatorInstance.authenticate(validatedBody.username, validatedBody.password);
+         const user = await localAuthenticatorInstance.authenticate(validatedBody);
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid credentials" };
 
@@ -74,15 +74,15 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
    },
    ["/auth/register"]: {
       POST: async (request) => {
-         const body = await receiveBody<CreateUserDto>(request);
+         const body = await receiveBody<RegisterDto>(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<CreateUserDto>(body, CreateUserDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<RegisterDto>(body, RegisterDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         const user = await localAuthenticatorInstance.register(validatedBody.username, validatedBody.password);
+         const user = await localAuthenticatorInstance.register(validatedBody);
          if (!user)
             return { statusCode: 409, statusMessage: "User already exists" };
 

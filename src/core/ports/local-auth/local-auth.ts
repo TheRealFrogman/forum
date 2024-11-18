@@ -1,7 +1,9 @@
-import { IEncryptHash } from "@/core/ports/encrypt/IEncryptHash";
+import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
 import { inject } from "inversify";
+import { LoginDto } from "./login.dto";
+import { RegisterDto } from "./create-user.dto";
 
 export class LocalAuthenticatorService {
    constructor(
@@ -17,7 +19,7 @@ export class LocalAuthenticatorService {
     * Returns `User` if the user is authenticated successfully.
     * Returns `null` if the user is not found or the password is incorrect.
     */
-   async authenticate(username: string, password: string): Promise<User | null> {
+   async authenticate({ password, username }: LoginDto): Promise<User | null> {
       const user = await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User, { isArray: false });
       if (!user)
          return null;
@@ -38,7 +40,7 @@ export class LocalAuthenticatorService {
     * Returns `User` if the registration is successful.
     * Returns null if exists
     */
-   async register(username: string, password: string): Promise<User | null> {
+   async register({ password, username }: RegisterDto): Promise<User | null> {
       const user = await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User, { isArray: false });
       if (user)
          return null;
