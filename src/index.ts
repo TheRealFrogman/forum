@@ -5,9 +5,9 @@ process.loadEnvFile(__dirname + "/../.env");
 
 const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService)
 
-localAuthenticatorInstance.register("admin", "admin123")
-localAuthenticatorInstance.register("john", "john_doe")
-localAuthenticatorInstance.register("jane", "jane_doe")
+localAuthenticatorInstance.register({ username: "admin", password: "admin123" })
+localAuthenticatorInstance.register({ username: "john", password: "john_doe" })
+localAuthenticatorInstance.register({ username: "jane", password: "jane_doe" })
 
 import { server } from "./server";
 import { LocalAuthenticatorService } from './core/ports/local-auth/local-auth';
