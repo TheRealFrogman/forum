@@ -13,6 +13,7 @@ export class CreateThreadDto {
          author_id: {
             type: "string",
             minLength: 0,
+            "pattern": "[0-9]+"
          },
          description: {
             type: "string",

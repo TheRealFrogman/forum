@@ -25,6 +25,7 @@ export class Photo implements PhotoProps {
          id: {
             type: "string",
             minLength: 0,
+            "pattern": "[0-9]+"
          },
          link: {
             type: "string",
