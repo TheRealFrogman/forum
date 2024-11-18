@@ -8,7 +8,7 @@ CREATE TABLE users (
 
 CREATE TABLE threads (
    id BIGSERIAL PRIMARY KEY,
-   author_id INT NOT NULL,
+   author_id BIGSERIAL NOT NULL,
    description TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
    title TEXT CHECK(LENGTH(title) > 3 AND LENGTH(title) < 255) NOT NULL,
    FOREIGN KEY (author_id) REFERENCES users(id)
@@ -17,8 +17,8 @@ CREATE TABLE threads (
 CREATE TABLE comments (
    id BIGSERIAL PRIMARY KEY,
    content TEXT NOT NULL,
-   thread_id INT NOT NULL,
-   author_id INT NOT NULL,
+   thread_id BIGSERIAL NOT NULL,
+   author_id BIGSERIAL NOT NULL,
    rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (thread_id) REFERENCES threads(id),
    FOREIGN KEY (author_id) REFERENCES users(id)
@@ -28,7 +28,7 @@ CREATE TABLE photos (
    id BIGSERIAL PRIMARY KEY,
    link VARCHAR(255),
    target_type VARCHAR(20) CHECK (target_type IN ('thread', 'comment')),
-   target_id INT,
+   target_id BIGSERIAL,
    FOREIGN KEY (target_id) REFERENCES threads(id) ON DELETE CASCADE,
    FOREIGN KEY (target_id) REFERENCES comments(id) ON DELETE CASCADE
 );
