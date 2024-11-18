@@ -1,5 +1,5 @@
-import { RegisterDto } from "@/core/ports/local-auth/create-user.dto";
-import { LoginDto } from "@/core/ports/local-auth/login.dto";
+import { RegisterDto } from "@/core/ports/local-auth/dto/create-user.dto";
+import { LoginDto } from "@/core/ports/local-auth/dto/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
 import { receiveBody } from "@/core/lib/receiveBody";

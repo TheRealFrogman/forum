@@ -2,8 +2,8 @@ import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
 import { inject } from "inversify";
-import { LoginDto } from "./login.dto";
-import { RegisterDto } from "./create-user.dto";
+import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "./dto/create-user.dto";
 
 export class LocalAuthenticatorService {
    constructor(

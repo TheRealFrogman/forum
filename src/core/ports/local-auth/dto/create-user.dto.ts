@@ -6,7 +6,7 @@ export class RegisterDto {
    ) { }
 
    static schema = {
-      "title": "CreateUserDto",
+      "title": "RegisterDto",
       "type": "object",
       "properties": {
          "username": {
