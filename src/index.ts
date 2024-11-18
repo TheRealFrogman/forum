@@ -10,7 +10,7 @@ localAuthenticatorInstance.register({ username: "john", password: "john_doe" })
 localAuthenticatorInstance.register({ username: "jane", password: "jane_doe" })
 
 import { server } from "./server";
-import { LocalAuthenticatorService } from './core/ports/local-auth/local-auth';
+import { LocalAuthenticatorService } from './core/domain/local-auth/local-auth';
 server.listen(process.env['PORT'], () => {
    console.log(`listening ${process.env['PORT']}`)
 });
