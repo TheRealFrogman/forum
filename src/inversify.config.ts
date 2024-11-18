@@ -3,7 +3,7 @@ import { SqlPoolDatabase } from "@/adapters/database/SqlDatabase";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { HashEncrypt } from "@/adapters/hash-encrypt/hash-encrypt.provider";
 import { JsonSchemaValidator } from "@/adapters/jsonschema-validation/jsonschema-validator.impl";
-import { LocalAuthenticatorService } from "@/core/ports/local-auth/local-auth";
+import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { ThreadService } from "./core/domain/thread/service/thread.service";
 import { CommentService } from "./core/domain/comment/service/comment.service";
 import { PhotoService } from "./core/domain/photo/service/photo.service";

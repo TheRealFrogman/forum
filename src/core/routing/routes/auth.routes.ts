@@ -1,5 +1,5 @@
-import { RegisterDto } from "@/core/ports/local-auth/dto/create-user.dto";
-import { LoginDto } from "@/core/ports/local-auth/dto/login.dto";
+import { RegisterDto } from "@/core/domain/local-auth/dto/create-user.dto";
+import { LoginDto } from "@/core/domain/local-auth/dto/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
 import { receiveBody } from "@/core/lib/receiveBody";
@@ -10,7 +10,7 @@ import { unsetSessionCookieHeaders } from "../reused-code/headers/unsetSessionCo
 import { myContainer } from "@/inversify.config";
 
 import { SessionService } from "@/core/ports/session/SessionService";
-import { LocalAuthenticatorService } from "@/core/ports/local-auth/local-auth";
+import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
 
 const sessionServiceInstance = myContainer.get(SessionService);
