@@ -1,8 +1,8 @@
-import { commentServiceInstance, threadServiceInstance } from "@/dependencies";
+import { commentServiceInstance, threadServiceInstance } from "@/inversify.config";
 import { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
-import { EndpointResult } from "@/routing/routes";
+import { EndpointResult } from "@/core/routing/routes";
 
 export async function createComment_UseCase(user: User, body: CreateCommentDto): Promise<EndpointResult> {
    const thread = await threadServiceInstance.findOne(body.thread_id);

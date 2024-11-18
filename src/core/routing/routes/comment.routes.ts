@@ -3,13 +3,15 @@ import { createComment_UseCase } from "@/core/domain/comment/use-case/createComm
 import { updateComment_UseCase } from "@/core/domain/comment/use-case/updateComment";
 import { deleteComment_UseCase } from "@/core/domain/comment/use-case/deleteComment";
 
-import { Routes } from "@/routing/routes";
-import { jsonschemaValidatorInstance } from "@/dependencies";
+import { Routes } from "@/core/routing/routes";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto";
 import { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto";
 import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
 
+import { myContainer } from "@/inversify.config";
+import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 export const commentRoutes: Routes<'/comments'> = {
    ["/comments"]: {
       GET: async (request) => {

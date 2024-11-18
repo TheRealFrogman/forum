@@ -1,5 +1,3 @@
-import { ServerResponse } from "http";
-
 export function cookie(
    key: string,
    value: string,

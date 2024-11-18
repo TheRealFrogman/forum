@@ -1,11 +1,13 @@
 import { randomBytes, scrypt } from "node:crypto";
 import { Buffer } from 'node:buffer';
 import type { IEncryptHash } from "../../core/ports/encrypt/IEncryptHash.js";
+import { injectable } from "inversify";
 
 const pepper = Buffer.from([
    0xab, 0x72, 0x37, 0x62, 0x0a, 0xd0, 0x43, 0x79, 0x81, 0x26, 0x68, 0xa4, 0xe8, 0xb2, 0xac, 0x68,
 ]).toString("hex");
 
+@injectable()
 export class HashEncrypt implements IEncryptHash {
    hash(password: string): Promise<string> {
       const salt = randomBytes(16).toString("hex");

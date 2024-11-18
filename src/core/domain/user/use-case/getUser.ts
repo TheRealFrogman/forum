@@ -1,6 +1,6 @@
-import { userServiceInstance } from "@/dependencies";
+import { userServiceInstance } from "@/inversify.config";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { EndpointResult } from "@/routing/routes";
+import { EndpointResult } from "@/core/routing/routes";
 
 export async function getUser_UseCase(username?: string, id?: User['id']): Promise<EndpointResult> {
    if (id && !username)

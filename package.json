@@ -27,8 +27,10 @@
    "dependencies": {
       "@types/pg": "^8.11.10",
       "default": "file:",
+      "inversify": "^6.1.4",
       "jsonschema": "^1.4.1",
       "jsonwebtoken": "^9.0.2",
-      "pg": "^8.13.1"
+      "pg": "^8.13.1",
+      "reflect-metadata": "^0.2.2"
    }
 }

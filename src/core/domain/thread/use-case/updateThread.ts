@@ -1,8 +1,8 @@
 import { UpdateThreadDto } from "@/core/domain/thread/dto/update-thread.dto";
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
-import { threadServiceInstance } from "@/dependencies";
-import { EndpointResult } from "@/routing/routes";
+import { threadServiceInstance } from "@/inversify.config";
+import { EndpointResult } from "@/core/routing/routes";
 
 export async function updateThread_UseCase(user: User, id: Thread['id'], body: UpdateThreadDto): Promise<EndpointResult> {
    const thread = await threadServiceInstance.findOne(id);

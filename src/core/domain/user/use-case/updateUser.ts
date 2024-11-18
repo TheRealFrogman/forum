@@ -1,8 +1,8 @@
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
 
-import { userServiceInstance } from "@/dependencies";
-import { EndpointResult } from "@/routing/routes";
+import { userServiceInstance } from "@/inversify.config";
+import { EndpointResult } from "@/core/routing/routes";
 
 export async function updateUser_UseCase(user: User, updateId: User['id'], payload: UpdateUserDto): Promise<EndpointResult> {
    const updateCandidate = await userServiceInstance.findOneById(updateId);

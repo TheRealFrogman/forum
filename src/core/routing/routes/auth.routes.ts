@@ -1,12 +1,21 @@
-import { jsonschemaValidatorInstance, localAuthenticatorInstance, sessionServiceInstance } from "@/dependencies";
 import { CreateUserDto } from "@/core/domain/user/dto/create-user.dto";
-import { LoginDto } from "@/core/auth/local/login.dto";
+import { LoginDto } from "@/core/ports/local-auth/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { Routes } from "../routes";
 import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
 import { unsetSessionCookieHeaders } from "../reused-code/headers/unsetSessionCookie.headers";
+
+import { myContainer } from "@/inversify.config";
+
+import { SessionService } from "@/core/ports/session/SessionService";
+import { LocalAuthenticatorService } from "@/core/ports/local-auth/local-auth";
+import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+
+const sessionServiceInstance = myContainer.get(SessionService);
+const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService);
+const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator);
 
 export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register"> = {
    ["/auth/me"]: {

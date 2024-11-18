@@ -4,12 +4,14 @@ import { createThread_UseCase } from "@/core/domain/thread/use-case/createThread
 import { updateThread_UseCase } from "@/core/domain/thread/use-case/updateThread";
 import { getAllThreads_UseCase } from "@/core/domain/thread/use-case/getAllThreads";
 
-import { jsonschemaValidatorInstance } from "@/dependencies";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
 import { Routes } from "../routes";
 import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
 
+import { myContainer } from "@/inversify.config";
+import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
    ["/threads/all"]: {
       GET:

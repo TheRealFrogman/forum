@@ -2,11 +2,14 @@ import { getUser_UseCase } from "@/core/domain/user/use-case/getUser";
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
 import { updateUser_UseCase } from "@/core/domain/user/use-case/updateUser";
 import { deleteUser_UseCase } from "@/core/domain/user/use-case/deleteUser";
-import { Routes } from "@/routing/routes";
+import { Routes } from "@/core/routing/routes";
 
-import { jsonschemaValidatorInstance } from "@/dependencies";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
+
+import { myContainer } from "@/inversify.config";
+import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 
 export const userRoutes: Routes<'/users'> = {
    ["/users"]: {

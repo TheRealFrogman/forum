@@ -2,11 +2,13 @@ import { randomUUID } from "crypto";
 import { Session } from "./Session";
 import { ISessionRepository } from "./SessionRepository";
 import { User } from "@/core/domain/user/entities/user.entity";
+import { inject, injectable } from "inversify";
 
 // its ok to return objects by reference not by value because they're frozen and immutable
+@injectable()
 export class SessionService {
    constructor(
-      private readonly sessions: ISessionRepository,
+      @inject(ISessionRepository) private readonly sessions: ISessionRepository,
    ) { }
 
    async createSessionForUser(user: User) {

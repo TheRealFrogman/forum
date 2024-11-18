@@ -1,6 +1,6 @@
 import { User } from "@/core/domain/user/entities/user.entity";
 import { Session } from "@/core/ports/session/Session";
-import { sessionServiceInstance, userServiceInstance } from "@/dependencies";
+import { sessionServiceInstance, userServiceInstance } from "@/inversify.config";
 import { IncomingMessage } from "http";
 
 

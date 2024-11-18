@@ -1,14 +1,11 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
+import { injectable } from "inversify";
 import { Pool } from "pg"
+
+@injectable()
 export class SqlPoolDatabase implements ISqlDatabase {
    constructor(
-      private pool = new Pool({
-         user: process.env['DB_USER'],
-         host: process.env['DB_HOST'],
-         database: process.env['DB_NAME'],
-         password: process.env['DB_PASSWORD'],
-         port: Number(process.env['DB_PORT']),
-      })
+      private pool: Pool
    ) { }
 
    private mapDataToInstance<T extends object>(cls: new (...args: any[]) => T, data: object) {
