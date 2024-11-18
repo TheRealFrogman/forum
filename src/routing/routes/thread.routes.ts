@@ -23,8 +23,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" };
 
-         const threads = await getThreadsByUser_UseCase(user.id);
-         return { statusCode: 200, responseModel: threads };
+         return await getThreadsByUser_UseCase(user.id);
       },
       POST: async (request) => {
          const user = await getSessionUser(request);
