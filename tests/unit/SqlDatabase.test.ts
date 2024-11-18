@@ -40,13 +40,13 @@ describe("SqlDatabase", () => {
    })
    describe("query", () => {
       it("should create user", async () => {
-         const user = await database.query("INSERT INTO users (username) VALUES ($1) RETURNING *", ["test"], UserConProps,);
+         const user = await database.query<UserConProps>("INSERT INTO users (username) VALUES ($1) RETURNING *", ["test"], UserConProps, { isArray: false });
 
          assert(!Array.isArray(user));
          assert.equal(user?.username, "test");
       })
       it("should retrieve user", async () => {
-         const user = await database.query("SELECT * FROM users WHERE id = $1", [1], UserConProps,);
+         const user = await database.query<UserConProps>("SELECT * FROM users WHERE id = $1", [1], UserConProps, { isArray: false });
 
          assert(!Array.isArray(user));
          assert.equal(user?.username, "test");

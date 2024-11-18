@@ -1,9 +1,13 @@
 import { User } from "@/core/domain/user/entities/user.entity";
+import { UserService } from "@/core/domain/user/service/user.service";
 import { Session } from "@/core/ports/session/Session";
-import { sessionServiceInstance, userServiceInstance } from "@/inversify.config";
+import { SessionService } from "@/core/ports/session/SessionService";
+import { myContainer } from "@/inversify.config";
 import { IncomingMessage } from "http";
 
 
+const sessionServiceInstance = myContainer.get(SessionService);
+const userServiceInstance = myContainer.get(UserService);
 /**
  * @description
  * Finds the user associated with the session id in the request cookie.

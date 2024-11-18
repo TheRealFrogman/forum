@@ -1,7 +1,10 @@
-import { userServiceInstance } from "@/inversify.config";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
+import { myContainer } from "@/inversify.config";
+import { UserService } from "../service/user.service";
+
+const userServiceInstance = myContainer.get<UserService>(UserService);
 export async function deleteUser_UseCase(user: User, deleteId: User['id']): Promise<EndpointResult> {
    const deleteCandidate = await userServiceInstance.findOneById(deleteId);
    if (!deleteCandidate)

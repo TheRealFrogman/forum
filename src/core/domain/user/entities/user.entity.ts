@@ -1,6 +1,3 @@
-import { Comment } from "@/core/domain/comment/entities/comment.entity";
-import { Thread } from "@/core/domain/thread/entities/thread.entity";
-
 export enum Role {
    REGULAR = 'regular',
    ADMIN = 'admin',

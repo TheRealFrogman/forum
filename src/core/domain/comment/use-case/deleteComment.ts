@@ -1,8 +1,10 @@
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
-import { commentServiceInstance } from "@/inversify.config";
 import { EndpointResult } from "@/core/routing/routes";
 
+import { myContainer } from "@/inversify.config";
+import { CommentService } from "../service/comment.service";
+const commentServiceInstance = myContainer.get<CommentService>(CommentService);
 export async function deleteComment_UseCase(user: User, id: Comment['id']): Promise<EndpointResult> {
    const comment = await commentServiceInstance.findOne(id);
    if (!comment)

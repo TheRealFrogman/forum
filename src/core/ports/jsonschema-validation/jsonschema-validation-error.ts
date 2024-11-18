@@ -9,7 +9,6 @@ export class JsonschemaPropertyValidationError extends HttpError {
       this.name = "JsonschemaValidationError";
    }
    override toJSON() {
-      const superJson = super.toJSON()
       const result = {
          ...super.toJSON(),
          validationTarget: this.validationTarget
