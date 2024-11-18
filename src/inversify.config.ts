@@ -12,7 +12,7 @@ import { IJsonschemaValidator } from "./core/ports/jsonschema-validation/jsonsch
 import { SessionService } from "./core/ports/session/SessionService";
 import { Container } from "inversify";
 import { ISqlDatabase } from "./core/ports/database/sql-database.interface";
-import { IEncryptHash } from "./core/ports/encrypt/IEncryptHash";
+import { IEncryptHash } from "./core/ports/hash-encrypt/IEncryptHash";
 import { ISessionRepository } from "./core/ports/session/SessionRepository";
 import { AccessJwtService } from "./core/ports/jwt/AccessJwtService";
 import { JwtImpl } from "./adapters/jwt/jwt.impl";

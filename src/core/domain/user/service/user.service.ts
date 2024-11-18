@@ -1,5 +1,5 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
-import type { IEncryptHash } from "@/core/ports/encrypt/IEncryptHash.js";
+import type { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash.js";
 import type { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto.js";
 import { User } from "@/core/domain/user/entities/user.entity.js";
 

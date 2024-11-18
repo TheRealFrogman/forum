@@ -1,6 +1,6 @@
 import { randomBytes, scrypt } from "node:crypto";
 import { Buffer } from 'node:buffer';
-import type { IEncryptHash } from "../../core/ports/encrypt/IEncryptHash.js";
+import type { IEncryptHash } from "../../core/ports/hash-encrypt/IEncryptHash.js";
 import { injectable } from "inversify";
 
 const pepper = Buffer.from([
