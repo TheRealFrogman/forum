@@ -2,10 +2,12 @@ import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
 import type { CreatePhotoDto } from "@/core/domain/photo/dto/create-photo.dto.js";
 import { Photo } from "@/core/domain/photo/entities/photo.entity.js";
 import { Thread } from "../../thread/entities/thread.entity";
+import { inject, injectable } from "inversify";
 
+@injectable()
 export class PhotoService {
    constructor(
-      private readonly database: ISqlDatabase
+     @inject(ISqlDatabase) private readonly database: ISqlDatabase
    ) { }
 
    async create(createPhotoDto: CreatePhotoDto) {

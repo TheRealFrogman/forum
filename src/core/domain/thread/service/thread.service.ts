@@ -3,10 +3,12 @@ import type { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto
 import type { UpdateThreadDto } from "@/core/domain/thread/dto/update-thread.dto.js";
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
 import { Thread } from "@/core/domain/thread/entities/thread.entity.js";
+import { inject, injectable } from "inversify";
 
+@injectable()
 export class ThreadService {
    constructor(
-      private readonly database: ISqlDatabase
+      @inject(ISqlDatabase) private readonly database: ISqlDatabase
    ) { }
 
    async create(createThreadDto: CreateThreadDto) {

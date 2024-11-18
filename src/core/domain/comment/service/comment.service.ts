@@ -2,10 +2,12 @@ import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
 import type { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto.ts";
 import type { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto.ts";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { inject, injectable } from "inversify";
 
+@injectable()
 export class CommentService {
    constructor(
-      private comments: ISqlDatabase,
+      @inject(ISqlDatabase) private comments: ISqlDatabase,
    ) { }
    async create(createCommentDto: CreateCommentDto): Promise<Comment> {
       return (await this.comments.query(
@@ -54,5 +56,5 @@ export class CommentService {
          { isArray: false }
       );
    }
-   
+
 }

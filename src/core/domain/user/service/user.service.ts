@@ -1,12 +1,13 @@
 import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
-import type { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash.js";
+import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash.js";
 import type { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto.js";
 import { User } from "@/core/domain/user/entities/user.entity.js";
+import { inject } from "inversify";
 
 export class UserService {
    constructor(
-      private readonly passwordHasher: IEncryptHash,
-      private readonly database: ISqlDatabase
+      @inject(IEncryptHash) private readonly passwordHasher: IEncryptHash,
+      @inject(ISqlDatabase) private readonly database: ISqlDatabase
    ) { }
 
    async findUserByUsername(username: string): Promise<User | null> {
