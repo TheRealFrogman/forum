@@ -3,9 +3,9 @@ import { LoginDto } from "@/core/domain/local-auth/dto/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
 import { receiveBody } from "@/core/lib/receiveBody";
-import { Routes } from "../routes";
-import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
-import { unsetSessionCookieHeaders } from "../reused-code/headers/unsetSessionCookie.headers";
+import { Routes } from "@/core/routing/routes";
+import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";
+import { unsetSessionCookieHeaders } from "@/core/routing/reused-code/headers/unsetSessionCookie.headers";
 
 import { myContainer } from "@/inversify.config";
 

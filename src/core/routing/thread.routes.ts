@@ -6,8 +6,8 @@ import { getAllThreads_UseCase } from "@/core/domain/thread/use-case/getAllThrea
 
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
-import { Routes } from "../routes";
-import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
+import { Routes } from "@/core/routing/routes";
+import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";

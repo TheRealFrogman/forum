@@ -7,7 +7,7 @@ import { Routes } from "@/core/routing/routes";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto";
 import { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto";
-import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
+import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";

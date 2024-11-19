@@ -1,5 +1,5 @@
 import { getMainPhotoForThreadIfExists_UseCase } from "@/core/domain/photo/use-case/getMainPhotoForThreadIfExists";
-import { Routes } from "../routes";
+import { Routes } from "@/core/routing/routes";
 
 // import { getAllPhotosForThread_UseCase } from "@/core/domain/photo/use-case/getAllPhotosForThread";
 // import { jsonschemaValidatorInstance } from "@/dependencies";

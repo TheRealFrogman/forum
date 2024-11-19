@@ -5,7 +5,7 @@ import { deleteUser_UseCase } from "@/core/domain/user/use-case/deleteUser";
 import { Routes } from "@/core/routing/routes";
 
 import { receiveBody } from "@/core/lib/receiveBody";
-import { getSessionUser } from "../reused-code/helpers/getSessionUser.helper";
+import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
