@@ -1,7 +1,4 @@
-import { getUser_UseCase } from "@/core/domain/user/use-case/getUser";
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
-import { updateUser_UseCase } from "@/core/domain/user/use-case/updateUser";
-import { deleteUser_UseCase } from "@/core/domain/user/use-case/deleteUser";
 import { Routes } from "@/core/routing/routes";
 
 import { receiveBody } from "@/core/lib/receiveBody";
@@ -9,7 +6,15 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+import { GetUser_UseCase } from "../domain/use-cases/getUser";
+import { UpdateUser_UseCase } from "../domain/use-cases/updateUser";
+import { DeleteUser_UseCase } from "../domain/use-cases/deleteUser";
+
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
+
+const getUser_UseCase = myContainer.get(GetUser_UseCase);
+const updateUser_UseCase = myContainer.get(UpdateUser_UseCase);
+const deleteUser_UseCase = myContainer.get(DeleteUser_UseCase);
 
 export const userRoutes: Routes<'/users'> = {
    ["/users"]: {
@@ -19,7 +24,7 @@ export const userRoutes: Routes<'/users'> = {
          const id = url.searchParams.get('id') ?? undefined;
          const username = url.searchParams.get('username') ?? undefined;
 
-         return await getUser_UseCase(username, id)
+         return await getUser_UseCase.execute(username, id)
       },
       PATCH: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
@@ -39,7 +44,9 @@ export const userRoutes: Routes<'/users'> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" }
 
-         return await updateUser_UseCase(user, id, validatedBody)
+
+
+         return await updateUser_UseCase.execute(user, id, validatedBody)
       },
 
       DELETE: async (request) => {
@@ -52,7 +59,7 @@ export const userRoutes: Routes<'/users'> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" }
 
-         return await deleteUser_UseCase(user, id)
+         return await deleteUser_UseCase.execute(user, id)
       }
    }
 }
