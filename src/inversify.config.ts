@@ -17,9 +17,9 @@ import { ISessionRepository } from "./core/ports/session/SessionRepository";
 import { AccessJwtService } from "./core/ports/jwt/AccessJwtService";
 import { JwtImpl } from "./adapters/jwt/jwt.impl";
 import { RefreshJwtService } from "./core/ports/jwt/RefreshJwtService";
-import { DeleteUser_UseCase } from "./core/domain/use-cases/deleteUser";
-import { UpdateUser_UseCase } from "./core/domain/use-cases/updateUser";
-import { GetUser_UseCase } from "./core/domain/use-cases/getUser";
+import { DeleteUser_UseCase } from "./core/domain/use-cases/user/deleteUser";
+import { UpdateUser_UseCase } from "./core/domain/use-cases/user/updateUser";
+import { GetUser_UseCase } from "./core/domain/use-cases/user/getUser";
 
 
 export const myContainer = new Container();
