@@ -1,8 +1,8 @@
 
-import { getThreadsByUser_UseCase } from "@/core/domain/thread/use-case/getThreadsByUser";
-import { createThread_UseCase } from "@/core/domain/thread/use-case/createThread";
-import { updateThread_UseCase } from "@/core/domain/thread/use-case/updateThread";
-import { getAllThreads_UseCase } from "@/core/domain/thread/use-case/getAllThreads";
+import { getThreadsByUser_UseCase } from "@/core/domain/use-cases/thread/getThreadsByUser";
+import { createThread_UseCase } from "@/core/domain/use-cases/thread/createThread";
+import { updateThread_UseCase } from "@/core/domain/use-cases/thread/updateThread";
+import { getAllThreads_UseCase } from "@/core/domain/use-cases/thread/getAllThreads";
 
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";

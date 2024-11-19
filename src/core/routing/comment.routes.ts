@@ -1,7 +1,7 @@
-import { getCommentsByThread_UseCase } from "@/core/domain/comment/use-case/getCommentsByThread";
-import { createComment_UseCase } from "@/core/domain/comment/use-case/createComment";
-import { updateComment_UseCase } from "@/core/domain/comment/use-case/updateComment";
-import { deleteComment_UseCase } from "@/core/domain/comment/use-case/deleteComment";
+import { getCommentsByThread_UseCase } from "@/core/domain/use-cases/comment/getCommentsByThread";
+import { createComment_UseCase } from "@/core/domain/use-cases/comment/createComment";
+import { updateComment_UseCase } from "@/core/domain/use-cases/comment/updateComment";
+import { deleteComment_UseCase } from "@/core/domain/use-cases/comment/deleteComment";
 
 import { Routes } from "@/core/routing/routes";
 import { receiveBody } from "@/core/lib/receiveBody";

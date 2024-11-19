@@ -1,4 +1,4 @@
-import { getMainPhotoForThreadIfExists_UseCase } from "@/core/domain/photo/use-case/getMainPhotoForThreadIfExists";
+import { getMainPhotoForThreadIfExists_UseCase } from "@/core/domain/use-cases/photo/getMainPhotoForThreadIfExists";
 import { Routes } from "@/core/routing/routes";
 
 // import { getAllPhotosForThread_UseCase } from "@/core/domain/photo/use-case/getAllPhotosForThread";

@@ -6,9 +6,9 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
-import { GetUser_UseCase } from "../domain/use-cases/getUser";
-import { UpdateUser_UseCase } from "../domain/use-cases/updateUser";
-import { DeleteUser_UseCase } from "../domain/use-cases/deleteUser";
+import { GetUser_UseCase } from "../domain/use-cases/user/getUser";
+import { UpdateUser_UseCase } from "../domain/use-cases/user/updateUser";
+import { DeleteUser_UseCase } from "../domain/use-cases/user/deleteUser";
 
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 
