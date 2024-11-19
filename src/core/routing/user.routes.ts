@@ -44,8 +44,6 @@ export const userRoutes: Routes<'/users'> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" }
 
-
-
          return await updateUser_UseCase.execute(user, id, validatedBody)
       },
 
