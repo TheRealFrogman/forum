@@ -4,7 +4,7 @@ import { Role, User } from "@/core/domain/user/entities/user.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
 import { myContainer } from "@/inversify.config";
-import { ThreadService } from "../service/thread.service";
+import { ThreadService } from "@/core/domain/thread/service/thread.service";
 const threadServiceInstance = myContainer.get<ThreadService>(ThreadService);
 export async function updateThread_UseCase(user: User, id: Thread['id'], body: UpdateThreadDto): Promise<EndpointResult> {
    const thread = await threadServiceInstance.findOne(id);

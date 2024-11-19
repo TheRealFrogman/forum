@@ -3,7 +3,7 @@ import { User } from "@/core/domain/user/entities/user.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
 import { myContainer } from "@/inversify.config";
-import { ThreadService } from "../service/thread.service";
+import { ThreadService } from "@/core/domain/thread/service/thread.service";
 const threadServiceInstance = myContainer.get<ThreadService>(ThreadService);
 export async function createThread_UseCase(user: User, body: CreateThreadDto): Promise<EndpointResult> {
    if (canCreateThread(user))
