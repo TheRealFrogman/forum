@@ -17,6 +17,9 @@ import { ISessionRepository } from "./core/ports/session/SessionRepository";
 import { AccessJwtService } from "./core/ports/jwt/AccessJwtService";
 import { JwtImpl } from "./adapters/jwt/jwt.impl";
 import { RefreshJwtService } from "./core/ports/jwt/RefreshJwtService";
+import { DeleteUser_UseCase } from "./core/domain/use-cases/deleteUser";
+import { UpdateUser_UseCase } from "./core/domain/use-cases/updateUser";
+import { GetUser_UseCase } from "./core/domain/use-cases/getUser";
 
 
 export const myContainer = new Container();
@@ -49,14 +52,18 @@ myContainer.bind<RefreshJwtService>(RefreshJwtService).toConstantValue(
    })
 )
 
-myContainer.bind<UserService>(UserService).to(UserService);
-myContainer.bind<ThreadService>(ThreadService).to(ThreadService);
-myContainer.bind<CommentService>(CommentService).to(CommentService);
-myContainer.bind<PhotoService>(PhotoService).to(PhotoService);
+myContainer.bind(UserService).to(UserService);
+myContainer.bind(ThreadService).to(ThreadService);
+myContainer.bind(CommentService).to(CommentService);
+myContainer.bind(PhotoService).to(PhotoService);
 
-myContainer.bind<IEncryptHash>(IEncryptHash).to(HashEncrypt);
-myContainer.bind<IJsonschemaValidator>(IJsonschemaValidator).to(JsonSchemaValidator);
-myContainer.bind<LocalAuthenticatorService>(LocalAuthenticatorService).to(LocalAuthenticatorService);
+myContainer.bind(IEncryptHash).to(HashEncrypt);
+myContainer.bind(IJsonschemaValidator).to(JsonSchemaValidator);
+myContainer.bind(LocalAuthenticatorService).to(LocalAuthenticatorService);
 
-myContainer.bind<ISessionRepository>(ISessionRepository).to(SessionMAPRepository);
-myContainer.bind<SessionService>(SessionService).to(SessionService);
+myContainer.bind(ISessionRepository).to(SessionMAPRepository);
+myContainer.bind(SessionService).to(SessionService);
+
+myContainer.bind(DeleteUser_UseCase).to(DeleteUser_UseCase);
+myContainer.bind(UpdateUser_UseCase).to(UpdateUser_UseCase);
+myContainer.bind(GetUser_UseCase).to(GetUser_UseCase);
