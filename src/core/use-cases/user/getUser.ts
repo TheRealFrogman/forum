@@ -13,11 +13,21 @@ export class GetUser_UseCase extends UseCase {
       super();
    }
    async execute(username?: string, id?: User['id']): Promise<EndpointResult> {
-      if (id && !username)
-         return { statusCode: 200, responseModel: await this.userService.findOneById(id) }
+      if (id && !username) {
+         const result = await this.userService.findOneById(id);
+         if (!result) {
+            return { statusCode: 404, statusMessage: "User not found" };
+         }
+         return { statusCode: 200, responseModel: result }
+      }
 
-      if (username && !id)
-         return { statusCode: 200, responseModel: await this.userService.findUserByUsername(username) }
+      if (username && !id) {
+         const result = await this.userService.findUserByUsername(username);
+         if (!result) {
+            return { statusCode: 404, statusMessage: "User not found" };
+         }
+         return { statusCode: 200, responseModel: result }
+      }
 
       return { statusCode: 400, statusMessage: "No id or username provided" };
    }
