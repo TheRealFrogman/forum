@@ -6,7 +6,7 @@ import { PhotoService } from "../../domain/photo/service/photo.service";
 import { inject, injectable } from "inversify";
 
 @injectable()
-export class GetMainPhotoForThreadIfExists_UseCase extends UseCase {
+export class GetMainPhotosForThreadIfExists_UseCase extends UseCase {
    constructor(
       @inject(PhotoService) private readonly photoService: PhotoService,
    ) {
@@ -14,6 +14,6 @@ export class GetMainPhotoForThreadIfExists_UseCase extends UseCase {
    }
 
    async execute(threadId: Thread['id']): Promise<EndpointResult> {
-      return { statusCode: 200, responseModel: await this.photoService.getMainPhotoForThread(threadId) };
+      return { statusCode: 200, responseModel: await this.photoService.getMainPhotosForThread(threadId) };
    }
 }

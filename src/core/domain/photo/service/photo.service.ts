@@ -7,7 +7,7 @@ import { inject, injectable } from "inversify";
 @injectable()
 export class PhotoService {
    constructor(
-     @inject(ISqlDatabase) private readonly database: ISqlDatabase
+      @inject(ISqlDatabase) private readonly database: ISqlDatabase
    ) { }
 
    async create(createPhotoDto: CreatePhotoDto) {
@@ -29,7 +29,7 @@ export class PhotoService {
    }
 
 
-   async getMainPhotoForThread(threadId: Thread['id']) {
+   async getMainPhotosForThread(threadId: Thread['id']) {
       return this.database.query(
          `SELECT * FROM photos WHERE target_type = 'thread' AND target_id = $1`,
          [threadId],

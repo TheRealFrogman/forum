@@ -1,12 +1,12 @@
 import { Routes } from "@/core/routing/routes";
-import { GetMainPhotoForThreadIfExists_UseCase } from "../use-cases/photo/getMainPhotoForThreadIfExists";
+import { GetMainPhotosForThreadIfExists_UseCase } from "../use-cases/photo/getMainPhotoForThreadIfExists";
 import { myContainer } from "@/inversify.config";
 
 // import { getAllPhotosForThread_UseCase } from "@/core/domain/photo/use-case/getAllPhotosForThread";
 // import { jsonschemaValidatorInstance } from "@/dependencies";
 // import { receiveBody } from "@/core/lib/receiveBody";
 // import { getSessionUser } from "./reused-code/helpers/getSessionUser.helper";
-const getMainPhotoForThreadIfExists_UseCase = myContainer.get(GetMainPhotoForThreadIfExists_UseCase);
+const getMainPhotosForThreadIfExists_UseCase = myContainer.get(GetMainPhotosForThreadIfExists_UseCase);
 export const photoRoutes: Routes<'/photos'> = {
    ["/photos"]: {
       GET: async (request) => {
@@ -15,7 +15,7 @@ export const photoRoutes: Routes<'/photos'> = {
          if (!threadId)
             return { statusCode: 400, statusMessage: "No threadId provided" };
 
-         return await getMainPhotoForThreadIfExists_UseCase.execute(threadId);
+         return await getMainPhotosForThreadIfExists_UseCase.execute(threadId);
       },
       //  POST: async (request) => {
       //    const user = await getSessionUser(request);

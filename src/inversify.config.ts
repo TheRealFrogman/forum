@@ -29,7 +29,7 @@ import { DeleteComment_UseCase } from "@/core/use-cases/comment/deleteComment";
 import { GetCommentsByThread_UseCase } from "@/core/use-cases/comment/getCommentsByThread";
 import { UpdateComment_UseCase } from "@/core/use-cases/comment/updateComment";
 import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
-import { GetMainPhotoForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
+import { GetMainPhotosForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
 
 
 export const myContainer = new Container();
@@ -93,4 +93,4 @@ myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase);
 
 // photo use-cases
 myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase);
-myContainer.bind(GetMainPhotoForThreadIfExists_UseCase).to(GetMainPhotoForThreadIfExists_UseCase);
+myContainer.bind(GetMainPhotosForThreadIfExists_UseCase).to(GetMainPhotosForThreadIfExists_UseCase);
