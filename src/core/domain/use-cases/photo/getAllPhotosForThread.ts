@@ -1,5 +1,10 @@
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { UseCase } from "../UseCase";
+import { injectable } from "inversify";
 
-export async function getAllPhotosForThread_UseCase(_threadId: Thread['id']) {
-   throw new Error("Not implemented");
+@injectable()
+export class GetAllPhotosForThread_UseCase extends UseCase {
+   async execute(_threadId: Thread['id']) {
+      throw new Error("Not implemented");
+   }
 }

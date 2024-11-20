@@ -2,16 +2,26 @@ import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
-import { myContainer } from "@/inversify.config";
 import { ThreadService } from "@/core/domain/thread/service/thread.service";
-const threadServiceInstance = myContainer.get<ThreadService>(ThreadService);
-export async function createThread_UseCase(user: User, body: CreateThreadDto): Promise<EndpointResult> {
-   if (canCreateThread(user))
-      return { statusCode: 201, responseModel: await threadServiceInstance.create(body) };
-   else
-      return { statusCode: 401, statusMessage: "You are not allowed to create a thread" }
-}
+import { UseCase } from "../UseCase";
+import { inject, injectable } from "inversify";
 
-function canCreateThread(_user: User) {
-   return true;
+@injectable()
+export class CreateThread_UseCase extends UseCase {
+
+   constructor(
+      @inject(ThreadService) private readonly threadService: ThreadService,
+   ) {
+      super();
+   }
+   async execute(user: User, body: CreateThreadDto): Promise<EndpointResult> {
+      if (this.canDo(user))
+         return { statusCode: 201, responseModel: await this.threadService.create(body) };
+      else
+         return { statusCode: 401, statusMessage: "You are not allowed to create a thread" }
+   }
+
+   override canDo(_user: User) {
+      return true;
+   }
 }

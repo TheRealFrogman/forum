@@ -1,9 +1,3 @@
-
-import { getThreadsByUser_UseCase } from "@/core/domain/use-cases/thread/getThreadsByUser";
-import { createThread_UseCase } from "@/core/domain/use-cases/thread/createThread";
-import { updateThread_UseCase } from "@/core/domain/use-cases/thread/updateThread";
-import { getAllThreads_UseCase } from "@/core/domain/use-cases/thread/getAllThreads";
-
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
 import { Routes } from "@/core/routing/routes";
@@ -11,12 +5,22 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+import { GetAllThreads_UseCase } from "../domain/use-cases/thread/getAllThreads";
+import { GetThreadsByUser_UseCase } from "../domain/use-cases/thread/getThreadsByUser";
+import { CreateThread_UseCase } from "../domain/use-cases/thread/createThread";
+import { UpdateThread_UseCase } from "../domain/use-cases/thread/updateThread";
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
+// import { GetAllPhotosForThread_UseCase } from "../domain/use-cases/photo/getAllPhotosForThread";
+// const getAllPhotosForThread_UseCase = myContainer.get(GetAllPhotosForThread_UseCase);
+const getAllThreads_UseCase = myContainer.get(GetAllThreads_UseCase);
+const getThreadsByUser_UseCase = myContainer.get(GetThreadsByUser_UseCase);
+const createThread_UseCase = myContainer.get(CreateThread_UseCase);
+const updateThread_UseCase = myContainer.get(UpdateThread_UseCase);
 export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
    ["/threads/all"]: {
       GET:
          async () => {
-            return await getAllThreads_UseCase()
+            return await getAllThreads_UseCase.execute()
          }
    },
    ["/threads"]: {
@@ -25,7 +29,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" };
 
-         return await getThreadsByUser_UseCase(user.id);
+         return await getThreadsByUser_UseCase.execute(user.id);
       },
       POST: async (request) => {
          const user = await getSessionUser(request);
@@ -40,7 +44,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await createThread_UseCase(user, validatedBody);
+         return await createThread_UseCase.execute(user, validatedBody);
       },
       PATCH: async (request) => {
          const user = await getSessionUser(request);
@@ -60,7 +64,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await updateThread_UseCase(user, id, validatedBody);
+         return await updateThread_UseCase.execute(user, id, validatedBody);
       }
    }
 };

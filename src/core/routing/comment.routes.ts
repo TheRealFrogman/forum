@@ -1,7 +1,3 @@
-import { getCommentsByThread_UseCase } from "@/core/domain/use-cases/comment/getCommentsByThread";
-import { createComment_UseCase } from "@/core/domain/use-cases/comment/createComment";
-import { updateComment_UseCase } from "@/core/domain/use-cases/comment/updateComment";
-import { deleteComment_UseCase } from "@/core/domain/use-cases/comment/deleteComment";
 
 import { Routes } from "@/core/routing/routes";
 import { receiveBody } from "@/core/lib/receiveBody";
@@ -11,7 +7,15 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+import { CreateComment_UseCase } from "../domain/use-cases/comment/createComment";
+import { UpdateComment_UseCase } from "../domain/use-cases/comment/updateComment";
+import { GetCommentsByThread_UseCase } from "../domain/use-cases/comment/getCommentsByThread";
+import { DeleteComment_UseCase } from "../domain/use-cases/comment/deleteComment";
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
+const createComment_UseCase = myContainer.get(CreateComment_UseCase);
+const updateComment_UseCase = myContainer.get(UpdateComment_UseCase);
+const getCommentsByThread_UseCase = myContainer.get(GetCommentsByThread_UseCase);
+const deleteComment_UseCase = myContainer.get(DeleteComment_UseCase);
 export const commentRoutes: Routes<'/comments'> = {
    ["/comments"]: {
       GET: async (request) => {
@@ -20,7 +24,7 @@ export const commentRoutes: Routes<'/comments'> = {
          if (!threadId)
             return { statusCode: 400, statusMessage: "Thread ID is required" };
 
-         return await getCommentsByThread_UseCase(threadId);
+         return await getCommentsByThread_UseCase.execute(threadId);
       },
       POST: async (request) => {
          const user = await getSessionUser(request);
@@ -34,7 +38,7 @@ export const commentRoutes: Routes<'/comments'> = {
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await createComment_UseCase(user, validatedBody);
+         return await createComment_UseCase.execute(user, validatedBody);
       },
       PUT: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
@@ -54,7 +58,7 @@ export const commentRoutes: Routes<'/comments'> = {
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await updateComment_UseCase(user, commentId, validatedBody);
+         return await updateComment_UseCase.execute(user, commentId, validatedBody);
       },
       DELETE: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
@@ -67,7 +71,7 @@ export const commentRoutes: Routes<'/comments'> = {
          if (!user)
             return { statusCode: 401, statusMessage: "Invalid session" };
 
-         return await deleteComment_UseCase(user, commentId);
+         return await deleteComment_UseCase.execute(user, commentId);
       },
    }
 };

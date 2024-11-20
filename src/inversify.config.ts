@@ -20,6 +20,16 @@ import { RefreshJwtService } from "./core/ports/jwt/RefreshJwtService";
 import { DeleteUser_UseCase } from "./core/domain/use-cases/user/deleteUser";
 import { UpdateUser_UseCase } from "./core/domain/use-cases/user/updateUser";
 import { GetUser_UseCase } from "./core/domain/use-cases/user/getUser";
+import { CreateThread_UseCase } from "./core/domain/use-cases/thread/createThread";
+import { GetAllThreads_UseCase } from "./core/domain/use-cases/thread/getAllThreads";
+import { GetThreadsByUser_UseCase } from "./core/domain/use-cases/thread/getThreadsByUser";
+import { UpdateThread_UseCase } from "./core/domain/use-cases/thread/updateThread";
+import { CreateComment_UseCase } from "./core/domain/use-cases/comment/createComment";
+import { DeleteComment_UseCase } from "./core/domain/use-cases/comment/deleteComment";
+import { GetCommentsByThread_UseCase } from "./core/domain/use-cases/comment/getCommentsByThread";
+import { UpdateComment_UseCase } from "./core/domain/use-cases/comment/updateComment";
+import { GetAllPhotosForThread_UseCase } from "./core/domain/use-cases/photo/getAllPhotosForThread";
+import { GetMainPhotoForThreadIfExists_UseCase } from "./core/domain/use-cases/photo/getMainPhotoForThreadIfExists";
 
 
 export const myContainer = new Container();
@@ -64,6 +74,23 @@ myContainer.bind(LocalAuthenticatorService).to(LocalAuthenticatorService);
 myContainer.bind(ISessionRepository).to(SessionMAPRepository);
 myContainer.bind(SessionService).to(SessionService);
 
+// user use-cases
 myContainer.bind(DeleteUser_UseCase).to(DeleteUser_UseCase);
 myContainer.bind(UpdateUser_UseCase).to(UpdateUser_UseCase);
 myContainer.bind(GetUser_UseCase).to(GetUser_UseCase);
+
+// thread use-cases
+myContainer.bind(CreateThread_UseCase).to(CreateThread_UseCase);
+myContainer.bind(GetAllThreads_UseCase).to(GetAllThreads_UseCase);
+myContainer.bind(GetThreadsByUser_UseCase).to(GetThreadsByUser_UseCase);
+myContainer.bind(UpdateThread_UseCase).to(UpdateThread_UseCase);
+
+// comment use-cases
+myContainer.bind(CreateComment_UseCase).to(CreateComment_UseCase);
+myContainer.bind(DeleteComment_UseCase).to(DeleteComment_UseCase);
+myContainer.bind(GetCommentsByThread_UseCase).to(GetCommentsByThread_UseCase);
+myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase);
+
+// photo use-cases
+myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase);
+myContainer.bind(GetMainPhotoForThreadIfExists_UseCase).to(GetMainPhotoForThreadIfExists_UseCase);

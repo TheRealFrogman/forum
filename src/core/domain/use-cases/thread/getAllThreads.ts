@@ -1,8 +1,18 @@
 import { EndpointResult } from "@/core/routing/routes";
 
-import { myContainer } from "@/inversify.config";
 import { ThreadService } from "@/core/domain/thread/service/thread.service";
-const threadServiceInstance = myContainer.get<ThreadService>(ThreadService);
-export async function getAllThreads_UseCase(): Promise<EndpointResult> {
-   return { statusCode: 200, responseModel: await threadServiceInstance.findAll() };
+import { UseCase } from "../UseCase";
+import { inject, injectable } from "inversify";
+
+@injectable()
+export class GetAllThreads_UseCase extends UseCase {
+   constructor(
+      @inject(ThreadService) private readonly threadService: ThreadService,
+   ) {
+      super();
+   }
+
+   async execute(): Promise<EndpointResult> {
+      return { statusCode: 200, responseModel: await this.threadService.findAll() };
+   }
 }

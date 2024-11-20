@@ -2,9 +2,18 @@ import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
 import { CommentService } from "@/core/domain/comment/service/comment.service";
-import { myContainer } from "@/inversify.config";
-const commentServiceInstance = myContainer.get<CommentService>(CommentService);
+import { UseCase } from "../UseCase";
+import { inject, injectable } from "inversify";
 
-export async function getCommentsByThread_UseCase(threadId: Thread['id']): Promise<EndpointResult> {
-   return { statusCode: 200, responseModel: await commentServiceInstance.findAllByThread(threadId) };
+@injectable()
+export class GetCommentsByThread_UseCase extends UseCase {
+   constructor(
+      @inject(CommentService) private readonly commentService: CommentService,
+   ) {
+      super();
+   }
+   async execute(threadId: Thread['id']): Promise<EndpointResult> {
+      return { statusCode: 200, responseModel: await this.commentService.findAllByThread(threadId) };
+   }
 }
+
