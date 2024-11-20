@@ -6,7 +6,6 @@ import { threadRoutes } from "@/core/routing/thread.routes";
 import { commentRoutes } from "@/core/routing/comment.routes";
 import { photoRoutes } from "@/core/routing/photo.routes";
 
-
 export const server = http.createServer({}, async (request, response) => {
    if (!request.url || !request.method)
       return void response.writeHead(400, "No url or method").end()
