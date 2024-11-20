@@ -28,7 +28,6 @@ import { CreateComment_UseCase } from "@/core/use-cases/comment/createComment";
 import { DeleteComment_UseCase } from "@/core/use-cases/comment/deleteComment";
 import { GetCommentsByThread_UseCase } from "@/core/use-cases/comment/getCommentsByThread";
 import { UpdateComment_UseCase } from "@/core/use-cases/comment/updateComment";
-import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
 import { GetMainPhotosForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
 
 
@@ -75,22 +74,26 @@ myContainer.bind(ISessionRepository).to(SessionMAPRepository);
 myContainer.bind(SessionService).to(SessionService);
 
 // user use-cases
-myContainer.bind(DeleteUser_UseCase).to(DeleteUser_UseCase);
-myContainer.bind(UpdateUser_UseCase).to(UpdateUser_UseCase);
-myContainer.bind(GetUser_UseCase).to(GetUser_UseCase);
+myContainer.bind(DeleteUser_UseCase).to(DeleteUser_UseCase).inSingletonScope();
+myContainer.bind(UpdateUser_UseCase).to(UpdateUser_UseCase).inSingletonScope();
+myContainer.bind(GetUser_UseCase).to(GetUser_UseCase).inSingletonScope();
 
 // thread use-cases
-myContainer.bind(CreateThread_UseCase).to(CreateThread_UseCase);
-myContainer.bind(GetAllThreads_UseCase).to(GetAllThreads_UseCase);
-myContainer.bind(GetThreadsByUser_UseCase).to(GetThreadsByUser_UseCase);
-myContainer.bind(UpdateThread_UseCase).to(UpdateThread_UseCase);
+myContainer.bind(CreateThread_UseCase).to(CreateThread_UseCase).inSingletonScope();
+myContainer.bind(GetAllThreads_UseCase).to(GetAllThreads_UseCase).inSingletonScope();
+myContainer.bind(GetThreadsByUser_UseCase).to(GetThreadsByUser_UseCase).inSingletonScope();
+myContainer.bind(UpdateThread_UseCase).to(UpdateThread_UseCase).inSingletonScope();
 
 // comment use-cases
-myContainer.bind(CreateComment_UseCase).to(CreateComment_UseCase);
-myContainer.bind(DeleteComment_UseCase).to(DeleteComment_UseCase);
-myContainer.bind(GetCommentsByThread_UseCase).to(GetCommentsByThread_UseCase);
-myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase);
+myContainer.bind(CreateComment_UseCase).to(CreateComment_UseCase).inSingletonScope();
+myContainer.bind(DeleteComment_UseCase).to(DeleteComment_UseCase).inSingletonScope();
+myContainer.bind(GetCommentsByThread_UseCase).to(GetCommentsByThread_UseCase).inSingletonScope();
+myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase).inSingletonScope();
 
-// photo use-cases
-myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase);
-myContainer.bind(GetMainPhotosForThreadIfExists_UseCase).to(GetMainPhotosForThreadIfExists_UseCase);
+// photo use-case
+// import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
+// myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase).inSingletonScope();
+myContainer.bind(GetMainPhotosForThreadIfExists_UseCase).to(GetMainPhotosForThreadIfExists_UseCase).inSingletonScope();
+
+const guuc = myContainer.get(GetUser_UseCase)
+guuc.subscribe((user) => console.log(user))
