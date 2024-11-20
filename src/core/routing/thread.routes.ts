@@ -5,10 +5,10 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
-import { GetAllThreads_UseCase } from "../domain/use-cases/thread/getAllThreads";
-import { GetThreadsByUser_UseCase } from "../domain/use-cases/thread/getThreadsByUser";
-import { CreateThread_UseCase } from "../domain/use-cases/thread/createThread";
-import { UpdateThread_UseCase } from "../domain/use-cases/thread/updateThread";
+import { GetAllThreads_UseCase } from "../use-cases/thread/getAllThreads";
+import { GetThreadsByUser_UseCase } from "../use-cases/thread/getThreadsByUser";
+import { CreateThread_UseCase } from "../use-cases/thread/createThread";
+import { UpdateThread_UseCase } from "../use-cases/thread/updateThread";
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 // import { GetAllPhotosForThread_UseCase } from "../domain/use-cases/photo/getAllPhotosForThread";
 // const getAllPhotosForThread_UseCase = myContainer.get(GetAllPhotosForThread_UseCase);

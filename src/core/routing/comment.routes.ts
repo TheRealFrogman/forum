@@ -7,10 +7,10 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
-import { CreateComment_UseCase } from "../domain/use-cases/comment/createComment";
-import { UpdateComment_UseCase } from "../domain/use-cases/comment/updateComment";
-import { GetCommentsByThread_UseCase } from "../domain/use-cases/comment/getCommentsByThread";
-import { DeleteComment_UseCase } from "../domain/use-cases/comment/deleteComment";
+import { CreateComment_UseCase } from "../use-cases/comment/createComment";
+import { UpdateComment_UseCase } from "../use-cases/comment/updateComment";
+import { GetCommentsByThread_UseCase } from "../use-cases/comment/getCommentsByThread";
+import { DeleteComment_UseCase } from "../use-cases/comment/deleteComment";
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 const createComment_UseCase = myContainer.get(CreateComment_UseCase);
 const updateComment_UseCase = myContainer.get(UpdateComment_UseCase);

@@ -5,7 +5,7 @@ import { EndpointResult } from "@/core/routing/routes";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { inject, injectable } from "inversify";
 
-import { UseCase } from "@/core/domain/use-cases/UseCase";
+import { UseCase } from "@/core/use-cases/UseCase";
 @injectable()
 export class UpdateUser_UseCase extends UseCase {
    constructor(

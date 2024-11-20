@@ -2,7 +2,7 @@ import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
 import { UseCase } from "../UseCase";
-import { PhotoService } from "../../photo/service/photo.service";
+import { PhotoService } from "../../domain/photo/service/photo.service";
 import { inject, injectable } from "inversify";
 
 @injectable()
