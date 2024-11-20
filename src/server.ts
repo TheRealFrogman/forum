@@ -1,10 +1,10 @@
 import http from "http"
 
-import { userRoutes } from "./core/routing/routes/user.routes";
-import { authRoutes } from "./core/routing/routes/auth.routes";
-import { threadRoutes } from "./core/routing/routes/thread.routes";
-import { commentRoutes } from "./core/routing/routes/comment.routes";
-import { photoRoutes } from "./core/routing/routes/photo.routes";
+import { userRoutes } from "@/core/routing/user.routes";
+import { authRoutes } from "@/core/routing/auth.routes";
+import { threadRoutes } from "@/core/routing/thread.routes";
+import { commentRoutes } from "@/core/routing/comment.routes";
+import { photoRoutes } from "@/core/routing/photo.routes";
 
 
 export const server = http.createServer({}, async (request, response) => {
