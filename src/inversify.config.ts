@@ -94,6 +94,3 @@ myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase).inSingletonSco
 // import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
 // myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase).inSingletonScope();
 myContainer.bind(GetMainPhotosForThreadIfExists_UseCase).to(GetMainPhotosForThreadIfExists_UseCase).inSingletonScope();
-
-const guuc = myContainer.get(GetUser_UseCase)
-guuc.subscribe((user) => console.log(user))
