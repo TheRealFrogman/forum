@@ -11,7 +11,7 @@ import { SessionMAPRepository } from "@/adapters/session/SessionRepository";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
 import { SessionService } from "@/core/ports/session/SessionService";
 import { Container } from "inversify";
-import { ISqlDatabase } from "@/core/ports/database/sql-database.interface";
+import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
 import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { ISessionRepository } from "@/core/ports/session/SessionRepository";
 import { AccessJwtService } from "@/core/ports/jwt/AccessJwtService";
@@ -29,20 +29,19 @@ import { DeleteComment_UseCase } from "@/core/use-cases/comment/deleteComment";
 import { GetCommentsByThread_UseCase } from "@/core/use-cases/comment/getCommentsByThread";
 import { UpdateComment_UseCase } from "@/core/use-cases/comment/updateComment";
 import { GetMainPhotosForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
-
+import { ISqlDatabaseConnectionBinder } from "./core/ports/single-connection-database/ISqlDatabaseConnectionBinder";
 
 export const myContainer = new Container();
-
-myContainer.bind<ISqlDatabase>(ISqlDatabase).toConstantValue(
-   new SqlPoolDatabase(
-      new Pool({
-         user: "postgres",
-         host: "localhost",
-         database: "forum",
-         port: 5432
-      })
-   )
-);
+const poolDatabaseInstance = new SqlPoolDatabase(
+   new Pool({
+      user: "postgres",
+      host: "localhost",
+      database: "forum",
+      port: 5432
+   })
+)
+myContainer.bind<ISqlDatabase>(ISqlDatabase).toConstantValue(poolDatabaseInstance);
+myContainer.bind<ISqlDatabase>(ISqlDatabaseConnectionBinder).toConstantValue(poolDatabaseInstance);
 
 myContainer.bind<AccessJwtService>(AccessJwtService).toConstantValue(
    new JwtImpl({

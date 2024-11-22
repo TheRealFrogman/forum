@@ -1,4 +1,4 @@
-import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
+import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface.js";
 import type { CreatePhotoDto } from "@/core/domain/photo/dto/create-photo.dto.js";
 import { Photo } from "@/core/domain/photo/entities/photo.entity.js";
 import { Thread } from "../../thread/entities/thread.entity";

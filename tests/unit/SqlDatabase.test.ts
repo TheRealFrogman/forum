@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { after, before, describe, it } from "node:test";
 import assert from "node:assert";
 
@@ -10,19 +12,21 @@ class UserConProps {
       public username: string,
    ) { }
 }
-class UserObjectAssign {
+class UserObject {
    public id!: number
    public username!: string
-   constructor(props: UserObjectAssign) {
-      Object.assign(this, props);
+   constructor(props: UserObject) {
+      this.id = props.id;
+      this.username = props.username;
    }
 }
 const sqlUserDefinition = `
-create table if not exists users (
-   id serial primary key,
-   username text not null   
-)`
-describe("SqlDatabase", () => {
+   create table if not exists users (
+      id serial primary key,
+      username text not null   
+   )
+`
+describe("SqlDatabase", async () => {
 
    const database = new SqlPoolDatabase(new Pool({
       user: "postgres",
@@ -33,24 +37,68 @@ describe("SqlDatabase", () => {
    }));
 
    before(async () => {
-      database.query(sqlUserDefinition);
+      await database.query(sqlUserDefinition);
    })
    after(async () => {
       database.query("DROP TABLE users");
    })
-   describe("query", () => {
-      it("should create user", async () => {
+
+   await describe("query", async () => {
+      await it("should create user", async () => {
          const user = await database.query<UserConProps>("INSERT INTO users (username) VALUES ($1) RETURNING *", ["test"], UserConProps, { isArray: false });
 
          assert(!Array.isArray(user));
          assert.equal(user?.username, "test");
       })
-      it("should retrieve user", async () => {
+      await it("should retrieve user and be of instance of class specified", async () => {
          const user = await database.query<UserConProps>("SELECT * FROM users WHERE id = $1", [1], UserConProps, { isArray: false });
 
          assert(!Array.isArray(user));
          assert.equal(user?.username, "test");
          assert.equal(user?.id, 1);
+         assert(user instanceof UserConProps);
+      })
+      after(async () => {
+         database.query("delete from users");
+      })
+   })
+   // passes only when the upper test is skipped
+   describe("connect", async () => {
+      await describe("query", async () => {
+         await it("should make transaction properly", async () => {
+            const oneConnectionDb1 = await database.connect();
+            const oneConnectionDb2 = await database.connect();
+
+            try {
+               await oneConnectionDb1.query('BEGIN;');
+               await oneConnectionDb1.query('INSERT INTO users (username) VALUES (\'test\')');
+               const userNotCommitted = await oneConnectionDb2.query<UserConProps>("SELECT * FROM users WHERE username = $1", ["test"], UserConProps, { isArray: false });
+
+               assert.equal(userNotCommitted, null);
+               await oneConnectionDb1.query('COMMIT;');
+
+               const userCommitted = await oneConnectionDb2.query<UserConProps>("SELECT * FROM users WHERE username = $1", ["test"], UserConProps, { isArray: false });
+
+               assert.equal(userCommitted?.username, "test");
+
+            } catch (err) {
+               await oneConnectionDb1.query('ROLLBACK;');
+               throw err
+            } finally {
+               await oneConnectionDb1.release();
+            }
+         })
+         it("should throw on query if already released", async () => {
+            const oneConnectionDb1 = await database.connect();
+            oneConnectionDb1.release();
+
+            try {
+               await oneConnectionDb1.query('select * from users');
+            } catch (error) {
+               return
+            }
+            throw new Error("Didnt return from catch")
+         })
       })
    })
 })

@@ -1,4 +1,4 @@
-import { ISqlDatabase } from "@/core/ports/database/sql-database.interface.js";
+import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface.js";
 import type { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto.ts";
 import type { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto.ts";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
