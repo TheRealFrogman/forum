@@ -6,7 +6,7 @@ import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
 
 @injectable()
-export class DeleteUser_UseCase extends UseCase {
+export class DeleteUser_UseCase extends UseCase<UserDeletedEvent> {
    constructor(
       @inject(UserService) private readonly userService: UserService,
    ) {
@@ -19,6 +19,7 @@ export class DeleteUser_UseCase extends UseCase {
 
       if (this.canDo(user, deleteCandidate)) {
          const user = await this.userService.delete(deleteCandidate);
+         this.publish(new UserDeletedEvent(user!));
          return { statusCode: 204, statusMessage: "User deleted", responseModel: user };
       }
 
@@ -33,4 +34,11 @@ export class DeleteUser_UseCase extends UseCase {
 
       return false;
    }
+}
+
+class UserDeletedEvent {
+   public readonly timestamp: Date = new Date();
+   constructor(
+      public readonly user: User,
+   ) { }
 }

@@ -6,7 +6,7 @@ import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
 
 @injectable()
-export class GetUser_UseCase extends UseCase {
+export class GetUser_UseCase extends UseCase<GetUserEvent> {
    constructor(
       @inject(UserService) private readonly userService: UserService,
    ) {
@@ -18,6 +18,8 @@ export class GetUser_UseCase extends UseCase {
          if (!result) {
             return { statusCode: 404, statusMessage: "User not found" };
          }
+
+         this.publish(new GetUserEvent(result));
          return { statusCode: 200, responseModel: result }
       }
 
@@ -26,9 +28,18 @@ export class GetUser_UseCase extends UseCase {
          if (!result) {
             return { statusCode: 404, statusMessage: "User not found" };
          }
+
+         this.publish(new GetUserEvent(result));
          return { statusCode: 200, responseModel: result }
       }
 
       return { statusCode: 400, statusMessage: "No id or username provided" };
    }
+}
+
+class GetUserEvent {
+   public readonly timestamp: Date = new Date();
+   constructor(
+      public readonly user: User,
+   ) { }
 }

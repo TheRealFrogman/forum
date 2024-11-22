@@ -7,7 +7,7 @@ import { inject, injectable } from "inversify";
 
 import { UseCase } from "@/core/use-cases/UseCase";
 @injectable()
-export class UpdateUser_UseCase extends UseCase {
+export class UpdateUser_UseCase extends UseCase<UserUpdatedEvent> {
    constructor(
       @inject(UserService) private readonly userService: UserService,
    ) {
@@ -32,4 +32,11 @@ export class UpdateUser_UseCase extends UseCase {
          return true;
       return false;
    }
+}
+
+class UserUpdatedEvent {
+   public readonly timestamp: Date = new Date();
+   constructor(
+      public readonly user: User,
+   ) { }
 }

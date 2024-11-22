@@ -9,8 +9,12 @@ localAuthenticatorInstance.register({ username: "admin", password: "admin123" })
 localAuthenticatorInstance.register({ username: "john", password: "john_doe" })
 localAuthenticatorInstance.register({ username: "jane", password: "jane_doe" })
 
+const guuc = myContainer.get(GetUser_UseCase)
+guuc.subscribe((getUserEvent) => console.log(getUserEvent.user))
+
 import { server } from "./server";
 import { LocalAuthenticatorService } from './core/domain/local-auth/local-auth';
+import { GetUser_UseCase } from './core/use-cases/user/getUser';
 server.listen(process.env['PORT'], () => {
    console.log(`listening ${process.env['PORT']}`)
 });
