@@ -1,4 +1,4 @@
-import { Token } from "../TToken";
+import { Token } from "../Token";
 
 export abstract class AbstractJwtService<P extends object> {
    abstract sign(payload: P): Promise<Token>;
