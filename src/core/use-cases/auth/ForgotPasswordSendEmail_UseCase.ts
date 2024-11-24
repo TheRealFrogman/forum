@@ -1,7 +1,7 @@
 import { UserService } from "@/core/domain/user/service/user.service";
 import { IEmailer } from "@/core/ports/emailer/IEmailer";
 import { ForgotPasswordJwtService } from "@/core/ports/jwt/service/ForgotPasswordJwtService";
-import { Token } from "@/core/ports/jwt/TToken";
+import { Token } from "@/core/ports/jwt/Token";
 import { EndpointResult } from "@/core/routing/routes";
 import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
