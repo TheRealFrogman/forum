@@ -18,10 +18,10 @@ export class CreateThread_UseCase extends UseCase {
       if (this.canDo(user))
          return { statusCode: 201, responseModel: await this.threadService.create(body) };
       else
-         return { statusCode: 401, statusMessage: "You are not allowed to create a thread" }
+         return { statusCode: 401, statusMessage: "You are not allowed to create a thread, please confirm your email" }
    }
 
-   override canDo(_user: User) {
-      return true;
+   override canDo(user: User) {
+      return user.email_confirmed;
    }
 }
