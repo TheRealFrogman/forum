@@ -4,12 +4,14 @@ import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
 import { inject, injectable } from "inversify";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
+import { IEmailer } from "@/core/ports/emailer/IEmailer";
 
 @injectable()
 export class LocalAuthenticatorService {
    constructor(
       @inject(IEncryptHash) private readonly passwordHasher: IEncryptHash,
       @inject(ISqlDatabase) private readonly database: ISqlDatabase,
+      @inject(IEmailer) private readonly emailer: IEmailer
    ) { }
    /**
     * Authenticate user by given username and password.
@@ -48,7 +50,7 @@ export class LocalAuthenticatorService {
 
       const hashed_password = await this.passwordHasher.hash(password);
 
-      const dbresult = await this.database.query(`INSERT INTO users (hashed_password, username, email) VALUES ($1, $2) RETURNING *`, [hashed_password, username, email], User, { isArray: false });
+      const dbresult = await this.database.query(`INSERT INTO users (hashed_password, username, email) VALUES ($1, $2, $3) RETURNING *`, [hashed_password, username, email], User, { isArray: false });
 
       return dbresult!;
    }

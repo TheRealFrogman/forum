@@ -9,7 +9,8 @@ interface UserProps {
    hashed_password: string;
    role: Role;
    created_at: Date;
-   email: string
+   email: string;
+   email_confirmed: boolean
 }
 
 interface UserInitializer {
@@ -18,16 +19,18 @@ interface UserInitializer {
    hashed_password: string;
    role: Role;
    created_at: Date;
-   email: string
+   email: string;
+   email_confirmed: boolean
 }
 
 export class User implements UserProps {
-   email!: string
-   id!: string;
-   username!: string;
-   hashed_password!: string;
-   role!: Role
-   created_at!: Date;
+   email: string
+   id: string;
+   username: string;
+   hashed_password: string;
+   role: Role
+   created_at: Date;
+   email_confirmed: boolean
    constructor(data: UserInitializer) {
       this.id = data.id;
       this.username = data.username;
@@ -35,6 +38,7 @@ export class User implements UserProps {
       this.role = data.role;
       this.created_at = data.created_at;
       this.email = data.email
+      this.email_confirmed = data.email_confirmed
    }
 
    toJSON() {
