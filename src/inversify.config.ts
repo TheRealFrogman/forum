@@ -14,9 +14,7 @@ import { Container } from "inversify";
 import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
 import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { ISessionRepository } from "@/core/ports/session/SessionRepository";
-import { AccessJwtService } from "@/core/ports/jwt/AccessJwtService";
 import { JwtImpl } from "@/adapters/jwt/jwt.impl";
-import { RefreshJwtService } from "@/core/ports/jwt/RefreshJwtService";
 import { DeleteUser_UseCase } from "@/core/use-cases/user/deleteUser";
 import { UpdateUser_UseCase } from "@/core/use-cases/user/updateUser";
 import { GetUser_UseCase } from "@/core/use-cases/user/getUser";
@@ -30,6 +28,10 @@ import { GetCommentsByThread_UseCase } from "@/core/use-cases/comment/getComment
 import { UpdateComment_UseCase } from "@/core/use-cases/comment/updateComment";
 import { GetMainPhotosForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
 import { ISqlDatabaseConnectionBinder } from "./core/ports/single-connection-database/ISqlDatabaseConnectionBinder";
+import { AccessJwtService } from "./core/ports/jwt/service/AccessJwtService";
+import { RefreshJwtService } from "./core/ports/jwt/service/RefreshJwtService";
+import { ConfirmEmailJwtService } from "./core/ports/jwt/service/ConfirmEmailJwtService";
+import { ForgotPasswordJwtService } from "./core/ports/jwt/service/ForgotPasswordJwtService";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -43,7 +45,7 @@ const poolDatabaseInstance = new SqlPoolDatabase(
 myContainer.bind<ISqlDatabase>(ISqlDatabase).toConstantValue(poolDatabaseInstance);
 myContainer.bind<ISqlDatabase>(ISqlDatabaseConnectionBinder).toConstantValue(poolDatabaseInstance);
 
-myContainer.bind<AccessJwtService>(AccessJwtService).toConstantValue(
+myContainer.bind(AccessJwtService).toConstantValue(
    new JwtImpl({
       secret: process.env['JWT_ACCESS_SECRET']!,
       signOptions: {},
@@ -51,9 +53,25 @@ myContainer.bind<AccessJwtService>(AccessJwtService).toConstantValue(
       decodeOptions: {}
    })
 )
-myContainer.bind<RefreshJwtService>(RefreshJwtService).toConstantValue(
+myContainer.bind(RefreshJwtService).toConstantValue(
    new JwtImpl({
       secret: process.env['JWT_REFRESH_SECRET']!,
+      signOptions: {},
+      verifyOptions: {},
+      decodeOptions: {}
+   })
+)
+myContainer.bind(ConfirmEmailJwtService).toConstantValue(
+   new JwtImpl({
+      secret: process.env['JWT_CONFRIM_EMAIL_SECRET']!,
+      signOptions: {},
+      verifyOptions: {},
+      decodeOptions: {}
+   })
+)
+myContainer.bind(ForgotPasswordJwtService).toConstantValue(
+   new JwtImpl({
+      secret: process.env['JWT_FORGOT_PASSWORD_SECRET']!,
       signOptions: {},
       verifyOptions: {},
       decodeOptions: {}
