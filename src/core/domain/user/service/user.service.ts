@@ -13,6 +13,9 @@ export class UserService {
    async findUserByUsername(username: string): Promise<User | null> {
       return await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User, { isArray: false });
    }
+   async findUserByEmail(email: string): Promise<User | null> {
+      return await this.database.query(`SELECT * FROM users WHERE email = $1`, [email], User, { isArray: false });
+   }
 
    async findOneById(id: User['id']): Promise<User | null> {
       return await this.database.query(`SELECT * FROM users WHERE id = $1`, [id], User, { isArray: false });

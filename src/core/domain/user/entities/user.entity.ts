@@ -9,6 +9,7 @@ interface UserProps {
    hashed_password: string;
    role: Role;
    created_at: Date;
+   email: string
 }
 
 interface UserInitializer {
@@ -17,22 +18,23 @@ interface UserInitializer {
    hashed_password: string;
    role: Role;
    created_at: Date;
+   email: string
 }
 
 export class User implements UserProps {
+   email!: string
    id!: string;
    username!: string;
    hashed_password!: string;
    role!: Role
    created_at!: Date;
    constructor(data: UserInitializer) {
-      if (data) {
-         this.id = data.id;
-         this.username = data.username;
-         this.hashed_password = data.hashed_password;
-         this.role = data.role;
-         this.created_at = data.created_at;
-      }
+      this.id = data.id;
+      this.username = data.username;
+      this.hashed_password = data.hashed_password;
+      this.role = data.role;
+      this.created_at = data.created_at;
+      this.email = data.email
    }
 
    toJSON() {
@@ -70,8 +72,12 @@ export class User implements UserProps {
             "type": "string",
             "enum": ["regular", "admin"]
          },
+         "email": {
+            "type": "string",
+            "pattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+         }
       },
-      "required": ["id", "username", "hashed_password"],
+      "required": ["id", "username", "hashed_password", "email"],
       "additionalProperties": false
    }
 }
