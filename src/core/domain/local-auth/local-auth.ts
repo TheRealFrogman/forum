@@ -3,7 +3,7 @@ import { User } from "@/core/domain/user/entities/user.entity";
 import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
 import { inject, injectable } from "inversify";
 import { LoginDto } from "./dto/login.dto";
-import { RegisterDto } from "./dto/create-user.dto";
+import { RegisterDto } from "./dto/register.dto";
 
 @injectable()
 export class LocalAuthenticatorService {
@@ -41,14 +41,14 @@ export class LocalAuthenticatorService {
     * Returns `User` if the registration is successful.
     * Returns null if exists
     */
-   async register({ password, username }: RegisterDto): Promise<User | null> {
+   async register({ password, username, email }: RegisterDto): Promise<User | null> {
       const user = await this.database.query(`SELECT * FROM users WHERE username = $1`, [username], User, { isArray: false });
       if (user)
          return null;
 
       const hashed_password = await this.passwordHasher.hash(password);
 
-      const dbresult = await this.database.query(`INSERT INTO users (hashed_password, username) VALUES ($1, $2) RETURNING *`, [hashed_password, username], User, { isArray: false });
+      const dbresult = await this.database.query(`INSERT INTO users (hashed_password, username, email) VALUES ($1, $2) RETURNING *`, [hashed_password, username, email], User, { isArray: false });
 
       return dbresult!;
    }

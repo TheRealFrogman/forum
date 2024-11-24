@@ -1,4 +1,4 @@
-import { RegisterDto } from "@/core/domain/local-auth/dto/create-user.dto";
+import { RegisterDto } from "@/core/domain/local-auth/dto/register.dto";
 import { LoginDto } from "@/core/domain/local-auth/dto/login.dto";
 import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
@@ -17,7 +17,7 @@ const sessionServiceInstance = myContainer.get(SessionService);
 const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService);
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator);
 
-export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register"> = {
+export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register" | "/auth/forgot-password"> = {
    ["/auth/me"]: {
       GET: async (request) => {
          const user = await getSessionUser(request)
@@ -89,4 +89,13 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          return { statusCode: 201, responseModel: user, statusMessage: "User created" }
       }
    },
+   ["/auth/forgot-password"]: {
+      POST: async (request) => {
+         const body = await receiveBody<RegisterDto>(request);
+         if (!body)
+            return { statusCode: 400, statusMessage: "No body" };
+
+         return {statusCode: 200}
+      }
+   }
 } 

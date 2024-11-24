@@ -3,7 +3,7 @@ import { Role, User } from "@/core/domain/user/entities/user.entity";
 import { EndpointResult } from "@/core/routing/routes";
 
 import { CommentService } from "@/core/domain/comment/service/comment.service";
-import { UseCase } from "../UseCase";
+import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
 
 @injectable()
