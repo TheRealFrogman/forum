@@ -9,12 +9,15 @@ interface ThreadProps {
 interface ThreadInitializer extends ThreadProps { }
 
 export class Thread implements ThreadProps {
-   id!: string;
-   author_id!: string;
-   description!: string;
-   title!: string;
+   id: string;
+   author_id: string;
+   description: string;
+   title: string;
    constructor(data: ThreadInitializer) {
-      Object.assign(this, data);
+      this.author_id = data.author_id;
+      this.id = data.id;
+      this.description = data.description;
+      this.title = data.title
    }
 
    static schema = {

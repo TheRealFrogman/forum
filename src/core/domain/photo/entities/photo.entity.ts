@@ -9,13 +9,16 @@ interface PhotoProps {
 interface PhotoInitializer extends PhotoProps { }
 
 export class Photo implements PhotoProps {
-   id!: string;
-   link!: string;
-   target_type!: 'thread' | 'comment';
-   target_id!: string;
+   id: string;
+   link: string;
+   target_type: 'thread' | 'comment';
+   target_id: string;
 
    constructor(data: PhotoInitializer) {
-      Object.assign(this, data);
+      this.id = data.id;
+      this.link = data.link;
+      this.target_type = data.target_type;
+      this.target_id = data.target_id;
    }
 
    static schema = {
