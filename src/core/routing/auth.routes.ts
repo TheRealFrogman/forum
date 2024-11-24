@@ -14,7 +14,7 @@ import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
 import { ForgotPasswordDto } from "../domain/local-auth/dto/forgot-password.dto";
 import { ForgotPasswordSendEmail_UseCase } from "../use-cases/auth/ForgotPasswordSendEmail_UseCase";
-import { isToken } from "../ports/jwt/TToken";
+import { isToken } from "../ports/jwt/Token";
 import { ForgotPasswordJwtService } from "../ports/jwt/service/ForgotPasswordJwtService";
 import { UserService } from "../domain/user/service/user.service";
 import { ForgotPasswordUpdatePassword_UseCase } from "../use-cases/auth/ForgotPasswordUpdatePassword_UseCase";
