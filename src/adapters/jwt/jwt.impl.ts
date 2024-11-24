@@ -1,4 +1,4 @@
-import { AbstractJwtService } from '@/core/ports/jwt/AbstractJwtService';
+import { AbstractJwtService } from '@/core/ports/jwt/service/AbstractJwtService';
 import { Token } from '@/core/ports/jwt/TToken';
 import jwt from 'jsonwebtoken';
 export interface Params {
