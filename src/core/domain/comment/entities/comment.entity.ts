@@ -9,18 +9,20 @@ interface CommentProps {
 interface CommentInitializer extends CommentProps { }
 
 export class Comment implements CommentProps {
-   id: string;
-   content: string;
-   thread_id: string;
-   author_id: string;
-   rating: number;
+   id!: string;
+   content!: string;
+   thread_id!: string;
+   author_id!: string;
+   rating!: number;
 
-   constructor(data: CommentInitializer) {
-      this.id = data.id;
-      this.content = data.content;
-      this.thread_id = data.thread_id;
-      this.author_id = data.author_id;
-      this.rating = data.rating
+   constructor(data?: CommentInitializer) {
+      if(data){
+         this.id = data.id;
+         this.content = data.content;
+         this.thread_id = data.thread_id;
+         this.author_id = data.author_id;
+         this.rating = data.rating
+      }
    }
 
    static schema = {

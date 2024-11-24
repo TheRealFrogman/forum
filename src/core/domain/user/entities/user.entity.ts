@@ -24,21 +24,23 @@ interface UserInitializer {
 }
 
 export class User implements UserProps {
-   email: string
-   id: string;
-   username: string;
-   hashed_password: string;
-   role: Role
-   created_at: Date;
-   email_confirmed: boolean
-   constructor(data: UserInitializer) {
-      this.id = data.id;
-      this.username = data.username;
-      this.hashed_password = data.hashed_password;
-      this.role = data.role;
-      this.created_at = data.created_at;
-      this.email = data.email
-      this.email_confirmed = data.email_confirmed
+   email!: string
+   id!: string;
+   username!: string;
+   hashed_password!: string;
+   role!: Role
+   created_at!: Date;
+   email_confirmed!: boolean
+   constructor(data?: UserInitializer) {
+      if (data) {
+         this.id = data.id;
+         this.username = data.username;
+         this.hashed_password = data.hashed_password;
+         this.role = data.role;
+         this.created_at = data.created_at;
+         this.email = data.email
+         this.email_confirmed = data.email_confirmed
+      }
    }
 
    toJSON() {
