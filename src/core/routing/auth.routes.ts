@@ -12,6 +12,13 @@ import { myContainer } from "@/inversify.config";
 import { SessionService } from "@/core/ports/session/SessionService";
 import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
+import { ForgotPasswordDto } from "../domain/local-auth/dto/forgot-password.dto";
+import { ForgotPasswordSendEmail_UseCase } from "../use-cases/auth/ForgotPasswordSendEmail_UseCase";
+import { isToken } from "../ports/jwt/TToken";
+import { ForgotPasswordJwtService } from "../ports/jwt/service/ForgotPasswordJwtService";
+import { UserService } from "../domain/user/service/user.service";
+import { ForgotPasswordUpdatePassword_UseCase } from "../use-cases/auth/ForgotPasswordUpdatePassword_UseCase";
+import { UpdateForgottenPasswordDto } from "../domain/local-auth/dto/update-forgotten-password.dto";
 
 const sessionServiceInstance = myContainer.get(SessionService);
 const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService);
@@ -91,11 +98,36 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
    },
    ["/auth/forgot-password"]: {
       POST: async (request) => {
-         const body = await receiveBody<RegisterDto>(request);
+         const url = new URL(request.url!, `http://${request.headers.host}`);
+         const token = url.searchParams.get('token');
+
+         const body = await receiveBody<ForgotPasswordDto>(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         return {statusCode: 200}
+         if (token /** if has token */) {
+            if (!isToken(token))
+               return { statusCode: 400, statusMessage: "Invalid token" }
+
+            const forgotPasswordJwtServiceInstance = myContainer.get(ForgotPasswordJwtService);       // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
+            const { userId } = await forgotPasswordJwtServiceInstance.verify(token);
+            const userServiceInstance = myContainer.get(UserService);
+            const user = await userServiceInstance.findOneById(userId);
+            if (!user)
+               return { statusCode: 404, statusMessage: "User not found" }
+
+            const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
+            if (error)
+               return { statusCode: 400, statusMessage: error.message, responseModel: error }
+
+            return myContainer.get(ForgotPasswordUpdatePassword_UseCase).execute(user, validatedBody.password)
+         } else {
+            const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<ForgotPasswordDto>(body, ForgotPasswordDto.schema);
+            if (error)
+               return { statusCode: 400, statusMessage: error.message, responseModel: error }
+
+            return myContainer.get(ForgotPasswordSendEmail_UseCase).execute(validatedBody.email)
+         }
       }
    }
 } 
