@@ -22,15 +22,15 @@ export class Register_UseCase extends UseCase {
       if (!user)
          return { statusCode: 409, statusMessage: "User already exists" };
 
-      const createLink = async (user: User) => {
-         return `http://localhost:3000/auth/forgot-password?token=${await this.confrirmEmailJwtService.sign({ userId: user.id })}`
-      }
 
-      const sent = await this.emailer.sendEmail(process.env["APP_EMAIL"]!, user.email, "Email confirmation", `Click this link to confirm your email: ${createLink(user)}`);
+
+      const sent = await this.emailer.sendEmail(process.env["APP_EMAIL"]!, user.email, "Email confirmation", `Click this link to confirm your email: ${this.createLink(user)}`);
       if (!sent)
          return { statusCode: 500, statusMessage: "Email sending failed" };
-      
+
       return { statusCode: 201, responseModel: user, statusMessage: "User created" }
    }
-
+   private async createLink(user: User) {
+      return `http://localhost:3000/auth/forgot-password?token=${await this.confrirmEmailJwtService.sign({ userId: user.id })}`
+   }
 }
