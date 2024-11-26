@@ -85,7 +85,11 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
             if (!isToken(token))
                return { statusCode: 400, statusMessage: "Invalid token" }
 
-            const { userId } = await myContainer.get(ForgotPasswordJwtService).verify(token); // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
+            const tokenPayload = await myContainer.get(ForgotPasswordJwtService).verify(token); // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
+            if (!tokenPayload)
+               return { statusCode: 400, statusMessage: "Invalid token" }
+
+            const userId = tokenPayload.userId;
             const user = await myContainer.get(UserService).findOneById(userId);
             if (!user)
                return { statusCode: 404, statusMessage: "User not found" };
