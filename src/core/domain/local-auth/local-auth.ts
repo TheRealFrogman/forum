@@ -5,13 +5,15 @@ import { inject, injectable } from "inversify";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { IEmailer } from "@/core/ports/emailer/IEmailer";
+import { ConfirmEmailJwtService } from "@/core/ports/jwt/service/ConfirmEmailJwtService";
 
 @injectable()
 export class LocalAuthenticatorService {
    constructor(
       @inject(IEncryptHash) private readonly passwordHasher: IEncryptHash,
       @inject(ISqlDatabase) private readonly database: ISqlDatabase,
-      @inject(IEmailer) private readonly emailer: IEmailer
+      @inject(IEmailer) private readonly emailer: IEmailer,
+      @inject(ConfirmEmailJwtService) private readonly confirmEmailJwtService: ConfirmEmailJwtService
    ) { }
    /**
     * Authenticate user by given username and password.
@@ -54,4 +56,10 @@ export class LocalAuthenticatorService {
 
       return dbresult!;
    }
+
+   async confirmEmail(user: User): Promise<User> {
+      const result = await this.database.query(`UPDATE users SET email_confirmed = $1 WHERE id = $2 RETURNING *`, [true, user.id], User, { isArray: false });
+      return result!;
+   }
+
 }

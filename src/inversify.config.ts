@@ -32,6 +32,8 @@ import { AccessJwtService } from "./core/ports/jwt/service/AccessJwtService";
 import { RefreshJwtService } from "./core/ports/jwt/service/RefreshJwtService";
 import { ConfirmEmailJwtService } from "./core/ports/jwt/service/ConfirmEmailJwtService";
 import { ForgotPasswordJwtService } from "./core/ports/jwt/service/ForgotPasswordJwtService";
+import { IEmailer } from "./core/ports/emailer/IEmailer";
+import { Emailer } from "./adapters/emailer/Emailer";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -77,6 +79,8 @@ myContainer.bind(ForgotPasswordJwtService).toConstantValue(
       decodeOptions: {}
    })
 )
+
+myContainer.bind(IEmailer).to(Emailer);
 
 myContainer.bind(UserService).to(UserService);
 myContainer.bind(ThreadService).to(ThreadService);

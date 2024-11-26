@@ -1,6 +1,5 @@
 import { RegisterDto } from "@/core/domain/local-auth/dto/register.dto";
 import { LoginDto } from "@/core/domain/local-auth/dto/login.dto";
-import { cookie } from "@/core/lib/setCookie";
 import { Session } from "@/core/ports/session/Session";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { Routes } from "@/core/routing/routes";
@@ -9,8 +8,6 @@ import { unsetSessionCookieHeaders } from "@/core/routing/reused-code/headers/un
 
 import { myContainer } from "@/inversify.config";
 
-import { SessionService } from "@/core/ports/session/SessionService";
-import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
 import { ForgotPasswordDto } from "../domain/local-auth/dto/forgot-password.dto";
 import { ForgotPasswordSendEmail_UseCase } from "../use-cases/auth/ForgotPasswordSendEmail_UseCase";
@@ -19,9 +16,10 @@ import { ForgotPasswordJwtService } from "../ports/jwt/service/ForgotPasswordJwt
 import { UserService } from "../domain/user/service/user.service";
 import { ForgotPasswordUpdatePassword_UseCase } from "../use-cases/auth/ForgotPasswordUpdatePassword_UseCase";
 import { UpdateForgottenPasswordDto } from "../domain/local-auth/dto/update-forgotten-password.dto";
+import { Login_UseCase } from "../use-cases/auth/Login_UseCase";
+import { Logout_UseCase } from "../use-cases/auth/Logout_UseCase";
+import { Register_UseCase } from "../use-cases/auth/Register_UseCase";
 
-const sessionServiceInstance = myContainer.get(SessionService);
-const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService);
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator);
 
 export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register" | "/auth/forgot-password"> = {
@@ -36,24 +34,16 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
    },
    ["/auth/logout"]: {
       POST: async (request) => {
-         let session: Session | null = null;
-
          const sessionId = Session.getIdFromCookie(request);
 
-         if (sessionId && (session = await sessionServiceInstance.getSession(sessionId))) {
-            await sessionServiceInstance.destroySession(session);
-            return {
-               statusCode: 200,
-               statusMessage: "Session destroyed",
-               headers: { ...unsetSessionCookieHeaders },
-            };
-         } else
+         if (!sessionId)
             return {
                statusCode: 401,
                statusMessage: "Invalid session",
                headers: { ...unsetSessionCookieHeaders },
             }
 
+         return myContainer.get(Logout_UseCase).execute(sessionId);
       }
    },
    ["/auth/login"]: {
@@ -66,17 +56,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         const user = await localAuthenticatorInstance.authenticate(validatedBody);
-         if (!user)
-            return { statusCode: 401, statusMessage: "Invalid credentials" };
-
-         const session = await sessionServiceInstance.createSessionForUser(user);
-         return {
-            statusCode: 200,
-            headers: {
-               'set-cookie': cookie('session', session.sessionId, new Date(Date.now() + 1000 * 60 * 5), { domain: process.env['DOMAIN'] ?? "localhost", httpOnly: true, secure: true, sameSite: "Strict", maxAge: 31536000, path: "/" }),
-            },
-         }
+         return myContainer.get(Login_UseCase).execute(validatedBody);
       }
    },
    ["/auth/register"]: {
@@ -89,11 +69,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         const user = await localAuthenticatorInstance.register(validatedBody);
-         if (!user)
-            return { statusCode: 409, statusMessage: "User already exists" };
-
-         return { statusCode: 201, responseModel: user, statusMessage: "User created" }
+         return myContainer.get(Register_UseCase).execute(validatedBody);
       }
    },
    ["/auth/forgot-password"]: {
@@ -105,16 +81,14 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         if (token /** if has token */) {
+         if (token) {
             if (!isToken(token))
                return { statusCode: 400, statusMessage: "Invalid token" }
 
-            const forgotPasswordJwtServiceInstance = myContainer.get(ForgotPasswordJwtService);       // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
-            const { userId } = await forgotPasswordJwtServiceInstance.verify(token);
-            const userServiceInstance = myContainer.get(UserService);
-            const user = await userServiceInstance.findOneById(userId);
+            const { userId } = await myContainer.get(ForgotPasswordJwtService).verify(token); // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
+            const user = await myContainer.get(UserService).findOneById(userId);
             if (!user)
-               return { statusCode: 404, statusMessage: "User not found" }
+               return { statusCode: 404, statusMessage: "User not found" };
 
             const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
             if (error)
@@ -130,4 +104,5 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          }
       }
    }
-} 
+}
+

@@ -5,9 +5,9 @@ process.loadEnvFile(__dirname + "/../.env");
 
 const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService)
 
-localAuthenticatorInstance.register({ username: "admin", password: "admin123", email: "admin@localhost" })
-localAuthenticatorInstance.register({ username: "john", password: "john_doe", email: "john@localhost" })
-localAuthenticatorInstance.register({ username: "jane", password: "jane_doe", email: "jane@localhost" })
+localAuthenticatorInstance.register({ username: "admin", password: "admin123", email: "admin@localhost.com" })
+localAuthenticatorInstance.register({ username: "john", password: "john_doe", email: "john@localhost.com" })
+localAuthenticatorInstance.register({ username: "jane", password: "jane_doe", email: "jane@localhost.com" })
 
 const guuc = myContainer.get(GetUser_UseCase)
 guuc.subscribe((getUserEvent) => console.log(getUserEvent.user))
