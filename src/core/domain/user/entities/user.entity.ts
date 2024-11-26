@@ -31,7 +31,7 @@ export class User implements UserProps {
    role!: Role
    created_at!: Date;
    email_confirmed!: boolean
-   constructor(data?: UserInitializer) {
+   constructor(data: UserInitializer) {
       if (data) {
          this.id = data.id;
          this.username = data.username;

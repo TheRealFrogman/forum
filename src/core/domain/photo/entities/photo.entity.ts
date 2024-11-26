@@ -14,7 +14,7 @@ export class Photo implements PhotoProps {
    target_type!: 'thread' | 'comment';
    target_id!: string;
 
-   constructor(data?: PhotoInitializer) {
+   constructor(data: PhotoInitializer) {
       if(data) {
          this.id = data.id;
          this.link = data.link;

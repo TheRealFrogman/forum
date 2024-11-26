@@ -13,7 +13,7 @@ export class Thread implements ThreadProps {
    author_id!: string;
    description!: string;
    title!: string;
-   constructor(data?: ThreadInitializer) {
+   constructor(data: ThreadInitializer) {
       if(data) {
          this.author_id = data.author_id;
          this.id = data.id;

@@ -15,7 +15,7 @@ export class Comment implements CommentProps {
    author_id!: string;
    rating!: number;
 
-   constructor(data?: CommentInitializer) {
+   constructor(data: CommentInitializer) {
       if(data){
          this.id = data.id;
          this.content = data.content;
