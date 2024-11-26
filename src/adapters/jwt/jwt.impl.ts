@@ -18,13 +18,21 @@ export class JwtImpl<TPayload extends object> implements AbstractJwtService<TPay
       this.verifyOptions = params.verifyOptions;
       this.decodeOptions = params.decodeOptions;
    }
-   async verify(token: Token): Promise<TPayload> {
-      return jwt.verify(token, this.secret, this.verifyOptions) as TPayload
-   }
    async sign(payload: TPayload): Promise<Token> {
       return jwt.sign(payload, this.secret, this.signOptions) as Token
    }
-   async decode(token: Token): Promise<TPayload> {
-      return jwt.decode(token, this.decodeOptions) as TPayload;
+   async verify(token: Token): Promise<TPayload | null> {
+      try {
+         return jwt.verify(token, this.secret, this.verifyOptions) as TPayload
+      } catch (error) {
+         return null;         
+      }
+   }
+   async decode(token: Token): Promise<TPayload | null> {
+      try {
+         return jwt.decode(token, this.decodeOptions) as TPayload;
+      } catch (error) {
+         return null;         
+      }
    }
 }
