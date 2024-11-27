@@ -42,3 +42,19 @@ CREATE TABLE categories (
    id BIGSERIAL PRIMARY KEY,
    name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL
 )
+
+CREATE TABLE thread_votes (
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
+    thread_id INTEGER NOT NULL REFERENCES threads(id) ON DELETE CASCADE, -- FK на threads
+    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, thread_id)
+);
+
+CREATE TABLE comment_votes (
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
+    comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE, -- FK на comments
+    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, comment_id)
+);
