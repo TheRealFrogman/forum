@@ -14,13 +14,11 @@ export class CreateCommentDto {
          },
          thread_id: {
             type: "string",
-            minimum: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          author_id: {
             type: "string",
-            minimum: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          }
       },
       required: ["content", "thread_id", "author_id"],

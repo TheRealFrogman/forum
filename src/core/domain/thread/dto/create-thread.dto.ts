@@ -13,8 +13,7 @@ export class CreateThreadDto {
       properties: {
          author_id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          description: {
             type: "string",
@@ -28,8 +27,7 @@ export class CreateThreadDto {
          },
          category_id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
       },
       required: ["author_id", "description", "title", "category_id"],

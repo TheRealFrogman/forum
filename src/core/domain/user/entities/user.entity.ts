@@ -59,8 +59,7 @@ export class User implements UserProps {
       "properties": {
          "id": {
             "type": "string",
-            "minLength": 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          "username": {
             "type": "string",

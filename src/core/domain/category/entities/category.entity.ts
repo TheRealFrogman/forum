@@ -22,8 +22,7 @@ export class Category implements CategoryProps {
       properties: {
          id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          name: {
             type: "string",

@@ -31,21 +31,18 @@ export class Comment implements CommentProps {
       properties: {
          id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          content: {
             type: "string",
          },
          thread_id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          author_id: {
             type: "string",
-            minLength: 0,
-            "pattern": "[0-9]+"
+            "pattern": "^[0-9]+$"
          },
          rating: {
             type: "number",
