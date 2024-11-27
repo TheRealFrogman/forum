@@ -13,8 +13,8 @@ export class ThreadService {
 
    async create(createThreadDto: CreateThreadDto) {
       return (await this.database.query(
-         `INSERT INTO threads (title, description, author_id) VALUES ($1, $2, $3) RETURNING *`,
-         [createThreadDto.title, createThreadDto.description, createThreadDto.author_id],
+         `INSERT INTO threads (title, description, author_id, category_id) VALUES ($1, $2, $3, $4) RETURNING *`,
+         [createThreadDto.title, createThreadDto.description, createThreadDto.author_id, createThreadDto.category_id],
          Thread, { isArray: false }
       ))!;
    }
@@ -25,15 +25,19 @@ export class ThreadService {
    async findAllByUserId(userId: User['id']) {
       return this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
    }
+   async findAllByCategoryId(categoryId: Thread['category_id']){
+      return this.database.query(`SELECT * FROM threads WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
+   }
 
    async findOne(id: Thread['id']) {
       return this.database.query(`SELECT * FROM threads WHERE id = $1`, [id], Thread, { isArray: false });
    }
 
    async update(id: Thread['id'], updateThreadDto: UpdateThreadDto) {
-      const input = {
+      const input = { // need this fsr
          title: updateThreadDto.title,
          description: updateThreadDto.description,
+         category_id: updateThreadDto.category_id
       }
       return this.database.query(`UPDATE threads SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], Thread, { isArray: false });
    }

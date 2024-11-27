@@ -4,6 +4,7 @@ export class CreateThreadDto {
       public author_id: string,
       public description: string,
       public title: string,
+      public category_id: string
    ) { }
 
    static schema = {
@@ -24,9 +25,14 @@ export class CreateThreadDto {
             type: "string",
             minLength: 4,
             maxLength: 255
-         }
+         },
+         category_id: {
+            type: "string",
+            minLength: 0,
+            "pattern": "[0-9]+"
+         },
       },
-      required: ["author_id", "description", "title"],
+      required: ["author_id", "description", "title", "category_id"],
       additionalProperties: false
    }
 }
