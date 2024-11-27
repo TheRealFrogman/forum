@@ -15,7 +15,6 @@ export class Logout_UseCase extends UseCase {
    override async execute(sessionId: Session['sessionId']): Promise<EndpointResult> {
       const session = await this.sessionService.getSession(sessionId);
 
-
       if (!session)
          return {
             statusCode: 401,

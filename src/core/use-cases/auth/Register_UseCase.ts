@@ -22,8 +22,6 @@ export class Register_UseCase extends UseCase {
       if (!user)
          return { statusCode: 409, statusMessage: "User already exists" };
 
-
-
       const sent = await this.emailer.sendEmail(process.env["APP_EMAIL"]!, user.email, "Email confirmation", `Click this link to confirm your email: ${this.createLink(user)}`);
       if (!sent)
          return { statusCode: 500, statusMessage: "Email sending failed" };
