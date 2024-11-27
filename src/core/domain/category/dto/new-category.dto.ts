@@ -4,6 +4,16 @@ export class NewCategoryDto {
    ) { }
 
    static schema = {
-
+      title: "NewCategoryDto",
+      type: "object",
+      properties: {
+         name: {
+            type: "string",
+            minLength: 3,
+            maxLength: 20
+         }
+      },
+      required: ["name"],
+      additionalProperties: false
    }
 }
