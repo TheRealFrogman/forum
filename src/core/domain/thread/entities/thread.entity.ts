@@ -4,7 +4,8 @@ interface ThreadProps {
    author_id: string;
    description: string;
    title: string;
-   category_id: string
+   category_id: string;
+   rating: number;
 }
 
 interface ThreadInitializer extends ThreadProps { }
@@ -15,6 +16,7 @@ export class Thread implements ThreadProps {
    description!: string;
    title!: string;
    category_id!: string;
+   rating!: number;
    constructor(data: ThreadInitializer) {
       if (data) {
          this.author_id = data.author_id;
@@ -22,6 +24,7 @@ export class Thread implements ThreadProps {
          this.description = data.description;
          this.title = data.title
          this.category_id = data.category_id;
+         this.rating = data.rating;
       }
    }
 
@@ -54,8 +57,11 @@ export class Thread implements ThreadProps {
             minLength: 0,
             "pattern": "[0-9]+"
          },
+         rating: {
+            type: "number",
+         }
       },
-      required: ["author_id", "description", "title", "category_id", "id"],
+      required: ["author_id", "description", "title", "category_id", "id", "rating"],
       additionalProperties: false
    }
 }
