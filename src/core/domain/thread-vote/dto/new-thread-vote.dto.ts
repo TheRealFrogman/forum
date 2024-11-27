@@ -1,7 +1,10 @@
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
+
 export class NewThreadVoteDto {
    constructor(
-      public thread_id: string,
-      public user_id: string,
+      public thread_id: Thread['id'],
+      public user_id: User['id'],
       public vote_type: 'upvote' | 'downvote',
    ) { }
 

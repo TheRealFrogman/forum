@@ -1,8 +1,11 @@
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
+
 interface CommentProps {
    id: string;
    content: string;
-   thread_id: string;
-   author_id: string;
+   thread_id: Thread['id'];
+   author_id: User['id'];
    rating: number;
 }
 
@@ -11,8 +14,8 @@ interface CommentInitializer extends CommentProps { }
 export class Comment implements CommentProps {
    id!: string;
    content!: string;
-   thread_id!: string;
-   author_id!: string;
+   thread_id!: Thread['id'];
+   author_id!: User['id'];
    rating!: number;
 
    constructor(data: CommentInitializer) {

@@ -1,9 +1,10 @@
-
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
 
 export class NewCommentVoteDto {
    constructor(
-      public comment_id: string,
-      public user_id: string,
+      public comment_id: Comment['id'],
+      public user_id: User['id'],
       public vote_type: 'upvote' | 'downvote',
    ) { }
 

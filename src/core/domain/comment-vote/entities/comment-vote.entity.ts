@@ -1,7 +1,10 @@
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
+
 interface CategoryProps {
    id: string;
-   comment_id: string;
-   user_id: string;
+   comment_id: Comment['id'];
+   user_id: User['id'];
    vote_type: 'upvote' | 'downvote';
 }
 
@@ -9,8 +12,8 @@ interface CategoryInitializer extends CategoryProps { }
 
 export class CommentVote implements CategoryProps {
    id!: string
-   comment_id!: string
-   user_id!: string
+   comment_id!: Comment['id']
+   user_id!: User['id']
    vote_type!: 'upvote' | 'downvote'
    constructor(data: CategoryInitializer) {
       if (data) {

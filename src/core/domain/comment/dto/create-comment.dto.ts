@@ -1,8 +1,11 @@
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
+
 export class CreateCommentDto {
    constructor(
       public content: string,
-      public thread_id: string,
-      public author_id: string,
+      public thread_id: Thread['id'],
+      public author_id: User['id'],
    ) { }
 
    static schema = {

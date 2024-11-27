@@ -1,9 +1,10 @@
+import { Category } from "@/core/domain/category/entities/category.entity";
 
 export class UpdateThreadDto {
    constructor(
       public description?: string,
       public title?: string,
-      public category_id?: string
+      public category_id?: Category['id']
    ) { }
 
    static schema = {

@@ -1,10 +1,12 @@
+import { Category } from "@/core/domain/category/entities/category.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
 
 interface ThreadProps {
    id: string;
-   author_id: string;
+   author_id: User['id'];
    description: string;
    title: string;
-   category_id: string;
+   category_id: Category['id'];
    rating: number;
 }
 

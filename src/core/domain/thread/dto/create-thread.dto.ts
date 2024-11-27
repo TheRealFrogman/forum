@@ -1,10 +1,12 @@
+import { Category } from "@/core/domain/category/entities/category.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
 
 export class CreateThreadDto {
    constructor(
-      public author_id: string,
+      public author_id: User['id'],
       public description: string,
       public title: string,
-      public category_id: string
+      public category_id: Category['id']
    ) { }
 
    static schema = {

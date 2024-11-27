@@ -1,9 +1,11 @@
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
 
 interface PhotoProps {
    id: string;
    link: string;
    target_type: 'thread' | 'comment';
-   target_id: string;
+   target_id: Thread['id'] | Comment['id'];
 }
 
 interface PhotoInitializer extends PhotoProps { }
@@ -12,10 +14,10 @@ export class Photo implements PhotoProps {
    id!: string;
    link!: string;
    target_type!: 'thread' | 'comment';
-   target_id!: string;
+   target_id!: Thread['id'] | Comment['id'];
 
    constructor(data: PhotoInitializer) {
-      if(data) {
+      if (data) {
          this.id = data.id;
          this.link = data.link;
          this.target_type = data.target_type;

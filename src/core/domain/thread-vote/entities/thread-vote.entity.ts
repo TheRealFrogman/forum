@@ -1,7 +1,10 @@
+import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { User } from "@/core/domain/user/entities/user.entity";
+
 interface ThreadProps {
    id: string;
-   thread_id: string;
-   user_id: string;
+   thread_id: Thread['id'];
+   user_id: User['id'];
    vote_type: 'upvote' | 'downvote';
 }
 
