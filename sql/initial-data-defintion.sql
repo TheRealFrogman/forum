@@ -13,7 +13,9 @@ CREATE TABLE threads (
    author_id BIGSERIAL NOT NULL,
    description TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
    title TEXT CHECK(LENGTH(title) > 3 AND LENGTH(title) < 255) NOT NULL,
-   FOREIGN KEY (author_id) REFERENCES users(id)
+   FOREIGN KEY (author_id) REFERENCES users(id),
+   category_id BIGSERIAL,
+   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
 );
 
 CREATE TABLE comments (
@@ -34,3 +36,8 @@ CREATE TABLE photos (
    FOREIGN KEY (target_id) REFERENCES threads(id) ON DELETE CASCADE,
    FOREIGN KEY (target_id) REFERENCES comments(id) ON DELETE CASCADE
 );
+
+CREATE TABLE categories (
+   id BIGSERIAL PRIMARY KEY,
+   name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL
+)
