@@ -17,6 +17,7 @@ CREATE TABLE threads (
    FOREIGN KEY (author_id) REFERENCES users(id),
    category_id BIGSERIAL,
    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE comments (
@@ -26,7 +27,8 @@ CREATE TABLE comments (
    author_id BIGSERIAL NOT NULL,
    rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (thread_id) REFERENCES threads(id),
-   FOREIGN KEY (author_id) REFERENCES users(id)
+   FOREIGN KEY (author_id) REFERENCES users(id),
+   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE photos (
@@ -35,7 +37,8 @@ CREATE TABLE photos (
    target_type VARCHAR(20) CHECK (target_type IN ('thread', 'comment')),
    target_id BIGSERIAL,
    FOREIGN KEY (target_id) REFERENCES threads(id) ON DELETE CASCADE,
-   FOREIGN KEY (target_id) REFERENCES comments(id) ON DELETE CASCADE
+   FOREIGN KEY (target_id) REFERENCES comments(id) ON DELETE CASCADE,
+   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE categories (
@@ -44,17 +47,17 @@ CREATE TABLE categories (
 )
 
 CREATE TABLE thread_votes (
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
-    thread_id INTEGER NOT NULL REFERENCES threads(id) ON DELETE CASCADE, -- FK на threads
-    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, thread_id)
+   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
+   thread_id INTEGER NOT NULL REFERENCES threads(id) ON DELETE CASCADE, -- FK на threads
+   vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
+   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (user_id, thread_id)
 );
 
 CREATE TABLE comment_votes (
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
-    comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE, -- FK на comments
-    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, comment_id)
+   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- FK на users
+   comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE, -- FK на comments
+   vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
+   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (user_id, comment_id)
 );
