@@ -52,7 +52,7 @@ export class Thread implements ThreadProps {
             minLength: 4,
             maxLength: 255
          },
-         categiry_id: {
+         category_id: {
             type: "string",
             "pattern": "^[0-9]+$"
          },
