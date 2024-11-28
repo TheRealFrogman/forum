@@ -8,11 +8,16 @@ CREATE TABLE users (
    email_confirmed BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE categories (
+   id BIGSERIAL PRIMARY KEY,
+   name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL
+);
+
 CREATE TABLE threads (
    id BIGSERIAL PRIMARY KEY,
    author_id BIGSERIAL NOT NULL,
    description TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
-   title TEXT CHECK(LENGTH(title) > 3 AND LENGTH(title) < 255) NOT NULL,
+   title TEXT CHECK(LENGTH(title) > 20 AND LENGTH(title) < 2000) NOT NULL,
    rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (author_id) REFERENCES users(id),
    category_id BIGSERIAL,
@@ -41,22 +46,17 @@ CREATE TABLE photos (
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories (
-   id BIGSERIAL PRIMARY KEY,
-   name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL
-)
-
 CREATE TABLE thread_votes (
-   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-   thread_id INTEGER NOT NULL REFERENCES threads(id) ON DELETE CASCADE,
+   user_id BIGSERIAL NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+   thread_id BIGSERIAL NOT NULL REFERENCES threads(id) ON DELETE CASCADE,
    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (user_id, thread_id)
 );
 
 CREATE TABLE comment_votes (
-   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-   comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
+   user_id BIGSERIAL NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+   comment_id BIGSERIAL NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (user_id, comment_id)
