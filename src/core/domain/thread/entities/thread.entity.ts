@@ -8,6 +8,8 @@ interface ThreadProps {
    title: string;
    category_id: Category['id'];
    rating: number;
+   created_at: Date;
+
 }
 
 interface ThreadInitializer extends ThreadProps { }
@@ -19,6 +21,7 @@ export class Thread implements ThreadProps {
    title!: string;
    category_id!: string;
    rating!: number;
+   created_at!: Date;
    constructor(data: ThreadInitializer) {
       if (data) {
          this.author_id = data.author_id;
@@ -27,6 +30,7 @@ export class Thread implements ThreadProps {
          this.title = data.title
          this.category_id = data.category_id;
          this.rating = data.rating;
+         this.created_at = data.created_at
       }
    }
 
@@ -49,8 +53,8 @@ export class Thread implements ThreadProps {
          },
          title: {
             type: "string",
-            minLength: 4,
-            maxLength: 255
+            minLength: 20,
+            maxLength: 2000
          },
          category_id: {
             type: "string",
@@ -58,9 +62,13 @@ export class Thread implements ThreadProps {
          },
          rating: {
             type: "number",
+         },
+         created_at: {
+            type: "string",
+            format: "date-time"
          }
       },
-      required: ["author_id", "description", "title", "category_id", "id", "rating"],
+      required: ["author_id", "description", "title", "category_id", "id", "rating", "created_at"],
       additionalProperties: false
    }
 }

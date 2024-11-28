@@ -6,6 +6,8 @@ interface ThreadProps {
    thread_id: Thread['id'];
    user_id: User['id'];
    vote_type: 'upvote' | 'downvote';
+   created_at: Date;
+
 }
 
 interface ThreadInitializer extends ThreadProps { }
@@ -15,12 +17,15 @@ export class ThreadVote implements ThreadProps {
    thread_id!: string
    user_id!: string
    vote_type!: 'upvote' | 'downvote'
+   created_at!: Date;
+
    constructor(data: ThreadInitializer) {
       if (data) {
          this.id = data.id;
          this.thread_id = data.thread_id;
          this.user_id = data.user_id;
          this.vote_type = data.vote_type
+         this.created_at = data.created_at
       }
    }
 
@@ -45,9 +50,13 @@ export class ThreadVote implements ThreadProps {
          },
          vote_type: {
             enum: ['upvote', 'downvote']
+         },
+         created_at: {
+            type: "string",
+            format: "date-time"
          }
       },
-      required: ["id", "thread_id", "user_id", "vote_type"],
+      required: ["id", "thread_id", "user_id", "vote_type", "created_at"],
       additionalProperties: false
    }
 }

@@ -11,17 +11,10 @@ interface UserProps {
    created_at: Date;
    email: string;
    email_confirmed: boolean
+
 }
 
-interface UserInitializer {
-   id: string;
-   username: string;
-   hashed_password: string;
-   role: Role;
-   created_at: Date;
-   email: string;
-   email_confirmed: boolean
-}
+interface UserInitializer extends UserProps{}
 
 export class User implements UserProps {
    email!: string
@@ -80,9 +73,13 @@ export class User implements UserProps {
          "email": {
             "type": "string",
             "pattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-         }
+         },
+         "created_at": {
+            "type": "string",
+            "format": "date-time"
+         },
       },
-      "required": ["id", "username", "hashed_password", "email"],
+      "required": ["id", "username", "hashed_password", "email", 'role', "created_at"],
       "additionalProperties": false
    }
 }

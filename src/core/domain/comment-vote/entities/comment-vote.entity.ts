@@ -6,6 +6,8 @@ interface CategoryProps {
    comment_id: Comment['id'];
    user_id: User['id'];
    vote_type: 'upvote' | 'downvote';
+   created_at: Date;
+
 }
 
 interface CategoryInitializer extends CategoryProps { }
@@ -15,12 +17,15 @@ export class CommentVote implements CategoryProps {
    comment_id!: Comment['id']
    user_id!: User['id']
    vote_type!: 'upvote' | 'downvote'
+   created_at!: Date;
+
    constructor(data: CategoryInitializer) {
       if (data) {
          this.id = data.id;
          this.comment_id = data.comment_id;
          this.user_id = data.user_id;
          this.vote_type = data.vote_type
+         this.created_at = data.created_at
       }
    }
 
@@ -45,9 +50,13 @@ export class CommentVote implements CategoryProps {
          },
          vote_type: {
             enum: ['upvote', 'downvote']
+         },
+         created_at: {
+            type: "string",
+            format: "date-time"
          }
       },
-      required: ["id", "comment_id", "user_id", "vote_type"],
+      required: ["id", "comment_id", "user_id", "vote_type", "created_at"],
       additionalProperties: false
    }
 }

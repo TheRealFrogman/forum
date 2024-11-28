@@ -7,6 +7,7 @@ interface CommentProps {
    thread_id: Thread['id'];
    author_id: User['id'];
    rating: number;
+   created_at: Date;
 }
 
 interface CommentInitializer extends CommentProps { }
@@ -17,6 +18,7 @@ export class Comment implements CommentProps {
    thread_id!: Thread['id'];
    author_id!: User['id'];
    rating!: number;
+   created_at!: Date;
 
    constructor(data: CommentInitializer) {
       if(data){
@@ -25,6 +27,7 @@ export class Comment implements CommentProps {
          this.thread_id = data.thread_id;
          this.author_id = data.author_id;
          this.rating = data.rating
+         this.created_at = data.created_at
       }
    }
 
@@ -49,9 +52,13 @@ export class Comment implements CommentProps {
          },
          rating: {
             type: "number",
+         },
+         created_at: {
+            type: "string",
+            format: "date-time"
          }
       },
-      required: ["id", "content", "thread_id", "author_id", "rating"],
+      required: ["id", "content", "thread_id", "author_id", "rating", "created_at"],
       additionalProperties: false
    }
 }
