@@ -29,6 +29,6 @@ export class Register_UseCase extends UseCase {
       return { statusCode: 201, responseModel: user, statusMessage: "User created" }
    }
    private async createLink(user: User) {
-      return `http://localhost:3000/auth/forgot-password?token=${await this.confrirmEmailJwtService.sign({ userId: user.id })}`
+      return `http://localhost:3000/auth/confirm-email?token=${await this.confrirmEmailJwtService.sign({ userId: user.id })}`
    }
 }
