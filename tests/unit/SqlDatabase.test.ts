@@ -64,6 +64,9 @@ describe("SqlDatabase", async () => {
    })
    // passes only when the upper test is skipped
    describe("connect", async () => {
+      after(async () => {
+         await database.query("delete from users"); 
+      })
       await describe("query", async () => {
          await it("should make transaction properly", async () => {
             const oneConnectionDb1 = await database.connect();
@@ -99,6 +102,30 @@ describe("SqlDatabase", async () => {
             }
             throw new Error("Didnt return from catch")
          })
+      })
+   })
+
+   describe("queryCursor", async () => {
+      before(async () => {
+         for (let i = 0; i < 10; i++) {
+            await database.query("INSERT INTO users (username) VALUES ($1)", [`test${i}`]);
+         }
+      })
+
+      it("should work properly", async () => {
+         const cursor = await database.queryCursor("SELECT * FROM users", [], UserConProps);
+         const rows1 = await cursor.read(2);
+         const rows2 = await cursor.read(2);
+         const rows3 = await cursor.read(2);
+         const rows4 = await cursor.read(2);
+         const rows5 = await cursor.read(2);
+         const rows6 = await cursor.read(2);
+         assert.equal(rows1.length, 2);
+         assert.equal(rows2.length, 2);
+         assert.equal(rows3.length, 2);
+         assert.equal(rows4.length, 2);
+         assert.equal(rows5.length, 2);
+         assert.equal(rows6.length, 0);
       })
    })
 })

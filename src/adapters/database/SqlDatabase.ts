@@ -1,7 +1,9 @@
-import { ISqlDatabaseConnectionBinder } from "@/core/ports/single-connection-database/ISqlDatabaseConnectionBinder";
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
+import { PgCursorDatabase } from "@/core/ports/database/pg-cursor-database/pg-cursor-database";
+import { ISqlDatabaseConnectionBinder } from "@/core/ports/database/single-connection-database/ISqlDatabaseConnectionBinder";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
 import { injectable } from "inversify";
 import { Client, Pool, PoolClient, } from "pg"
+import Cursor from 'pg-cursor';
 
 type SomeClass<T> = new (...args: any[]) => T
 
@@ -49,10 +51,23 @@ async function makeQuery<T extends object>(client: PoolClient | Client | Pool, q
 
 
 @injectable()
-export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBinder {
+export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBinder, PgCursorDatabase {
    constructor(
-      private pool: Pool
+      private pool: Pool,
    ) { }
+   async queryCursor<T extends object>(query: string, params: unknown[], cls: new (...args: any[]) => T): Promise<{ read: (amount: number) => Promise<T[]>; }> {
+      const client = await this.pool.connect();
+      const cursor = client.query(new Cursor(query, params));
+      return {
+         async read(amount) {
+            const rows = await cursor.read(amount)
+            return rows.map((row) => mapDataToInstance(cls, row));
+         },
+         // release() {
+         //    client.release();
+         // }
+      }
+   }
    // перегрузки для того чтобы видеть контракты прямо тут
    query<T extends object>(query: string, params?: unknown[]): Promise<null>;
    query<T extends object>(query: string, params: unknown[], cls: SomeClass<T>, opts: { isArray: false }): Promise<T | null>;
@@ -60,7 +75,7 @@ export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBind
    async query<T extends object>(query: string, params?: unknown[], cls?: SomeClass<T>, opts?: { isArray: boolean }): Promise<T | T[] | null> {
       return makeQuery(this.pool, query, params, cls, opts);
    }
-   async connect(): Promise<ISqlDatabase & { release: (err?: Error | boolean) => Promise<void> }> {
+   async connect(): Promise<{ query: ISqlDatabase['query'], release: (err?: Error | boolean) => Promise<void> }> {
       const poolClient = await this.pool.connect()
       let released = false;
       return new class {
