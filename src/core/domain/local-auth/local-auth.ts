@@ -1,6 +1,6 @@
 import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
 import { inject, injectable } from "inversify";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
