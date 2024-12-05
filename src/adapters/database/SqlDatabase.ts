@@ -49,7 +49,6 @@ async function makeQuery<T extends object>(client: PoolClient | Client | Pool, q
 
 }
 
-
 @injectable()
 export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBinder, PgCursorDatabase {
    constructor(
