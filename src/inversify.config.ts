@@ -11,7 +11,7 @@ import { SessionMAPRepository } from "@/adapters/session/SessionRepository";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
 import { SessionService } from "@/core/ports/session/SessionService";
 import { Container } from "inversify";
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
 import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash";
 import { ISessionRepository } from "@/core/ports/session/SessionRepository";
 import { JwtImpl } from "@/adapters/jwt/jwt.impl";
@@ -27,13 +27,17 @@ import { DeleteComment_UseCase } from "@/core/use-cases/comment/deleteComment";
 import { GetCommentsByThread_UseCase } from "@/core/use-cases/comment/getCommentsByThread";
 import { UpdateComment_UseCase } from "@/core/use-cases/comment/updateComment";
 import { GetMainPhotosForThreadIfExists_UseCase } from "@/core/use-cases/photo/getMainPhotoForThreadIfExists";
-import { ISqlDatabaseConnectionBinder } from "./core/ports/single-connection-database/ISqlDatabaseConnectionBinder";
+import { ISqlDatabaseConnectionBinder } from "./core/ports/database/single-connection-database/ISqlDatabaseConnectionBinder";
 import { AccessJwtService } from "./core/ports/jwt/service/AccessJwtService";
 import { RefreshJwtService } from "./core/ports/jwt/service/RefreshJwtService";
 import { ConfirmEmailJwtService } from "./core/ports/jwt/service/ConfirmEmailJwtService";
 import { ForgotPasswordJwtService } from "./core/ports/jwt/service/ForgotPasswordJwtService";
 import { IEmailer } from "./core/ports/emailer/IEmailer";
 import { Emailer } from "./adapters/emailer/Emailer";
+import { CategoryService } from "./core/domain/category/service/category.service";
+import { CommentVoteService } from "./core/domain/comment-vote/service/comment-vote.service";
+import { ThreadVoteService } from "./core/domain/thread-vote/service/thread-vote.service";
+import { GetThreadsParametrised_UseCase } from "./core/use-cases/thread/getThreadsParametrised";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -82,10 +86,13 @@ myContainer.bind(ForgotPasswordJwtService).toConstantValue(
 
 myContainer.bind(IEmailer).to(Emailer);
 
-myContainer.bind(UserService).to(UserService);
-myContainer.bind(ThreadService).to(ThreadService);
+myContainer.bind(CategoryService).to(CategoryService);
 myContainer.bind(CommentService).to(CommentService);
+myContainer.bind(CommentVoteService).to(CommentVoteService);
 myContainer.bind(PhotoService).to(PhotoService);
+myContainer.bind(ThreadService).to(ThreadService);
+myContainer.bind(ThreadVoteService).to(ThreadVoteService);
+myContainer.bind(UserService).to(UserService);
 
 myContainer.bind(IEncryptHash).to(HashEncrypt);
 myContainer.bind(IJsonschemaValidator).to(JsonSchemaValidator);
@@ -104,6 +111,7 @@ myContainer.bind(CreateThread_UseCase).to(CreateThread_UseCase).inSingletonScope
 myContainer.bind(GetAllThreads_UseCase).to(GetAllThreads_UseCase).inSingletonScope();
 myContainer.bind(GetThreadsByUser_UseCase).to(GetThreadsByUser_UseCase).inSingletonScope();
 myContainer.bind(UpdateThread_UseCase).to(UpdateThread_UseCase).inSingletonScope();
+myContainer.bind(GetThreadsParametrised_UseCase).to(GetThreadsParametrised_UseCase).inSingletonScope();
 
 // comment use-cases
 myContainer.bind(CreateComment_UseCase).to(CreateComment_UseCase).inSingletonScope();
