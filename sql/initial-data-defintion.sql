@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE categories (
    id BIGSERIAL PRIMARY KEY,
-   name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL
+   name VARCHAR(50) CHECK (LENGTH(name) > 3 AND LENGTH(name) < 20) NOT NULL UNIQUE
 );
 
 CREATE TABLE threads (
@@ -61,3 +61,9 @@ CREATE TABLE comment_votes (
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (user_id, comment_id)
 );
+
+CREATE VIEW threads_with_comments AS
+SELECT
+  t.*,
+  (SELECT COUNT(*) FROM comments WHERE thread_id = t.id) AS comment_count
+FROM threads t;
