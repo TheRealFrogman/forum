@@ -1,7 +1,7 @@
 import { User } from "@/core/domain/user/entities/user.entity.js";
 import type { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto.js";
 import type { UpdateThreadDto } from "@/core/domain/thread/dto/update-thread.dto.js";
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface.js";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface.js";
 import { Thread } from "@/core/domain/thread/entities/thread.entity.js";
 import { inject, injectable } from "inversify";
 
@@ -25,7 +25,7 @@ export class ThreadService {
    async findAllByUserId(userId: User['id']) {
       return this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
    }
-   async findAllByCategoryId(categoryId: Thread['category_id']){
+   async findAllByCategoryId(categoryId: Thread['category_id']) {
       return this.database.query(`SELECT * FROM threads WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
    }
 
@@ -40,6 +40,10 @@ export class ThreadService {
          category_id: updateThreadDto.category_id
       }
       return this.database.query(`UPDATE threads SET ${Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')} WHERE id = $1 RETURNING *`, [id, ...Object.values(input)], Thread, { isArray: false });
+   }
+
+   findAllByCategoryPaginated(categoryId: Thread['category_id'], page: string, limit: string) {
+
    }
 }
 

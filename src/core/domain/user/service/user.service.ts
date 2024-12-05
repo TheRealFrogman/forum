@@ -1,4 +1,4 @@
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface.js";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface.js";
 import { IEncryptHash } from "@/core/ports/hash-encrypt/IEncryptHash.js";
 import type { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto.js";
 import { User } from "@/core/domain/user/entities/user.entity.js";

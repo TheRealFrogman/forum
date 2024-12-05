@@ -1,4 +1,4 @@
-import { ISqlDatabase } from "@/core/ports/sql-database/sql-database.interface";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
 import { inject } from "inversify";
 import { NewCommentVoteDto } from "@/core/domain/comment-vote/dto/new-comment-vote.dto";
 import { CommentVote } from "@/core/domain/comment-vote/entities/comment-vote.entity";
