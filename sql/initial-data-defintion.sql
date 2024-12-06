@@ -17,7 +17,7 @@ CREATE TABLE threads (
    id BIGSERIAL PRIMARY KEY,
    author_id BIGSERIAL NOT NULL,
    description TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
-   title TEXT CHECK(LENGTH(title) > 20 AND LENGTH(title) < 2000) NOT NULL,
+   title TEXT CHECK(LENGTH(title) > 6 AND LENGTH(title) < 2000) NOT NULL,
    rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (author_id) REFERENCES users(id),
    category_id BIGSERIAL,
