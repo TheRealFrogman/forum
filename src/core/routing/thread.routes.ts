@@ -23,9 +23,10 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
    ["/threads/all"]: {
       GET:
          async () => {
-            // throw new Error("Not implemented");
-            // сделать авторизованным этот запрос
-            return await getAllThreads_UseCase.execute()
+            if (process.env["ENV"] === "dev")
+               return await getAllThreads_UseCase.execute();
+
+            throw new Error("Allowed only in dev environment");
          }
    },
    ["/threads"]: {
