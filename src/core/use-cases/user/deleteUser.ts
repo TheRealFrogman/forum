@@ -20,7 +20,7 @@ export class DeleteUser_UseCase extends UseCase<UserDeletedEvent> {
       if (this.canDo(user, deleteCandidate)) {
          const user = await this.userService.delete(deleteCandidate);
          this.publish(new UserDeletedEvent(user!));
-         return { statusCode: 204, statusMessage: "User deleted", responseModel: user };
+         return { statusCode: 200, statusMessage: "User deleted", responseModel: user };
       }
 
       return { statusCode: 401, statusMessage: "You are not allowed to delete this user" };

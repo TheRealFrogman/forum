@@ -20,7 +20,7 @@ export class DeleteComment_UseCase extends UseCase {
          return { statusCode: 404, statusMessage: "Comment not found" };
 
       if (this.canDo(user, comment))
-         return { statusCode: 204, statusMessage: "Comment deleted" };
+         return { statusCode: 200, statusMessage: "Comment deleted" };
       else
          return { statusCode: 401, statusMessage: "You are not allowed to delete this comment" };
    }
