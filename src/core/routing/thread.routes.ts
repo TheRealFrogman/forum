@@ -9,6 +9,9 @@ import { GetAllThreads_UseCase } from "../use-cases/thread/getAllThreads";
 import { GetThreadsByUser_UseCase } from "../use-cases/thread/getThreadsByUser";
 import { CreateThread_UseCase } from "../use-cases/thread/createThread";
 import { UpdateThread_UseCase } from "../use-cases/thread/updateThread";
+import { CategoryService } from "../domain/category/service/category.service";
+import { GetThreadsParametrised_UseCase } from "../use-cases/thread/getThreadsParametrised";
+import { Thread } from "../domain/thread/entities/thread.entity";
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
 // import { GetAllPhotosForThread_UseCase } from "../domain/use-cases/photo/getAllPhotosForThread";
 // const getAllPhotosForThread_UseCase = myContainer.get(GetAllPhotosForThread_UseCase);
@@ -20,16 +23,55 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
    ["/threads/all"]: {
       GET:
          async () => {
+            throw new Error("Not implemented");
+            // сделать авторизованным этот запрос
             return await getAllThreads_UseCase.execute()
          }
    },
    ["/threads"]: {
       GET: async (request) => {
-         const user = await getSessionUser(request);
-         if (!user)
-            return { statusCode: 401, statusMessage: "Invalid session" };
+         const url = new URL(request.url!, `http://${request.headers.host}`);
+         const page = url.searchParams.get('page');
+         const limit = url.searchParams.get('limit');
+         const orderBy = url.searchParams.get('order_by');
+         const direction = url.searchParams.get('direction')
+         const categoryId = url.searchParams.get('category_id');
 
-         return await getThreadsByUser_UseCase.execute(user.id);
+         const isPagingParamsMissing = !page || !limit || !orderBy || !direction || !categoryId;
+         if (isPagingParamsMissing) {
+            const user = await getSessionUser(request);
+            if (!user)
+               return { statusCode: 401, statusMessage: "Invalid session" };
+
+            return await getThreadsByUser_UseCase.execute(user.id);
+         }
+
+         const validatedPage = Number.parseInt(page);
+         const validatedLimit = Number.parseInt(limit);
+         if (isNaN(validatedPage) || isNaN(validatedLimit) || validatedPage <= 0 || validatedLimit <= 0)
+            return { statusCode: 400, statusMessage: "Invalid query params" };
+
+         const validatedOrderBy = orderBy as keyof Thread;
+         if (!["id", "title", "created_at", "updated_at"].includes(validatedOrderBy))
+            return { statusCode: 400, statusMessage: "Invalid sortBy query param" };
+
+         const validatedDirection = direction as "ascending" | "descending";
+         if (!["ascending", "descending"].includes(validatedDirection))
+            return { statusCode: 400, statusMessage: "Invalid order query param" };
+
+
+         const categoryService = myContainer.get(CategoryService);
+         const category = await categoryService.getCategory(categoryId);
+         if (!category)
+            return { statusCode: 400, statusMessage: "Invalid categoryId query param" };
+
+         return myContainer.get(GetThreadsParametrised_UseCase).execute(
+            validatedPage,
+            validatedLimit,
+            validatedOrderBy,
+            validatedDirection,
+            categoryId,
+         );
       },
       POST: async (request) => {
          const user = await getSessionUser(request);

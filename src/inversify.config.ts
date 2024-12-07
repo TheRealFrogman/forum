@@ -38,6 +38,14 @@ import { CategoryService } from "./core/domain/category/service/category.service
 import { CommentVoteService } from "./core/domain/comment-vote/service/comment-vote.service";
 import { ThreadVoteService } from "./core/domain/thread-vote/service/thread-vote.service";
 import { GetThreadsParametrised_UseCase } from "./core/use-cases/thread/getThreadsParametrised";
+import { PgCursorDatabase } from "./core/ports/database/pg-cursor-database/pg-cursor-database";
+import { PaginatedDatabase } from "./core/ports/database/paginated-database/PaginatedDatabase";
+import { Login_UseCase } from "./core/use-cases/auth/Login_UseCase";
+import { ForgotPasswordSendEmail_UseCase } from "./core/use-cases/auth/ForgotPasswordSendEmail_UseCase";
+import { Logout_UseCase } from "./core/use-cases/auth/Logout_UseCase";
+import { Register_UseCase } from "./core/use-cases/auth/Register_UseCase";
+import { ForgotPasswordUpdatePassword_UseCase } from "./core/use-cases/auth/ForgotPasswordUpdatePassword_UseCase";
+import { ConfirmEmail_UseCase } from "./core/use-cases/auth/ConfirmEmail_UseCase";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -45,11 +53,13 @@ const poolDatabaseInstance = new SqlPoolDatabase(
       user: "postgres",
       host: "localhost",
       database: "forum",
-      port: 5432
+      port: 5432,
    })
 )
-myContainer.bind<ISqlDatabase>(ISqlDatabase).toConstantValue(poolDatabaseInstance);
-myContainer.bind<ISqlDatabase>(ISqlDatabaseConnectionBinder).toConstantValue(poolDatabaseInstance);
+myContainer.bind(ISqlDatabase).toConstantValue(poolDatabaseInstance);
+myContainer.bind(ISqlDatabaseConnectionBinder).toConstantValue(poolDatabaseInstance);
+myContainer.bind(PgCursorDatabase).toConstantValue(poolDatabaseInstance);
+myContainer.bind(PaginatedDatabase).toConstantValue(poolDatabaseInstance);
 
 myContainer.bind(AccessJwtService).toConstantValue(
    new JwtImpl({
@@ -119,6 +129,14 @@ myContainer.bind(DeleteComment_UseCase).to(DeleteComment_UseCase).inSingletonSco
 myContainer.bind(GetCommentsByThread_UseCase).to(GetCommentsByThread_UseCase).inSingletonScope();
 myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase).inSingletonScope();
 
+
+//auth use-cases
+myContainer.bind(Login_UseCase).to(Login_UseCase).inSingletonScope();
+myContainer.bind(ForgotPasswordSendEmail_UseCase).to(ForgotPasswordSendEmail_UseCase).inSingletonScope();
+myContainer.bind(ForgotPasswordUpdatePassword_UseCase).to(ForgotPasswordUpdatePassword_UseCase).inSingletonScope();
+myContainer.bind(Logout_UseCase).to(Logout_UseCase).inSingletonScope();
+myContainer.bind(Register_UseCase).to(Register_UseCase).inSingletonScope();
+myContainer.bind(ConfirmEmail_UseCase).to(ConfirmEmail_UseCase).inSingletonScope();
 // photo use-case
 // import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
 // myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase).inSingletonScope();

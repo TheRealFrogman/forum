@@ -19,10 +19,12 @@ import { UpdateForgottenPasswordDto } from "../domain/local-auth/dto/update-forg
 import { Login_UseCase } from "../use-cases/auth/Login_UseCase";
 import { Logout_UseCase } from "../use-cases/auth/Logout_UseCase";
 import { Register_UseCase } from "../use-cases/auth/Register_UseCase";
+import { ConfirmEmailJwtService } from "../ports/jwt/service/ConfirmEmailJwtService";
+import { ConfirmEmail_UseCase } from "../use-cases/auth/ConfirmEmail_UseCase";
 
 const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator);
 
-export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register" | "/auth/forgot-password"> = {
+export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/auth/register" | "/auth/forgot-password" | "/auth/confirm-email"> = {
    ["/auth/me"]: {
       GET: async (request) => {
          const user = await getSessionUser(request)
@@ -77,35 +79,52 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          const url = new URL(request.url!, `http://${request.headers.host}`);
          const token = url.searchParams.get('token');
 
-         const body = await receiveBody<ForgotPasswordDto>(request);
-         if (!body)
-            return { statusCode: 400, statusMessage: "No body" };
-
-         if (token) {
-            if (!isToken(token))
-               return { statusCode: 400, statusMessage: "Invalid token" }
-
-            const tokenPayload = await myContainer.get(ForgotPasswordJwtService).verify(token); // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
-            if (!tokenPayload)
-               return { statusCode: 400, statusMessage: "Invalid token" }
-
-            const userId = tokenPayload.userId;
-            const user = await myContainer.get(UserService).findOneById(userId);
-            if (!user)
-               return { statusCode: 404, statusMessage: "User not found" };
-
-            const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
-            if (error)
-               return { statusCode: 400, statusMessage: error.message, responseModel: error }
-
-            return myContainer.get(ForgotPasswordUpdatePassword_UseCase).execute(user, validatedBody.password)
-         } else {
+         if (!token) {
+            const body = await receiveBody<ForgotPasswordDto>(request);
+            if (!body)
+               return { statusCode: 400, statusMessage: "No body" };
             const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<ForgotPasswordDto>(body, ForgotPasswordDto.schema);
             if (error)
                return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
             return myContainer.get(ForgotPasswordSendEmail_UseCase).execute(validatedBody.email)
          }
+         if (!isToken(token))
+            return { statusCode: 400, statusMessage: "Invalid token" }
+
+         const tokenPayload = await myContainer.get(ForgotPasswordJwtService).verify(token); // чтобы понять какой юзер перешел по ссылке нам нужно задекодить jwt
+         if (!tokenPayload)
+            return { statusCode: 400, statusMessage: "Invalid token" }
+         const { userId } = tokenPayload;
+
+         const user = await myContainer.get(UserService).findOneById(userId);
+         if (!user)
+            return { statusCode: 404, statusMessage: "User not found" };
+
+         const body = await receiveBody<UpdateForgottenPasswordDto>(request);
+         if (!body)
+            return { statusCode: 400, statusMessage: "No body" };
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
+         if (error)
+            return { statusCode: 400, statusMessage: error.message, responseModel: error }
+
+         return myContainer.get(ForgotPasswordUpdatePassword_UseCase).execute(user, validatedBody.password)
+      }
+   },
+   ["/auth/confirm-email"]: {
+      GET: async (request) => {
+         const url = new URL(request.url!, `http://${request.headers.host}`);
+         const token = url.searchParams.get('token');
+
+         if (!token || !isToken(token))
+            return { statusCode: 400, statusMessage: "Invalid token" }
+
+         const tokenPayload = await myContainer.get(ConfirmEmailJwtService).verify(token);
+         if (!tokenPayload)
+            return { statusCode: 400, statusMessage: "Invalid token" }
+
+         const userId = tokenPayload.userId;
+         return myContainer.get(ConfirmEmail_UseCase).execute(userId);
       }
    }
 }

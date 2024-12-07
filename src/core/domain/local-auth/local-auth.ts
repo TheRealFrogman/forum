@@ -62,4 +62,17 @@ export class LocalAuthenticatorService {
       return result!;
    }
 
+   /**
+    * Sends a confirmation email to the user
+    *
+    * @param {User} user
+    * @return {Promise<boolean>} true if the email was sent, false otherwise
+    */
+   async sendConfirmationEmail(user: User) {
+      const isSent = await this.emailer.sendEmail(process.env["APP_EMAIL"]!, user.email, "Confirm your email", `Click <a href="${ this.createLink(user)}">here</a> to confirm your email.`);
+      return isSent;
+   }
+   private async createLink(user: User) {
+      return `http://localhost:3000/auth/confirm-email?token=${await this.confirmEmailJwtService.sign({ userId: user.id })}`
+   }
 }

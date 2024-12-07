@@ -62,10 +62,9 @@ describe("SqlDatabase", async () => {
          database.query("delete from users");
       })
    })
-   // passes only when the upper test is skipped
    describe("connect", async () => {
       after(async () => {
-         await database.query("delete from users"); 
+         await database.query("delete from users");
       })
       await describe("query", async () => {
          await it("should make transaction properly", async () => {
@@ -105,15 +104,78 @@ describe("SqlDatabase", async () => {
       })
    })
 
+   describe("getPaginated", async () => {
+      before(async () => {
+         for (let i = 0; i < 10; i++) {
+            await database.query("INSERT INTO users (username) VALUES ($1)", [`test${i}`]);
+         }
+      })
+      after(async () => {
+         await database.query("delete from users");
+      })
+      it("should work properly", async () => {
+         const result1 = await database.getPaginated('users', UserConProps, 1, 5, "username", "ascending", "", []);
+         assert.equal(result1.length, 5);
+         assert.equal(result1[0].username, "test0");
+         assert.equal(result1[1].username, "test1");
+         assert.equal(result1[2].username, "test2");
+         assert.equal(result1[3].username, "test3");
+         assert.equal(result1[4].username, "test4");
+         assert(result1.every(row => row instanceof UserConProps));
+
+         const result2 = await database.getPaginated('users', UserConProps, 2, 5, "username", "ascending", "", []);
+         assert.equal(result2.length, 5);
+         assert.equal(result2[0].username, "test5");
+         assert.equal(result2[1].username, "test6");
+         assert.equal(result2[2].username, "test7");
+         assert.equal(result2[3].username, "test8");
+         assert.equal(result2[4].username, "test9");
+         assert(result2.every(row => row instanceof UserConProps));
+
+      })
+
+      it("orderBy asc desc", async () => {
+         const result1 = await database.getPaginated('users', UserConProps, 1, 5, "username", "descending", "", []);
+         assert.equal(result1.length, 5);
+         assert.equal(result1[0].username, "test9");
+         assert.equal(result1[1].username, "test8");
+         assert.equal(result1[2].username, "test7");
+         assert.equal(result1[3].username, "test6");
+         assert.equal(result1[4].username, "test5");
+         assert(result1.every(row => row instanceof UserConProps));
+
+         const result2 = await database.getPaginated('users', UserConProps, 1, 5, "username", "ascending", "", []);
+         assert.equal(result2.length, 5);
+         assert.equal(result2[0].username, "test0");
+         assert.equal(result2[1].username, "test1");
+         assert.equal(result2[2].username, "test2");
+         assert.equal(result2[3].username, "test3");
+         assert.equal(result2[4].username, "test4");
+         assert(result2.every(row => row instanceof UserConProps));
+      })
+
+      it("conditions", async () => {
+         const result1 = await database.getPaginated('users', UserConProps, 1, 5, "username", "descending", "where username = 'test2'");
+         assert.equal(result1.length, 1);
+         assert.equal(result1[0].username, 'test2');
+
+         const result2 = await database.getPaginated('users', UserConProps, 1, 5, "username", "descending", "where username = $1", ['test2']);
+         assert.equal(result2.length, 1);
+         assert.equal(result2[0].username, 'test2');
+      })
+   })
+
    describe("queryCursor", async () => {
       before(async () => {
          for (let i = 0; i < 10; i++) {
             await database.query("INSERT INTO users (username) VALUES ($1)", [`test${i}`]);
          }
       })
-
+      after(async () => {
+         await database.query("delete from users");
+      })
       it("should work properly", async () => {
-         const cursor = await database.queryCursor("SELECT * FROM users", [], UserConProps);
+         const cursor = await database.createCursor("SELECT * FROM users", [], UserConProps);
          const rows1 = await cursor.read(2);
          const rows2 = await cursor.read(2);
          const rows3 = await cursor.read(2);

@@ -1,6 +1,8 @@
+import { PaginatedDatabase } from "@/core/ports/database/paginated-database/PaginatedDatabase";
 import { PgCursorDatabase } from "@/core/ports/database/pg-cursor-database/pg-cursor-database";
 import { ISqlDatabaseConnectionBinder } from "@/core/ports/database/single-connection-database/ISqlDatabaseConnectionBinder";
 import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
+import assert from "assert";
 import { injectable } from "inversify";
 import { Client, Pool, PoolClient, } from "pg"
 import Cursor from 'pg-cursor';
@@ -50,11 +52,48 @@ async function makeQuery<T extends object>(client: PoolClient | Client | Pool, q
 }
 
 @injectable()
-export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBinder, PgCursorDatabase {
+export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBinder, PaginatedDatabase, PgCursorDatabase {
    constructor(
       private pool: Pool,
    ) { }
-   async queryCursor<T extends object>(query: string, params: unknown[], cls: new (...args: any[]) => T): Promise<{ read: (amount: number) => Promise<T[]>; }> {
+   async getPaginated<T extends object>(
+      table: string,
+      clazz: new (...args: any[]) => T,
+      page: number,
+      pageSize: number,
+      orderBy: keyof T,
+      direction: "ascending" | "descending",
+      conditions?: string,
+      conditionsParams: any[] = [],
+   ): Promise<T[]> {
+      const offset = (page - 1) * pageSize;
+      assert(!conditions || conditions.toUpperCase().includes("WHERE"), "Conditions should contain WHERE clause");
+
+      const query = `
+         SELECT * FROM ${table}
+         ${conditions}
+         ORDER BY ${String(orderBy)} ${direction === "ascending" ? "ASC" : "DESC"} 
+         LIMIT $${conditionsParams.length + 1} OFFSET $${conditionsParams.length + 2};
+      `;
+
+      const values = [...conditionsParams, pageSize, offset];
+
+      let client: PoolClient;
+      try {
+         client = await this.pool.connect();
+         const result = await client.query(query, values);
+
+         return result.rows.map(row => mapDataToInstance(clazz, row));
+      } catch (error) {
+         console.error('Error fetching data:', error);
+         throw error;
+      } finally {
+         if (client!) {
+            client.release();
+         }
+      }
+   }
+   async createCursor<T extends object>(query: string, params: unknown[], cls: new (...args: any[]) => T): Promise<{ read: (amount: number) => Promise<T[]>; release: () => void }> {
       const client = await this.pool.connect();
       const cursor = client.query(new Cursor(query, params));
       return {
@@ -62,9 +101,11 @@ export class SqlPoolDatabase implements ISqlDatabase, ISqlDatabaseConnectionBind
             const rows = await cursor.read(amount)
             return rows.map((row) => mapDataToInstance(cls, row));
          },
-         // release() {
-         //    client.release();
-         // }
+         release() {
+            cursor.close(() => {
+               client.release()
+            })
+         }
       }
    }
    // перегрузки для того чтобы видеть контракты прямо тут
