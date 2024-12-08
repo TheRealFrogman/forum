@@ -3,6 +3,8 @@ import type { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.
 import type { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto.ts";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
 import { inject, injectable } from "inversify";
+import { User } from "../../user/entities/user.entity";
+import { Thread } from "../../thread/entities/thread.entity";
 
 @injectable()
 export class CommentService {
@@ -18,10 +20,18 @@ export class CommentService {
       ))!;
    }
 
-   async findAllByThread(threadId: string): Promise<Comment[]> {
+   async findAllByThread(threadId: Thread['id']): Promise<Comment[]> {
       return await this.comments.query(
          `SELECT * FROM comments WHERE thread_id = $1`,
          [threadId],
+         Comment,
+         { isArray: true }
+      );
+   }
+   async findAllByAuthorId(authorId: User['id']): Promise<Comment[]> {
+      return await this.comments.query(
+         `SELECT * FROM comments WHERE author_id = $1`,
+         [authorId],
          Comment,
          { isArray: true }
       );
