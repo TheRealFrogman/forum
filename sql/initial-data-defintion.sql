@@ -23,6 +23,7 @@ CREATE TABLE threads (
    category_id BIGSERIAL,
    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   comment_count INT DEFAULT 0
 );
 
 CREATE INDEX author_id_index ON threads (author_id);
@@ -74,8 +75,67 @@ CREATE TABLE comment_votes (
 CREATE INDEX user_id_index ON comment_votes (user_id);
 CREATE INDEX comment_id_index ON comment_votes (comment_id);
 
-CREATE VIEW threads_with_comments AS
-SELECT
-  t.*,
-  (SELECT COUNT(*) FROM comments WHERE thread_id = t.id) AS comment_count
-FROM threads t;
+CREATE OR REPLACE FUNCTION update_thread_rating()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW.vote_type = 'upvote' THEN
+      UPDATE threads SET rating = rating + 1 WHERE id = NEW.thread_id;
+    ELSIF NEW.vote_type = 'downvote' THEN
+      UPDATE threads SET rating = rating - 1 WHERE id = NEW.thread_id;
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_thread_rating_trigger
+AFTER INSERT ON thread_votes
+FOR EACH ROW
+EXECUTE PROCEDURE update_thread_rating();
+
+CREATE OR REPLACE FUNCTION update_comment_rating()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW.vote_type = 'upvote' THEN
+      UPDATE comments SET rating = rating + 1 WHERE id = NEW.comment_id;
+    ELSIF NEW.vote_type = 'downvote' THEN
+      UPDATE comments SET rating = rating - 1 WHERE id = NEW.comment_id;
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_comment_rating_trigger
+AFTER INSERT ON comment_votes
+FOR EACH ROW
+EXECUTE PROCEDURE update_comment_rating();
+
+
+CREATE OR REPLACE FUNCTION increment_thread_comment_count()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE threads SET comment_count = comment_count + 1 WHERE id = NEW.thread_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER increment_comment_count_trigger
+AFTER INSERT ON comments
+FOR EACH ROW
+EXECUTE PROCEDURE increment_thread_comment_count();
+
+CREATE OR REPLACE FUNCTION decrement_thread_comment_count()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE threads SET comment_count = comment_count - 1 WHERE id = OLD.thread_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER decrement_comment_count_trigger
+BEFORE DELETE ON comments
+FOR EACH ROW
+EXECUTE PROCEDURE decrement_thread_comment_count();

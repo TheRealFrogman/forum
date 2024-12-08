@@ -9,7 +9,7 @@ interface ThreadProps {
    category_id: Category['id'];
    rating: number;
    created_at: Date;
-   comment_count: string; // may be the cause of bugs in the future as i didn't check it, i should have
+   comment_count: number; // may be the cause of bugs in the future as i didn't check it, i should have
 }
 
 interface ThreadInitializer extends ThreadProps { }
@@ -22,7 +22,7 @@ export class Thread implements ThreadProps {
    category_id!: string;
    rating!: number;
    created_at!: Date;
-   comment_count!: string;
+   comment_count!: number;
    constructor(data: ThreadInitializer) {
       if (data) {
          this.author_id = data.author_id;
