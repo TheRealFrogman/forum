@@ -21,7 +21,7 @@ function mapDataToInstance<T extends object>(cls: SomeClass<T>, data: object) {
    }
 
    if (Object.keys(instance).length !== Object.keys(data).length)
-      throw new Error("Amount of instance fields is not equal to amount of data fields");
+      throw new Error("Amount of instance fields is not equal to amount of data fields\nInstance fields: " + Object.keys(instance).join(", ") + "\nData fields: " + Object.keys(data).join(", "));
 
    return instance;
 }
@@ -30,7 +30,10 @@ async function makeQuery<T extends object>(client: PoolClient | Client | Pool, q
    const result = await client.query(query, params)
 
    if (result.rowCount === 0) {
-      return null
+      if (!opts?.isArray)
+         return null
+      else 
+         return [];
    } else {
       if (!cls)
          return null
