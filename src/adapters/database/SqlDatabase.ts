@@ -41,7 +41,7 @@ async function makeQuery<T extends object>(client: PoolClient | Client | Pool, q
       const instances = result.rows.map((row) => mapDataToInstance(cls, row)!);
       if (instances.length === 1) {
          if (opts?.isArray === true) {
-            throw new Error("Single object expected, check your query");
+            return instances;
          }
          return instances[0]!;
       } else {
