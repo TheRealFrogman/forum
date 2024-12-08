@@ -25,6 +25,9 @@ CREATE TABLE threads (
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX author_id_index ON threads (author_id);
+CREATE INDEX category_id_index ON threads (category_id);
+
 CREATE TABLE comments (
    id BIGSERIAL PRIMARY KEY,
    content TEXT NOT NULL,
@@ -35,6 +38,9 @@ CREATE TABLE comments (
    FOREIGN KEY (author_id) REFERENCES users(id),
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX thread_id_index ON comments (thread_id);
+CREATE INDEX author_id_index ON comments (author_id);
 
 CREATE TABLE photos (
    id BIGSERIAL PRIMARY KEY,
@@ -54,6 +60,9 @@ CREATE TABLE thread_votes (
    PRIMARY KEY (user_id, thread_id)
 );
 
+CREATE INDEX user_id_index ON thread_votes (user_id);
+CREATE INDEX thread_id_index ON thread_votes (thread_id);
+
 CREATE TABLE comment_votes (
    user_id BIGSERIAL NOT NULL REFERENCES users(id) ON DELETE CASCADE,
    comment_id BIGSERIAL NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
@@ -61,6 +70,9 @@ CREATE TABLE comment_votes (
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (user_id, comment_id)
 );
+
+CREATE INDEX user_id_index ON comment_votes (user_id);
+CREATE INDEX comment_id_index ON comment_votes (comment_id);
 
 CREATE VIEW threads_with_comments AS
 SELECT
