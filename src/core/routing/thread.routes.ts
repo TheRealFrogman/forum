@@ -5,26 +5,23 @@ import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUse
 
 import { myContainer } from "@/inversify.config";
 import { IJsonschemaValidator } from "@/core/ports/jsonschema-validation/jsonschema-validator.interface";
-import { GetAllThreads_UseCase } from "../use-cases/thread/getAllThreads";
+
 import { GetThreadsByUser_UseCase } from "../use-cases/thread/getThreadsByAuthor";
 import { CreateThread_UseCase } from "../use-cases/thread/createThread";
 import { UpdateThread_UseCase } from "../use-cases/thread/updateThread";
 import { CategoryService } from "../domain/category/service/category.service";
 import { GetThreadsParametrised_UseCase } from "../use-cases/thread/getThreadsParametrised";
 import { Thread } from "../domain/thread/entities/thread.entity";
-const jsonschemaValidatorInstance = myContainer.get(IJsonschemaValidator)
+import { GetAllThreads_UseCase } from "../use-cases/thread/getAllThreads";
 // import { GetAllPhotosForThread_UseCase } from "../domain/use-cases/photo/getAllPhotosForThread";
 // const getAllPhotosForThread_UseCase = myContainer.get(GetAllPhotosForThread_UseCase);
-const getAllThreads_UseCase = myContainer.get(GetAllThreads_UseCase);
-const getThreadsByUser_UseCase = myContainer.get(GetThreadsByUser_UseCase);
-const createThread_UseCase = myContainer.get(CreateThread_UseCase);
-const updateThread_UseCase = myContainer.get(UpdateThread_UseCase);
+
 export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
    ["/threads/all"]: {
       GET:
          async () => {
             if (process.env["ENV"] === "dev")
-               return await getAllThreads_UseCase.execute();
+               return await myContainer.get(GetAllThreads_UseCase).execute();
 
             throw new Error("Allowed only in dev environment");
          }
@@ -44,7 +41,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
             if (!user)
                return { statusCode: 401, statusMessage: "Invalid session" };
 
-            return await getThreadsByUser_UseCase.execute(user.id);
+            return await myContainer.get(GetThreadsByUser_UseCase).execute(user.id);
          }
 
          const validatedPage = Number.parseInt(page);
@@ -83,11 +80,11 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
+         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await createThread_UseCase.execute(user, validatedBody);
+         return await myContainer.get(CreateThread_UseCase).execute(user, validatedBody);
       },
       PATCH: async (request) => {
          const user = await getSessionUser(request);
@@ -103,11 +100,11 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
+         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
-         return await updateThread_UseCase.execute(user, id, validatedBody);
+         return await myContainer.get(UpdateThread_UseCase).execute(user, id, validatedBody);
       }
    }
 };

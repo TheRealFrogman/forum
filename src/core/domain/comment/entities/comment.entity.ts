@@ -21,7 +21,7 @@ export class Comment implements CommentProps {
    created_at!: Date;
 
    constructor(data: CommentInitializer) {
-      if(data){
+      if (data) {
          this.id = data.id;
          this.content = data.content;
          this.thread_id = data.thread_id;
@@ -41,6 +41,8 @@ export class Comment implements CommentProps {
          },
          content: {
             type: "string",
+            minLength: 4,
+            maxLength: 255
          },
          thread_id: {
             type: "string",

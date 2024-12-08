@@ -1,28 +1,24 @@
-import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
 import { User } from "@/core/domain/user/entities/user.entity";
 
-interface ThreadProps {
-   id: string;
-   thread_id: Thread['id'];
+interface VoteProps {
+   comment_id: Comment['id'];
    user_id: User['id'];
    vote_type: 'upvote' | 'downvote';
    created_at: Date;
-
 }
 
-interface ThreadInitializer extends ThreadProps { }
+interface CategoryInitializer extends VoteProps { }
 
-export class ThreadVote implements ThreadProps {
-   id!: string
-   thread_id!: string
-   user_id!: string
+export class Vote implements VoteProps {
+   comment_id!: Comment['id']
+   user_id!: User['id']
    vote_type!: 'upvote' | 'downvote'
    created_at!: Date;
 
-   constructor(data: ThreadInitializer) {
+   constructor(data: CategoryInitializer) {
       if (data) {
-         this.id = data.id;
-         this.thread_id = data.thread_id;
+         this.comment_id = data.comment_id;
          this.user_id = data.user_id;
          this.vote_type = data.vote_type
          this.created_at = data.created_at
@@ -30,15 +26,10 @@ export class ThreadVote implements ThreadProps {
    }
 
    static schema = {
-      title: "ThreadVote",
+      title: "CommentVote",
       type: "object",
       properties: {
-         id: {
-            type: "string",
-            minLength: 1,
-            "pattern": "^[0-9]+$"
-         },
-         thread_id: {
+         comment_id: {
             type: "string",
             minLength: 1,
             "pattern": "^[0-9]+$"
@@ -56,7 +47,7 @@ export class ThreadVote implements ThreadProps {
             format: "date-time"
          }
       },
-      required: ["id", "thread_id", "user_id", "vote_type", "created_at"],
+      required: ["comment_id", "user_id", "vote_type", "created_at"],
       additionalProperties: false
    }
 }

@@ -20,7 +20,7 @@ export const commentRoutes: Routes<'/comments'> = {
    ["/comments"]: {
       GET: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
-         const threadId = url.searchParams.get('threadId');
+         const threadId = url.searchParams.get('thread_id');
          if (!threadId)
             return { statusCode: 400, statusMessage: "Thread ID is required" };
 
@@ -42,7 +42,7 @@ export const commentRoutes: Routes<'/comments'> = {
       },
       PUT: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
-         const commentId = url.searchParams.get('commentId');
+         const commentId = url.searchParams.get('comment_id');
          if (!commentId)
             return { statusCode: 400, statusMessage: "Comment ID is required" };
 
@@ -63,7 +63,7 @@ export const commentRoutes: Routes<'/comments'> = {
       DELETE: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
 
-         const commentId = url.searchParams.get('commentId');
+         const commentId = url.searchParams.get('comment_id');
          if (!commentId)
             return { statusCode: 400, statusMessage: "Comment ID is required" };
 

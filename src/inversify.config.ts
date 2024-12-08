@@ -35,8 +35,7 @@ import { ForgotPasswordJwtService } from "./core/ports/jwt/service/ForgotPasswor
 import { IEmailer } from "./core/ports/emailer/IEmailer";
 import { Emailer } from "./adapters/emailer/Emailer";
 import { CategoryService } from "./core/domain/category/service/category.service";
-import { CommentVoteService } from "./core/domain/comment-vote/service/comment-vote.service";
-import { ThreadVoteService } from "./core/domain/thread-vote/service/thread-vote.service";
+import { VoteService } from "./core/domain/vote/service/vote.service";
 import { GetThreadsParametrised_UseCase } from "./core/use-cases/thread/getThreadsParametrised";
 import { PgCursorDatabase } from "./core/ports/database/pg-cursor-database/pg-cursor-database";
 import { PaginatedDatabase } from "./core/ports/database/paginated-database/PaginatedDatabase";
@@ -47,6 +46,7 @@ import { Register_UseCase } from "./core/use-cases/auth/Register_UseCase";
 import { ForgotPasswordUpdatePassword_UseCase } from "./core/use-cases/auth/ForgotPasswordUpdatePassword_UseCase";
 import { ConfirmEmail_UseCase } from "./core/use-cases/auth/ConfirmEmail_UseCase";
 import { GetCommentsByAuthor_UseCase } from "./core/use-cases/comment/getCommentsByAuthor";
+import { FindAllByUserAndThread_UseCase } from "./core/use-cases/vote/FindAllByUserAndThread_UseCase";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -99,10 +99,9 @@ myContainer.bind(IEmailer).to(Emailer);
 
 myContainer.bind(CategoryService).to(CategoryService);
 myContainer.bind(CommentService).to(CommentService);
-myContainer.bind(CommentVoteService).to(CommentVoteService);
+myContainer.bind(VoteService).to(VoteService);
 myContainer.bind(PhotoService).to(PhotoService);
 myContainer.bind(ThreadService).to(ThreadService);
-myContainer.bind(ThreadVoteService).to(ThreadVoteService);
 myContainer.bind(UserService).to(UserService);
 
 myContainer.bind(IEncryptHash).to(HashEncrypt);
@@ -143,3 +142,7 @@ myContainer.bind(ConfirmEmail_UseCase).to(ConfirmEmail_UseCase).inSingletonScope
 // import { GetAllPhotosForThread_UseCase } from "@/core/use-cases/photo/getAllPhotosForThread";
 // myContainer.bind(GetAllPhotosForThread_UseCase).to(GetAllPhotosForThread_UseCase).inSingletonScope();
 myContainer.bind(GetMainPhotosForThreadIfExists_UseCase).to(GetMainPhotosForThreadIfExists_UseCase).inSingletonScope();
+
+
+//vote use-cases
+myContainer.bind(FindAllByUserAndThread_UseCase).to(FindAllByUserAndThread_UseCase).inSingletonScope();

@@ -5,6 +5,7 @@ import { authRoutes } from "@/core/routing/auth.routes";
 import { threadRoutes } from "@/core/routing/thread.routes";
 import { commentRoutes } from "@/core/routing/comment.routes";
 import { photoRoutes } from "@/core/routing/photo.routes";
+import { votesRoutes } from "./core/routing/vote.routes";
 
 export const server = http.createServer({}, async (request, response) => {
    if (!request.url || !request.method)
@@ -23,6 +24,7 @@ export const server = http.createServer({}, async (request, response) => {
          ...threadRoutes,
          ...commentRoutes,
          ...photoRoutes,
+         ...votesRoutes,
       }
       if (!(url.pathname in allRoutes))
          return void response.writeHead(404, "Route not found").end()

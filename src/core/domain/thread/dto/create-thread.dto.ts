@@ -4,7 +4,7 @@ import { User } from "@/core/domain/user/entities/user.entity";
 export class CreateThreadDto {
    constructor(
       public author_id: User['id'],
-      public description: string,
+      public initial_comment: string,
       public title: string,
       public category_id: Category['id']
    ) { }
@@ -17,7 +17,7 @@ export class CreateThreadDto {
             type: "string",
             "pattern": "^[0-9]+$"
          },
-         description: {
+         initial_comment: {
             type: "string",
             minLength: 4,
             maxLength: 255
@@ -32,7 +32,7 @@ export class CreateThreadDto {
             "pattern": "^[0-9]+$"
          },
       },
-      required: ["author_id", "description", "title", "category_id"],
+      required: ["author_id", "initial_comment", "title", "category_id"],
       additionalProperties: false
    }
 }

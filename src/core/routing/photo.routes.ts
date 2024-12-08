@@ -11,7 +11,7 @@ export const photoRoutes: Routes<'/photos'> = {
    ["/photos"]: {
       GET: async (request) => {
          const url = new URL(request.url!, `http://${request.headers.host}`);
-         const threadId = url.searchParams.get('threadId');
+         const threadId = url.searchParams.get('thread_id');
          if (!threadId)
             return { statusCode: 400, statusMessage: "No threadId provided" };
 

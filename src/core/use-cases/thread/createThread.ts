@@ -22,6 +22,7 @@ export class CreateThread_UseCase extends UseCase {
    }
 
    override canDo(user: User) {
-      return user.email_confirmed;
+      // return user.email_confirmed;
+      return true;
    }
 }

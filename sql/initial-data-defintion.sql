@@ -16,12 +16,10 @@ CREATE TABLE categories (
 CREATE TABLE threads (
    id BIGSERIAL PRIMARY KEY,
    author_id BIGSERIAL NOT NULL,
-   description TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
-   title TEXT CHECK(LENGTH(title) > 6 AND LENGTH(title) < 2000) NOT NULL,
-   rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (author_id) REFERENCES users(id),
    category_id BIGSERIAL,
    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+   title TEXT CHECK(LENGTH(title) > 6 AND LENGTH(title) < 2000) NOT NULL,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
    comment_count INT DEFAULT 0
 );
@@ -31,12 +29,12 @@ CREATE INDEX category_id_index ON threads (category_id);
 
 CREATE TABLE comments (
    id BIGSERIAL PRIMARY KEY,
-   content TEXT NOT NULL,
+   content TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
    thread_id BIGSERIAL NOT NULL,
    author_id BIGSERIAL NOT NULL,
-   rating INT DEFAULT 0 NOT NULL,
    FOREIGN KEY (thread_id) REFERENCES threads(id),
    FOREIGN KEY (author_id) REFERENCES users(id),
+   rating INT DEFAULT 0 NOT NULL,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -53,18 +51,7 @@ CREATE TABLE photos (
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE thread_votes (
-   user_id BIGSERIAL NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-   thread_id BIGSERIAL NOT NULL REFERENCES threads(id) ON DELETE CASCADE,
-   vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
-   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   PRIMARY KEY (user_id, thread_id)
-);
-
-CREATE INDEX user_id_index ON thread_votes (user_id);
-CREATE INDEX thread_id_index ON thread_votes (thread_id);
-
-CREATE TABLE comment_votes (
+CREATE TABLE votes (
    user_id BIGSERIAL NOT NULL REFERENCES users(id) ON DELETE CASCADE,
    comment_id BIGSERIAL NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
    vote_type VARCHAR(10) NOT NULL CHECK (vote_type IN ('upvote', 'downvote')),
@@ -72,27 +59,8 @@ CREATE TABLE comment_votes (
    PRIMARY KEY (user_id, comment_id)
 );
 
-CREATE INDEX user_id_index ON comment_votes (user_id);
-CREATE INDEX comment_id_index ON comment_votes (comment_id);
-
-CREATE OR REPLACE FUNCTION update_thread_rating()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF TG_OP = 'INSERT' THEN
-    IF NEW.vote_type = 'upvote' THEN
-      UPDATE threads SET rating = rating + 1 WHERE id = NEW.thread_id;
-    ELSIF NEW.vote_type = 'downvote' THEN
-      UPDATE threads SET rating = rating - 1 WHERE id = NEW.thread_id;
-    END IF;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_thread_rating_trigger
-AFTER INSERT ON thread_votes
-FOR EACH ROW
-EXECUTE PROCEDURE update_thread_rating();
+CREATE INDEX user_id_index ON votes (user_id);
+CREATE INDEX comment_id_index ON votes (comment_id);
 
 CREATE OR REPLACE FUNCTION update_comment_rating()
 RETURNS TRIGGER AS $$
@@ -109,7 +77,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER update_comment_rating_trigger
-AFTER INSERT ON comment_votes
+AFTER INSERT ON votes
 FOR EACH ROW
 EXECUTE PROCEDURE update_comment_rating();
 

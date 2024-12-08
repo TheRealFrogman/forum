@@ -1,18 +1,18 @@
-import { Thread } from "@/core/domain/thread/entities/thread.entity";
+import { Comment } from "@/core/domain/comment/entities/comment.entity";
 import { User } from "@/core/domain/user/entities/user.entity";
 
-export class NewThreadVoteDto {
+export class NewVoteDto {
    constructor(
-      public thread_id: Thread['id'],
+      public comment_id: Comment['id'],
       public user_id: User['id'],
       public vote_type: 'upvote' | 'downvote',
    ) { }
 
    static schema = {
-      title: "NewThreadVoteDto",
+      title: "NewVoteDto",
       type: "object",
       properties: {
-         thread_id: {
+         comment_id: {
             type: "string",
             minLength: 1,
             "pattern": "^[0-9]+$"
@@ -26,7 +26,7 @@ export class NewThreadVoteDto {
             enum: ['upvote', 'downvote']
          }
       },
-      required: ["thread_id", "user_id", "vote_type"],
+      required: ["comment_id", "user_id", "vote_type"],
       additionalProperties: false
    }
 }
