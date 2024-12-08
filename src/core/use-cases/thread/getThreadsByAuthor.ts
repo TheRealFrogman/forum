@@ -14,6 +14,6 @@ export class GetThreadsByUser_UseCase extends UseCase {
    }
 
    async execute(id: User['id']): Promise<EndpointResult> {
-      return { statusCode: 200, responseModel: await this.threadService.findAllByUserId(id) };
+      return { statusCode: 200, responseModel: await this.threadService.findAllByAuthorId(id) };
    }
 }

@@ -20,7 +20,7 @@ import { UpdateUser_UseCase } from "@/core/use-cases/user/updateUser";
 import { GetUser_UseCase } from "@/core/use-cases/user/getUser";
 import { CreateThread_UseCase } from "@/core/use-cases/thread/createThread";
 import { GetAllThreads_UseCase } from "@/core/use-cases/thread/getAllThreads";
-import { GetThreadsByUser_UseCase } from "@/core/use-cases/thread/getThreadsByUser";
+import { GetThreadsByUser_UseCase } from "@/core/use-cases/thread/getThreadsByAuthor";
 import { UpdateThread_UseCase } from "@/core/use-cases/thread/updateThread";
 import { CreateComment_UseCase } from "@/core/use-cases/comment/createComment";
 import { DeleteComment_UseCase } from "@/core/use-cases/comment/deleteComment";

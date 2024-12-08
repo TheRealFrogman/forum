@@ -22,7 +22,7 @@ export class ThreadService {
    async findAll() {
       return this.database.query(`SELECT * FROM threads_with_comments`, [], Thread, { isArray: true });
    }
-   async findAllByUserId(userId: User['id']) {
+   async findAllByAuthorId(userId: User['id']) {
       return this.database.query(`SELECT * FROM threads_with_comments WHERE author_id = $1`, [userId], Thread, { isArray: true });
    }
    async findAllByCategoryId(categoryId: Thread['category_id']) {
