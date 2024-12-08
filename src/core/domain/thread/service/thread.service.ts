@@ -20,17 +20,17 @@ export class ThreadService {
    }
 
    async findAll() {
-      return this.database.query(`SELECT * FROM threads_with_comments`, [], Thread, { isArray: true });
+      return this.database.query(`SELECT * FROM threads`, [], Thread, { isArray: true });
    }
    async findAllByAuthorId(userId: User['id']) {
-      return this.database.query(`SELECT * FROM threads_with_comments WHERE author_id = $1`, [userId], Thread, { isArray: true });
+      return this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
    }
    async findAllByCategoryId(categoryId: Thread['category_id']) {
-      return this.database.query(`SELECT * FROM threads_with_comments WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
+      return this.database.query(`SELECT * FROM threads WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
    }
 
    async findOne(id: Thread['id']) {
-      return this.database.query(`SELECT * FROM threads_with_comments WHERE id = $1`, [id], Thread, { isArray: false });
+      return this.database.query(`SELECT * FROM threads WHERE id = $1`, [id], Thread, { isArray: false });
    }
 
    async update(id: Thread['id'], updateThreadDto: UpdateThreadDto) {
