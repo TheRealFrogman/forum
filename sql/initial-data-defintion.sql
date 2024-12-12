@@ -47,7 +47,7 @@ CREATE TABLE comments (
 
 CREATE INDEX comments_thread_id_index ON comments (thread_id);
 CREATE INDEX comments_author_id_index ON comments (author_id);
-CREATE INDEX comments_thread_and_seq_id_index ON comments (author_id, local_id);
+CREATE INDEX comments_thread_id_and_local_id_index ON comments (thread_id, local_id);
 
 CREATE FUNCTION fill_in_comments_seq() RETURNS trigger
    LANGUAGE plpgsql
