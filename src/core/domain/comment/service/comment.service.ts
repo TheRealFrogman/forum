@@ -11,7 +11,7 @@ export class CommentService {
    constructor(
       @inject(ISqlDatabase) private comments: ISqlDatabase,
    ) { }
-   async create(createCommentDto: CreateCommentDto & {author_id: User['id']}): Promise<Comment> {
+   async create(createCommentDto: CreateCommentDto & { author_id: User['id'] }): Promise<Comment> {
       return (await this.comments.query(
          `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3) RETURNING *`,
          [createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
@@ -27,6 +27,15 @@ export class CommentService {
          Comment,
          { isArray: true }
       );
+   }
+   async findOneByThreadAndLocalId(localId: Comment['local_id'], threadId: Thread['id']): Promise<Comment> {
+      const result = await this.comments.query(
+         `SELECT * FROM comments WHERE local_id = $1 AND thread_id = $2`,
+         [localId, threadId],
+         Comment,
+         { isArray: false }
+      );
+      return result!;
    }
    async findAllByAuthorId(authorId: User['id']): Promise<Comment[]> {
       return await this.comments.query(
