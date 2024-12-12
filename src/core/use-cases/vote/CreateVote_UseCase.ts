@@ -13,12 +13,12 @@ export class CreateVote_UseCase extends UseCase {
       super();
    }
    override async execute(user: User, createVoteDto: NewVoteDto): Promise<EndpointResult> {
-      if (this.canDo(user, createVoteDto))
-         return { statusCode: 200, responseModel: await this.voteService.create(createVoteDto) };
+      if (this.canDo(user))
+         return { statusCode: 200, responseModel: await this.voteService.create({...createVoteDto, user_id: user.id}) };
       else
          return { statusCode: 401, statusMessage: "You are not allowed to vote on this comment" }
    }
-   override canDo(user: User, createVoteDto: NewVoteDto): boolean {
-      return user.id === createVoteDto.user_id
+   override canDo(user: User): boolean {
+      return true;
    }
 }

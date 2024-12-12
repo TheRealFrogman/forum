@@ -16,7 +16,7 @@ export class CreateThread_UseCase extends UseCase {
    }
    async execute(user: User, body: CreateThreadDto): Promise<EndpointResult> {
       if (this.canDo(user))
-         return { statusCode: 201, responseModel: await this.threadService.create(body) };
+         return { statusCode: 201, responseModel: await this.threadService.create({ ...body, author_id: user.id }) };
       else
          return { statusCode: 401, statusMessage: "You are not allowed to create a thread, please confirm your email" }
    }

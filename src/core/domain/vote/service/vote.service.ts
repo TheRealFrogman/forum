@@ -9,7 +9,7 @@ export class VoteService {
    constructor(
       @inject(ISqlDatabase) private commentVotes: ISqlDatabase,
    ) { }
-   async create(createCommentVoteDto: NewVoteDto): Promise<Vote> {
+   async create(createCommentVoteDto: NewVoteDto & {user_id: User['id']}): Promise<Vote> {
       const result = await this.commentVotes.query(
          `INSERT INTO votes (comment_id, user_id, vote_type) VALUES ($1, $2, $3) RETURNING *`,
          [createCommentVoteDto.comment_id, createCommentVoteDto.user_id, createCommentVoteDto.vote_type],

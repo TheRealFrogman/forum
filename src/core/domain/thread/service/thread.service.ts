@@ -14,7 +14,7 @@ export class ThreadService {
       @inject(ISqlDatabaseConnectionBinder) private readonly connectionBinder: ISqlDatabaseConnectionBinder
    ) { }
 
-   async create(createThreadDto: CreateThreadDto): Promise<{ thread: Thread, comment: Comment }> {
+   async create(createThreadDto: CreateThreadDto & { author_id: User['id']}): Promise<{ thread: Thread, comment: Comment }> {
       const connection = await this.connectionBinder.connect();
 
       try {

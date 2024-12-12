@@ -21,9 +21,9 @@ export class CreateComment_UseCase extends UseCase {
       const thread = await this.threadService.findOne(body.thread_id);
       if (!thread)
          return { statusCode: 404, statusMessage: "Thread not found" };
-   
+
       if (this.canDo(user, thread))
-         return { statusCode: 201, responseModel: await this.commentService.create(body) };
+         return { statusCode: 201, responseModel: await this.commentService.create({ ...body, author_id: user.id }) };
       else
          return { statusCode: 401, statusMessage: "You are not allowed to comment on this thread" };
    }

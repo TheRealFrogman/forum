@@ -11,7 +11,7 @@ export class CommentService {
    constructor(
       @inject(ISqlDatabase) private comments: ISqlDatabase,
    ) { }
-   async create(createCommentDto: CreateCommentDto): Promise<Comment> {
+   async create(createCommentDto: CreateCommentDto & {author_id: User['id']}): Promise<Comment> {
       return (await this.comments.query(
          `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3) RETURNING *`,
          [createCommentDto.content, createCommentDto.thread_id, createCommentDto.author_id],
