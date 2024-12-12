@@ -37,7 +37,7 @@ CREATE TRIGGER make_thread_seq AFTER INSERT ON threads FOR EACH ROW EXECUTE PROC
 
 CREATE TABLE comments (
    id BIGSERIAL PRIMARY KEY,
-   seq BIGINT,
+   local_id BIGINT,
    thread_id BIGINT NOT NULL REFERENCES threads(id),
    author_id BIGINT NOT NULL REFERENCES users(id),
    content TEXT CHECK(LENGTH(content) > 3 AND LENGTH(content) < 255) NOT NULL,
@@ -47,13 +47,13 @@ CREATE TABLE comments (
 
 CREATE INDEX comments_thread_id_index ON comments (thread_id);
 CREATE INDEX comments_author_id_index ON comments (author_id);
-CREATE INDEX comments_thread_and_seq_id_index ON comments (author_id, seq);
+CREATE INDEX comments_thread_and_seq_id_index ON comments (author_id, local_id);
 
 CREATE FUNCTION fill_in_comments_seq() RETURNS trigger
    LANGUAGE plpgsql
    AS $$
 begin
-   NEW.seq := nextval('thread_seq_' || NEW.thread_id);
+   NEW.local_id := nextval('thread_seq_' || NEW.thread_id);
    RETURN NEW;
 end
 $$;

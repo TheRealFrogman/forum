@@ -8,7 +8,7 @@ interface CommentProps {
    author_id: User['id'];
    rating: number;
    created_at: Date;
-   seq: string;
+   local_id: string;
 }
 
 interface CommentInitializer extends CommentProps { }
@@ -20,7 +20,7 @@ export class Comment implements CommentProps {
    author_id!: User['id'];
    rating!: number;
    created_at!: Date;
-   seq!: string;
+   local_id!: string;
 
    constructor(data: CommentInitializer) {
       if (data) {
@@ -30,7 +30,7 @@ export class Comment implements CommentProps {
          this.author_id = data.author_id;
          this.rating = data.rating
          this.created_at = data.created_at
-         this.seq = data.seq
+         this.local_id = data.local_id
       }
    }
 
