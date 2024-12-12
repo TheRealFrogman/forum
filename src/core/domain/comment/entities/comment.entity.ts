@@ -51,7 +51,7 @@ export class Comment implements CommentProps {
             type: "string",
             "pattern": "^[0-9]+$"
          },
-         seq: {
+         local_id: {
             type: "string",
             "pattern": "^[0-9]+$"
          },
@@ -67,7 +67,7 @@ export class Comment implements CommentProps {
             format: "date-time"
          }
       },
-      required: ["id", "content", "thread_id", "author_id", "rating", "created_at", "seq"],
+      required: ["id", "content", "thread_id", "author_id", "rating", "created_at", "local_id"],
       additionalProperties: false
    }
 }
