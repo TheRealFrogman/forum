@@ -8,6 +8,7 @@ interface CommentProps {
    author_id: User['id'];
    rating: number;
    created_at: Date;
+   seq: string;
 }
 
 interface CommentInitializer extends CommentProps { }
@@ -19,6 +20,7 @@ export class Comment implements CommentProps {
    author_id!: User['id'];
    rating!: number;
    created_at!: Date;
+   seq!: string;
 
    constructor(data: CommentInitializer) {
       if (data) {
@@ -28,6 +30,7 @@ export class Comment implements CommentProps {
          this.author_id = data.author_id;
          this.rating = data.rating
          this.created_at = data.created_at
+         this.seq = data.seq
       }
    }
 
@@ -48,6 +51,10 @@ export class Comment implements CommentProps {
             type: "string",
             "pattern": "^[0-9]+$"
          },
+         seq: {
+            type: "string",
+            "pattern": "^[0-9]+$"
+         },
          author_id: {
             type: "string",
             "pattern": "^[0-9]+$"
@@ -60,7 +67,7 @@ export class Comment implements CommentProps {
             format: "date-time"
          }
       },
-      required: ["id", "content", "thread_id", "author_id", "rating", "created_at"],
+      required: ["id", "content", "thread_id", "author_id", "rating", "created_at", "seq"],
       additionalProperties: false
    }
 }

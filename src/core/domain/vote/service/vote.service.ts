@@ -3,6 +3,7 @@ import { inject } from "inversify";
 import { NewVoteDto } from "@/core/domain/vote/dto/new-vote.dto";
 import { Vote } from "@/core/domain/vote/entities/vote.entity";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
+import { User } from "../../user/entities/user.entity";
 
 export class VoteService {
    constructor(
@@ -27,19 +28,19 @@ export class VoteService {
       );
    }
 
-   async findOne(id: Vote['id']): Promise<Vote | null> {
+   async findOne(userId: User['id'], commentId: Comment['id']): Promise<Vote | null> {
       return await this.commentVotes.query(
-         `SELECT * FROM votes WHERE id = $1`,
-         [id],
+         `SELECT * FROM votes WHERE user_id = $1 AND comment_id = $2`,
+         [userId, commentId],
          Vote,
          { isArray: false }
       );
    }
 
-   async delete(id: Vote['id']): Promise<Vote | null> {
+   async delete(userId: User['id'], commentId: Comment['id']): Promise<Vote | null> {
       return await this.commentVotes.query(
-         `DELETE FROM votes WHERE id = $1 RETURNING *`,
-         [id],
+         `DELETE FROM votes WHERE user_id = $1 AND comment_id = $2 RETURNING *`,
+         [userId, commentId],
          Vote,
          { isArray: false }
       );
