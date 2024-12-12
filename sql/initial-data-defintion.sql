@@ -22,22 +22,42 @@ CREATE TABLE threads (
    comment_count INT DEFAULT 0
 );
 
-CREATE INDEX author_id_index ON threads (author_id);
-CREATE INDEX category_id_index ON threads (category_id);
+CREATE INDEX threads_author_id_index ON threads (author_id);
+CREATE INDEX threads_category_id_index ON threads (category_id);
+
+CREATE FUNCTION make_thread_seq() RETURNS trigger
+   LANGUAGE plpgsql
+   AS $$
+begin
+   execute format('create sequence thread_seq_%s', NEW.id);
+   return NEW;
+end
+$$;
+CREATE TRIGGER make_thread_seq AFTER INSERT ON threads FOR EACH ROW EXECUTE PROCEDURE make_thread_seq();
 
 CREATE TABLE comments (
-   id BIGSERIAL PRIMARY KEY,
-   content TEXT CHECK(LENGTH(description) > 3 AND LENGTH(description) < 255) NOT NULL,
-   thread_id BIGSERIAL NOT NULL,
-   author_id BIGSERIAL NOT NULL,
-   FOREIGN KEY (thread_id) REFERENCES threads(id),
-   FOREIGN KEY (author_id) REFERENCES users(id),
+   id BIGSERIAL PRIMARY KEY ,
+   seq BIGINT,
+   thread_id BIGINT NOT NULL REFERENCES threads(id),
+   author_id BIGINT NOT NULL REFERENCES users(id),
+   content TEXT CHECK(LENGTH(content) > 3 AND LENGTH(content) < 255) NOT NULL,
    rating INT DEFAULT 0 NOT NULL,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX thread_id_index ON comments (thread_id);
-CREATE INDEX author_id_index ON comments (author_id);
+CREATE INDEX comments_thread_id_index ON comments (thread_id);
+CREATE INDEX comments_author_id_index ON comments (author_id);
+CREATE INDEX comments_thread_and_seq_id_index ON comments (author_id, seq);
+
+CREATE FUNCTION fill_in_comments_seq() RETURNS trigger
+   LANGUAGE plpgsql
+   AS $$
+begin
+   NEW.seq := nextval('thread_seq_' || NEW.id);
+   RETURN NEW;
+end
+$$;
+CREATE TRIGGER fill_in_comments_seq BEFORE INSERT ON comments FOR EACH ROW EXECUTE PROCEDURE fill_in_comments_seq();
 
 CREATE TABLE photos (
    id BIGSERIAL PRIMARY KEY,
