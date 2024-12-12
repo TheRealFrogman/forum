@@ -36,7 +36,7 @@ $$;
 CREATE TRIGGER make_thread_seq AFTER INSERT ON threads FOR EACH ROW EXECUTE PROCEDURE make_thread_seq();
 
 CREATE TABLE comments (
-   id BIGSERIAL PRIMARY KEY ,
+   id BIGSERIAL PRIMARY KEY,
    seq BIGINT,
    thread_id BIGINT NOT NULL REFERENCES threads(id),
    author_id BIGINT NOT NULL REFERENCES users(id),
