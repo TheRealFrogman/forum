@@ -53,7 +53,7 @@ CREATE FUNCTION fill_in_comments_seq() RETURNS trigger
    LANGUAGE plpgsql
    AS $$
 begin
-   NEW.seq := nextval('thread_seq_' || NEW.id);
+   NEW.seq := nextval('thread_seq_' || NEW.thread_id);
    RETURN NEW;
 end
 $$;
