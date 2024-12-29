@@ -19,7 +19,9 @@ CREATE TABLE threads (
    category_id BIGINT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
    title TEXT CHECK(LENGTH(title) > 6 AND LENGTH(title) < 2000) NOT NULL,
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   comment_count INT DEFAULT 0
+   comment_count INT DEFAULT 0,
+   last_commented_at TIMESTAMP DEFAULT NULL,
+   views_count INT DEFAULT 0
 );
 
 CREATE INDEX threads_author_id_index ON threads (author_id);
@@ -83,12 +85,12 @@ CREATE INDEX comment_id_index ON votes (comment_id);
 CREATE OR REPLACE FUNCTION update_comment_rating()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF TG_OP = 'INSERT' THEN
-    IF NEW.vote_type = 'upvote' THEN
+   IF TG_OP = 'INSERT' THEN
+      IF NEW.vote_type = 'upvote' THEN
       UPDATE comments SET rating = rating + 1 WHERE id = NEW.comment_id;
-    ELSIF NEW.vote_type = 'downvote' THEN
+   ELSIF NEW.vote_type = 'downvote' THEN
       UPDATE comments SET rating = rating - 1 WHERE id = NEW.comment_id;
-    END IF;
+   END IF;
   END IF;
   RETURN NEW;
 END;
@@ -112,6 +114,19 @@ CREATE TRIGGER increment_comment_count_trigger
 AFTER INSERT ON comments
 FOR EACH ROW
 EXECUTE PROCEDURE increment_thread_comment_count();
+
+CREATE OR REPLACE FUNCTION set_thread_last_commented_at_procedure()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE threads SET last_commented_at = CURRENT_TIMESTAMP WHERE id = NEW.thread_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_thread_last_commented_at_trigger
+AFTER INSERT ON comments
+FOR EACH ROW
+EXECUTE PROCEDURE set_thread_last_commented_at_procedure();
 
 CREATE OR REPLACE FUNCTION decrement_thread_comment_count()
 RETURNS TRIGGER AS $$

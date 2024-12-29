@@ -7,7 +7,9 @@ interface ThreadProps {
    title: string;
    category_id: Category['id'];
    created_at: Date;
-   comment_count: number; // may be the cause of bugs in the future as i didn't check it, i should have
+   comment_count: number;
+   last_commented_at: Date
+   views_count: number;
 }
 
 interface ThreadInitializer extends ThreadProps { }
@@ -19,6 +21,8 @@ export class Thread implements ThreadProps {
    category_id!: string;
    created_at!: Date;
    comment_count!: number;
+   last_commented_at!: Date
+   views_count!: number
    constructor(data: ThreadInitializer) {
       if (data) {
          this.author_id = data.author_id;
@@ -27,6 +31,8 @@ export class Thread implements ThreadProps {
          this.category_id = data.category_id;
          this.created_at = data.created_at
          this.comment_count = data.comment_count
+         this.last_commented_at = data.last_commented_at
+         this.views_count = data.views_count
       }
    }
 
@@ -58,9 +64,17 @@ export class Thread implements ThreadProps {
          comment_count: {
             type: "string",
             pattern: "^[0-9]+$"
+         },
+         last_commented_at: {
+            type: "string",
+            format: "date-time"
+         },
+         views_count: {
+            type: "string",
+            pattern: "^[0-9]+$"
          }
       },
-      required: ["author_id", "title", "category_id", "id", "rating", "created_at", "comment_count"],
+      required: ["author_id", "title", "category_id", "id", "rating", "created_at", "comment_count", "last_commented_at", "views_count"],
       additionalProperties: false
    }
 }

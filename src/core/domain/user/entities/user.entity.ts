@@ -11,7 +11,6 @@ interface UserProps {
    created_at: Date;
    email: string;
    email_confirmed: boolean
-
 }
 
 interface UserInitializer extends UserProps{}

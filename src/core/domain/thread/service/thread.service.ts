@@ -14,7 +14,7 @@ export class ThreadService {
       @inject(ISqlDatabaseConnectionBinder) private readonly connectionBinder: ISqlDatabaseConnectionBinder
    ) { }
 
-   async create(createThreadDto: CreateThreadDto & { author_id: User['id']}): Promise<{ thread: Thread, comment: Comment }> {
+   async create(createThreadDto: CreateThreadDto & { author_id: User['id'] }): Promise<{ thread: Thread, comment: Comment }> {
       const connection = await this.connectionBinder.connect();
 
       try {
@@ -37,14 +37,14 @@ export class ThreadService {
          await connection.query('COMMIT;');
 
          const newThread = await connection.query(
-            `SELECT * FROM threads WHERE id = $1`, 
+            `SELECT * FROM threads WHERE id = $1`,
             [thread!.id],
             Thread,
             { isArray: false }
          );
 
          const newComment = await connection.query(
-            `SELECT * FROM comments WHERE id = $1`, 
+            `SELECT * FROM comments WHERE id = $1`,
             [comment!.id],
             Comment,
             { isArray: false }
@@ -63,14 +63,35 @@ export class ThreadService {
       return this.database.query(`SELECT * FROM threads`, [], Thread, { isArray: true });
    }
    async findAllByAuthorId(userId: User['id']) {
-      return this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
+      const result = this.database.query(`SELECT * FROM threads WHERE author_id = $1`, [userId], Thread, { isArray: true });
+      this.database.query(
+         `UPDATE threads SET views_count = views_count + 1 WHERE author_id = $1`,
+         [userId]
+      );
+      return result;
    }
    async findAllByCategoryId(categoryId: Thread['category_id']) {
-      return this.database.query(`SELECT * FROM threads WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
+      const result = this.database.query(`SELECT * FROM threads WHERE category_id = $1`, [categoryId], Thread, { isArray: true });
+      this.database.query(
+         `UPDATE threads SET views_count = views_count + 1 WHERE category_id = $1`,
+         [categoryId]
+      );
+      return result
    }
 
    async findOne(id: Thread['id']) {
-      return this.database.query(`SELECT * FROM threads WHERE id = $1`, [id], Thread, { isArray: false });
+      try {
+         const thread = await this.database.query(`SELECT * FROM threads WHERE id = $1`, [id], Thread, { isArray: false });
+         if (thread) {
+            await this.database.query(
+               `UPDATE threads SET views_count = views_count + 1 WHERE id = $1`,
+               [id]
+            );
+         }
+         return thread;
+      } catch (error) {
+         throw error;
+      }
    }
 
    async update(id: Thread['id'], updateThreadDto: UpdateThreadDto) {
