@@ -47,6 +47,7 @@ import { ForgotPasswordUpdatePassword_UseCase } from "./core/use-cases/auth/Forg
 import { ConfirmEmail_UseCase } from "./core/use-cases/auth/ConfirmEmail_UseCase";
 import { GetCommentsByAuthor_UseCase } from "./core/use-cases/comment/getCommentsByAuthor";
 import { FindAllByUserAndThread_UseCase } from "./core/use-cases/vote/FindAllByUserAndThread_UseCase";
+import { GetCommentByThreadIdAndLocalId } from "./core/use-cases/comment/getCommentByThreadIdAndLocalId";
 
 export const myContainer = new Container();
 const poolDatabaseInstance = new SqlPoolDatabase(
@@ -129,7 +130,7 @@ myContainer.bind(DeleteComment_UseCase).to(DeleteComment_UseCase).inSingletonSco
 myContainer.bind(GetCommentsByThread_UseCase).to(GetCommentsByThread_UseCase).inSingletonScope();
 myContainer.bind(UpdateComment_UseCase).to(UpdateComment_UseCase).inSingletonScope();
 myContainer.bind(GetCommentsByAuthor_UseCase).to(GetCommentsByAuthor_UseCase).inSingletonScope();
-
+myContainer.bind(GetCommentByThreadIdAndLocalId).to(GetCommentByThreadIdAndLocalId).inSingletonScope();
 
 //auth use-cases
 myContainer.bind(Login_UseCase).to(Login_UseCase).inSingletonScope();
