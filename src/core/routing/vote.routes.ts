@@ -34,7 +34,7 @@ export const votesRoutes: Routes<'/votes'> = {
          const body = await receiveBody<NewVoteDto>(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<NewVoteDto>(body, NewVoteDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<NewVoteDto>(body, NewVoteDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 

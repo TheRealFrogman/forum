@@ -54,7 +54,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<LoginDto>(body, LoginDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<LoginDto>(body, LoginDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
@@ -67,7 +67,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<RegisterDto>(body, RegisterDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<RegisterDto>(body, RegisterDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
@@ -83,7 +83,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
             const body = await receiveBody<ForgotPasswordDto>(request);
             if (!body)
                return { statusCode: 400, statusMessage: "No body" };
-            const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<ForgotPasswordDto>(body, ForgotPasswordDto.schema);
+            const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<ForgotPasswordDto>(body, ForgotPasswordDto.schema);
             if (error)
                return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
@@ -104,7 +104,7 @@ export const authRoutes: Routes<"/auth/me" | "/auth/logout" | "/auth/login" | "/
          const body = await receiveBody<UpdateForgottenPasswordDto>(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<UpdateForgottenPasswordDto>(body, UpdateForgottenPasswordDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 

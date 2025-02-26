@@ -36,7 +36,7 @@ export const userRoutes: Routes<'/users'> = {
          const body = await receiveBody<UpdateUserDto>(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateUserDto>(body, UpdateUserDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<UpdateUserDto>(body, UpdateUserDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 

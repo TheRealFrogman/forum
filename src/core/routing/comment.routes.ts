@@ -34,7 +34,7 @@ export const commentRoutes: Routes<'/comments'> = {
          const body = await receiveBody(request);
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<CreateCommentDto>(body, CreateCommentDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<CreateCommentDto>(body, CreateCommentDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
@@ -54,7 +54,7 @@ export const commentRoutes: Routes<'/comments'> = {
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchemaOrThrow<UpdateCommentDto>(body, UpdateCommentDto.schema);
+         const [validatedBody, error] = jsonschemaValidatorInstance.assertBySchema<UpdateCommentDto>(body, UpdateCommentDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 

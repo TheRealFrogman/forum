@@ -6,7 +6,7 @@ import { Validator as Validator_jsonschema } from "jsonschema";
 
 @injectable()
 export class JsonSchemaValidator implements IJsonschemaValidator {
-   assertBySchemaOrThrow<T extends object>(instance: object, schema: object): [T, null] | [null, AggregateJsonschemaValidationError] {
+   assertBySchema<T extends object>(instance: object, schema: object): [T, null] | [null, AggregateJsonschemaValidationError] {
 
       const v = new Validator_jsonschema();
       const result = v.validate(instance, schema);

@@ -80,7 +80,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
+         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchema<CreateThreadDto>(body, CreateThreadDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
@@ -100,7 +100,7 @@ export const threadRoutes: Routes<'/threads' | "/threads/all"> = {
          if (!body)
             return { statusCode: 400, statusMessage: "No body" };
 
-         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchemaOrThrow<CreateThreadDto>(body, CreateThreadDto.schema);
+         const [validatedBody, error] = myContainer.get(IJsonschemaValidator).assertBySchema<CreateThreadDto>(body, CreateThreadDto.schema);
          if (error)
             return { statusCode: 400, statusMessage: error.message, responseModel: error }
 
