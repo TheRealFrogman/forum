@@ -2,14 +2,11 @@ import { IEmailer } from "@/core/ports/emailer/IEmailer";
 import { createTestAccount, getTestMessageUrl, createTransport, } from 'nodemailer'
 
 export class Emailer implements IEmailer {
-   constructor() {
+   constructor(host: string, port: number, auth:{user:string, pass:string}) {
       this.transporter = createTransport({
-         host: 'smtp.ethereal.email',
-         port: 587,
-         auth: {
-             user: 'sheridan9@ethereal.email',
-             pass: 'P8GrwaKNm8Zt1DtB9B'
-         }
+         host,
+         port,
+         auth
      });
    }
    private transporter;

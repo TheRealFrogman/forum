@@ -99,7 +99,14 @@ myContainer.bind(ForgotPasswordJwtService).toConstantValue(
    })
 )
 
-myContainer.bind(IEmailer).to(Emailer);
+myContainer.bind(IEmailer).toConstantValue(new Emailer(
+   'smtp.ethereal.email', 
+   587, 
+   {
+      user: 'sheridan9@ethereal.email',
+      pass: 'P8GrwaKNm8Zt1DtB9B'
+   }
+));
 
 myContainer.bind(CategoryService).to(CategoryService);
 myContainer.bind(CommentService).to(CommentService);
