@@ -2,6 +2,7 @@ import { IEmailer } from "@/core/ports/emailer/IEmailer";
 import { createTestAccount, getTestMessageUrl, createTransport, } from 'nodemailer'
 
 export class Emailer implements IEmailer {
+   private transporter;
    constructor(host: string, port: number, auth:{user:string, pass:string}) {
       this.transporter = createTransport({
          host,
@@ -9,7 +10,7 @@ export class Emailer implements IEmailer {
          auth
      });
    }
-   private transporter;
+
    async sendEmail(from: string, to: string, subject: string, message: string): Promise<boolean> {
       try {
          const info = await new Promise((res, rej) => {
