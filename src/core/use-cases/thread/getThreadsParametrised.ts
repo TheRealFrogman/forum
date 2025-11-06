@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { UseCase } from "../UseCase";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { PaginatedDatabase } from "@/core/ports/database/paginated-database/PaginatedDatabase";
 

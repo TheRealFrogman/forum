@@ -1,5 +1,5 @@
 import { Role, User } from "@/core/domain/user/entities/user.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 import { UserService } from "@/core/domain/user/service/user.service";
 import { UseCase } from "@/core/use-cases/UseCase";

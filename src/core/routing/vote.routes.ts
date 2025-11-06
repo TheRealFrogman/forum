@@ -1,5 +1,5 @@
 import { myContainer } from "@/inversify.config";
-import { Routes } from "./routes";
+import { Routes } from "./reused-code/routes";
 import { FindAllByUserAndThread_UseCase } from "../use-cases/vote/FindAllByUserAndThread_UseCase";
 import { receiveBody } from "../lib/receiveBody";
 import { NewVoteDto } from "../domain/vote/dto/new-vote.dto";

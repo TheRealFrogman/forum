@@ -1,5 +1,5 @@
 
-import { Routes } from "@/core/routing/routes";
+import { Routes } from "@/core/routing/reused-code/routes";
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateCommentDto } from "@/core/domain/comment/dto/create-comment.dto";
 import { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto";

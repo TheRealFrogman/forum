@@ -1,4 +1,4 @@
-import { Routes } from "@/core/routing/routes";
+import { Routes } from "@/core/routing/reused-code/routes";
 import { GetMainPhotosForThreadIfExists_UseCase } from "../use-cases/photo/getMainPhotoForThreadIfExists";
 import { myContainer } from "@/inversify.config";
 

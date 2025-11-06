@@ -1,5 +1,5 @@
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
-import { Routes } from "@/core/routing/routes";
+import { Routes } from "@/core/routing/reused-code/routes";
 
 import { receiveBody } from "@/core/lib/receiveBody";
 import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";

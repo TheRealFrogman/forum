@@ -1,4 +1,4 @@
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "../UseCase";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { inject } from "inversify";

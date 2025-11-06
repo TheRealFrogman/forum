@@ -2,7 +2,7 @@ import { User } from "@/core/domain/user/entities/user.entity";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { IEmailer } from "@/core/ports/emailer/IEmailer";
 import { ForgotPasswordJwtService } from "@/core/ports/jwt/service/ForgotPasswordJwtService";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
 

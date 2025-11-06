@@ -1,5 +1,5 @@
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 import { CommentService } from "@/core/domain/comment/service/comment.service";
 import { UseCase } from "../UseCase";

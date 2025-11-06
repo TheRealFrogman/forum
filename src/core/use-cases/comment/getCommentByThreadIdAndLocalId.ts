@@ -1,5 +1,5 @@
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";

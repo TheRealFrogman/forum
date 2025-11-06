@@ -1,4 +1,4 @@
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "../UseCase";
 import { inject, injectable } from "inversify";
 import { SessionService } from "@/core/ports/session/SessionService";

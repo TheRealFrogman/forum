@@ -1,15 +1,15 @@
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "../UseCase";
 import { inject, injectable } from "inversify";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
+import { ISqlDatabase } from "@/core/ports/database/sql-database/sql-database.interface";
 
 @injectable()
 export class ConfirmEmail_UseCase extends UseCase {
    constructor(
       @inject(UserService) private readonly userService: UserService,
-      @inject(LocalAuthenticatorService) private readonly localAuthenticator: LocalAuthenticatorService
+      @inject(ISqlDatabase) private readonly database: ISqlDatabase,
    ) {
       super();
    }
@@ -18,7 +18,7 @@ export class ConfirmEmail_UseCase extends UseCase {
       if (!user)
          return { statusCode: 404, statusMessage: "User not found" };
 
-      const updatedUser = await this.localAuthenticator.confirmEmail(user);
+      const updatedUser = await this.database.query(`UPDATE users SET email_confirmed = $1 WHERE id = $2 RETURNING *`, [true, user.id], User, { isArray: false });
       if (!updatedUser)
          return { statusCode: 500, statusMessage: "Email confirmation failed" };
 

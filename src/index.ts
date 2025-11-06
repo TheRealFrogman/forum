@@ -1,20 +1,20 @@
 import 'reflect-metadata'
-import { myContainer } from "./inversify.config";
-
+import 'module-alias/register';
 process.loadEnvFile(__dirname + "/../.env");
 
-const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService)
+import { myContainer } from "./inversify.config";
+import { server } from "./server";
+import { GetUser_UseCase } from './core/use-cases/user/getUser';
 
-localAuthenticatorInstance.register({ username: "admin", password: "admin123", email: "admin@localhost.com" })
-localAuthenticatorInstance.register({ username: "john", password: "john_doe", email: "john@localhost.com" })
-localAuthenticatorInstance.register({ username: "jane", password: "jane_doe", email: "jane@localhost.com" })
+
+// const localAuthenticatorInstance = myContainer.get(LocalAuthenticatorService)
+// localAuthenticatorInstance.register({ username: "admin", password: "admin123", email: "admin@localhost.com" })
+// localAuthenticatorInstance.register({ username: "john", password: "john_doe", email: "john@localhost.com" })
+// localAuthenticatorInstance.register({ username: "jane", password: "jane_doe", email: "jane@localhost.com" })
 
 const guuc = myContainer.get(GetUser_UseCase)
 guuc.subscribe((getUserEvent) => console.log(getUserEvent.user))
 
-import { server } from "./server";
-import { LocalAuthenticatorService } from './core/domain/local-auth/local-auth';
-import { GetUser_UseCase } from './core/use-cases/user/getUser';
 server.listen(process.env['PORT'], () => {
    console.log(`listening ${process.env['PORT']}`)
 });

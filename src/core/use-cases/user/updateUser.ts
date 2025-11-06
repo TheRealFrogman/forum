@@ -1,7 +1,7 @@
 import { UpdateUserDto } from "@/core/domain/user/dto/update-user.dto";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
 
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { inject, injectable } from "inversify";
 

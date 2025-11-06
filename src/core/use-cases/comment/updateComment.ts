@@ -1,7 +1,7 @@
 import { UpdateCommentDto } from "@/core/domain/comment/dto/update-comment.dto";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";
 import { Role, User } from "@/core/domain/user/entities/user.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 import { CommentService } from "@/core/domain/comment/service/comment.service";
 import { UseCase } from "../UseCase";

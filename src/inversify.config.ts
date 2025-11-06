@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { SqlPoolDatabase } from "@/adapters/database/SqlDatabase";
 import { UserService } from "@/core/domain/user/service/user.service";
 import { HashEncrypt } from "@/adapters/hash-encrypt/hash-encrypt.provider";
-import { JsonSchemaValidator } from "@/adapters/jsonschema-validation/jsonschema-validator.impl";
+import { JsonSchemaValidator } from "@/adapters/jsonschema-validator/jsonschema-validator.impl";
 import { LocalAuthenticatorService } from "@/core/domain/local-auth/local-auth";
 import { ThreadService } from "@/core/domain/thread/service/thread.service";
 import { CommentService } from "@/core/domain/comment/service/comment.service";
@@ -49,12 +49,15 @@ import { GetCommentsByAuthor_UseCase } from "./core/use-cases/comment/getComment
 import { FindAllByUserAndThread_UseCase } from "./core/use-cases/vote/FindAllByUserAndThread_UseCase";
 import { GetCommentByThreadIdAndLocalId } from "./core/use-cases/comment/getCommentByThreadIdAndLocalId";
 
+process.loadEnvFile(__dirname + "/../.env");
+
 export const myContainer = new Container();
+
 const poolDatabaseInstance = new SqlPoolDatabase(
    new Pool({
-      user: "postgres",
-      host: "localhost",
-      database: "forum",
+      user: process.env['PG_USER']!,
+      host: process.env['PG_HOST']!,
+      database: process.env['PG_DATABASE_NAME']!,
       port: 5432,
    })
 )
@@ -81,7 +84,7 @@ myContainer.bind(RefreshJwtService).toConstantValue(
 )
 myContainer.bind(ConfirmEmailJwtService).toConstantValue(
    new JwtImpl({
-      secret: process.env['JWT_CONFRIM_EMAIL_SECRET']!,
+      secret: process.env['JWT_CONFIRM_EMAIL_SECRET']!,
       signOptions: {},
       verifyOptions: {},
       decodeOptions: {}

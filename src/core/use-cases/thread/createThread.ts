@@ -1,6 +1,6 @@
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 import { ThreadService } from "@/core/domain/thread/service/thread.service";
 import { UseCase } from "../UseCase";

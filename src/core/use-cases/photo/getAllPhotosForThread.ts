@@ -1,7 +1,7 @@
 import { Thread } from "@/core/domain/thread/entities/thread.entity";
 import { UseCase } from "../UseCase";
 import { injectable } from "inversify";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 
 @injectable()
 export class GetAllPhotosForThread_UseCase extends UseCase {

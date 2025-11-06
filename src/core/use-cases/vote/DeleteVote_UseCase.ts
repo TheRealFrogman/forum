@@ -1,7 +1,7 @@
 import { Vote } from "@/core/domain/vote/entities/vote.entity";
 import { VoteService } from "@/core/domain/vote/service/vote.service";
 import { User } from "@/core/domain/user/entities/user.entity";
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "@/core/use-cases/UseCase";
 import { inject, injectable } from "inversify";
 import { Comment } from "@/core/domain/comment/entities/comment.entity";

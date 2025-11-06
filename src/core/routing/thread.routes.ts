@@ -1,6 +1,6 @@
 import { receiveBody } from "@/core/lib/receiveBody";
 import { CreateThreadDto } from "@/core/domain/thread/dto/create-thread.dto";
-import { Routes } from "@/core/routing/routes";
+import { Routes } from "@/core/routing/reused-code/routes";
 import { getSessionUser } from "@/core/routing/reused-code/helpers/getSessionUser.helper";
 
 import { myContainer } from "@/inversify.config";

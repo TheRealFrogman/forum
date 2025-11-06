@@ -4,9 +4,12 @@ CREATE TABLE users (
    hashed_password VARCHAR(255) CHECK(hashed_password ~ $$^.+:.+$$ AND LENGTH(hashed_password) > 8) NOT NULL,
    role TEXT CHECK(role IN ('regular', 'admin')) NOT NULL DEFAULT 'regular',
    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   email TEXT CHECK(email ~ $$^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$$),
+   email TEXT CHECK(email ~ $$^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$$) NOT NULL UNIQUE,
    email_confirmed BOOLEAN DEFAULT FALSE
 );
+
+CREATE INDEX username_index ON users (username);
+CREATE INDEX username_index ON users (email);
 
 CREATE TABLE categories (
    id BIGSERIAL PRIMARY KEY,

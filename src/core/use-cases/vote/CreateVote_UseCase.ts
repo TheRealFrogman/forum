@@ -1,4 +1,4 @@
-import { EndpointResult } from "@/core/routing/routes";
+import { EndpointResult } from "@/core/routing/reused-code/routes";
 import { UseCase } from "@/core/use-cases/UseCase";
 import { User } from "@/core/domain/user/entities/user.entity";
 import { inject, injectable } from "inversify";
@@ -14,7 +14,7 @@ export class CreateVote_UseCase extends UseCase {
    }
    override async execute(user: User, createVoteDto: NewVoteDto): Promise<EndpointResult> {
       if (this.canDo(user))
-         return { statusCode: 200, responseModel: await this.voteService.create({...createVoteDto, user_id: user.id}) };
+         return { statusCode: 200, responseModel: await this.voteService.create({ ...createVoteDto, user_id: user.id }) };
       else
          return { statusCode: 401, statusMessage: "You are not allowed to vote on this comment" }
    }
