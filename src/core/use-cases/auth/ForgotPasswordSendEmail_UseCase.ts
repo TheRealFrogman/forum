@@ -28,6 +28,6 @@ export class ForgotPasswordSendEmail_UseCase extends UseCase {
    }
 
    private async createLink(user: User) {
-      return `http://localhost:3000/auth/forgot-password?token=${await this.forgotPasswordJwtService.sign({ userId: user.id })}`
+      return `http://${process.env["HOSTNAME"]}/auth/forgot-password?token=${await this.forgotPasswordJwtService.sign({ userId: user.id })}`
    }
 }
