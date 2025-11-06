@@ -100,11 +100,11 @@ myContainer.bind(ForgotPasswordJwtService).toConstantValue(
 )
 
 myContainer.bind(IEmailer).toConstantValue(new Emailer(
-   'smtp.ethereal.email', 
-   587, 
+   process.env["SMTP_HOST"]!, 
+   +process.env["SMTP_PORT"]!, 
    {
-      user: 'sheridan9@ethereal.email',
-      pass: 'P8GrwaKNm8Zt1DtB9B'
+      user: process.env["SMTP_USER"]!,
+      pass: process.env["P8GrwaKNm8Zt1DtB9B"]!
    }
 ));
 
