@@ -44,7 +44,7 @@ export const server = http.createServer({}, async (request, response) => {
 
       console.error(error);
       return void response
-         .writeHead(500, { 'Content-Type': 'application/json' })
+         .writeHead(500, { 'Content-Type': 'application/json' }) // зачем тут сontent-type?
          .end()
    }
 })
