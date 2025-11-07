@@ -9,6 +9,10 @@ export class VoteService {
    constructor(
       @inject(ISqlDatabase) private commentVotes: ISqlDatabase,
    ) { }
+   // тут надо проверить, существует ли оценка с этими данными
+   // если коммент айди и юзер айди совпадают и тип оценки совпадают, не создавать, а выдавать null
+   // если совпадают коммент айди и юзер айди, а тип оценки не совпадает, значит удалить оценку, которая есть, и создать запрошенную оценку
+   
    async create(createCommentVoteDto: NewVoteDto & {user_id: User['id']}): Promise<Vote> {
       const result = await this.commentVotes.query(
          `INSERT INTO votes (comment_id, user_id, vote_type) VALUES ($1, $2, $3) RETURNING *`,
