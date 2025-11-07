@@ -16,47 +16,49 @@ export class ThreadService {
 
    async create(createThreadDto: CreateThreadDto & { author_id: User['id'] }): Promise<{ thread: Thread, comment: Comment }> {
       const connection = await this.connectionBinder.connect();
-
+      let thread: Thread;
+      let comment: Comment;
       try {
          await connection.query('BEGIN;');
 
-         const thread = await connection.query(
+         thread = (await connection.query(
             `INSERT INTO threads (title, author_id, category_id) VALUES ($1, $2, $3) RETURNING *`,
             [createThreadDto.title, createThreadDto.author_id, createThreadDto.category_id],
             Thread,
             { isArray: false }
-         );
+         ))!;
 
-         const comment = await connection.query(
+         comment = (await connection.query(
             `INSERT INTO comments (content, thread_id, author_id) VALUES ($1, $2, $3) RETURNING *`,
             [createThreadDto.initial_comment, thread!.id, createThreadDto.author_id],
             Comment,
             { isArray: false }
-         );
+         ))!;
 
          await connection.query('COMMIT;');
 
-         const newThread = await connection.query(
-            `SELECT * FROM threads WHERE id = $1`,
-            [thread!.id],
-            Thread,
-            { isArray: false }
-         );
 
-         const newComment = await connection.query(
-            `SELECT * FROM comments WHERE id = $1`,
-            [comment!.id],
-            Comment,
-            { isArray: false }
-         );
-
-         return { thread: newThread!, comment: newComment! }
       } catch (error) {
          await connection.query('ROLLBACK;');
-         throw error;
-      } finally {
          await connection.release();
+         throw error;
       }
+
+      const newThread = await connection.query(
+         `SELECT * FROM threads WHERE id = $1`,
+         [thread!.id],
+         Thread,
+         { isArray: false }
+      );
+
+      const newComment = await connection.query(
+         `SELECT * FROM comments WHERE id = $1`,
+         [comment!.id],
+         Comment,
+         { isArray: false }
+      );
+
+      return { thread: newThread!, comment: newComment! }
    }
 
    async findAll() {
