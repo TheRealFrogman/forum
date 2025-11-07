@@ -57,6 +57,8 @@ export class ThreadService {
          Comment,
          { isArray: false }
       );
+      
+      await connection.release();
 
       return { thread: newThread!, comment: newComment! }
    }
