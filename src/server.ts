@@ -14,6 +14,7 @@ export const server = http.createServer({}, async (request, response) => {
 
    const url = new URL(request.url, `http://${request.headers.host}`);
    console.log(request.method, url.pathname);
+
    try {
       if (url.pathname === "/test")
          return void request.pipe(response)
@@ -28,6 +29,7 @@ export const server = http.createServer({}, async (request, response) => {
       }
       if (!(url.pathname in allRoutes))
          return void response.writeHead(404, "Route not found").end()
+      
       const route = allRoutes[url.pathname as keyof typeof allRoutes];
 
       if (!(request.method in route))
